@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java,hibernate,持久层," />
+  <meta name="keywords" content="hibernate, hbm, orm, log, java, cache" />
 
 
 
@@ -96,13 +96,13 @@
 
 
 
-<meta name="description" content="Hibernate Framework 简介：Hibernate框架是一个全自动的ORM框架，它拥有强大的映射功能，提供了缓存机制、事务管理、拦截器机制、查询语句的多方面支持  本系列笔记可能会遇到的专业词汇有：  Framework, 框架，某一类问题的总体解决方案  ORM, Object Relationship">
-<meta name="keywords" content="java,hibernate,持久层">
+<meta name="description" content="学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作">
+<meta name="keywords" content="hibernate, hbm, orm, log, java, cache">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hibernate框架学习(二)">
 <meta property="og:url" content="http://bella2011.github.io/2017/11/29/hibernate-2/index.html">
 <meta property="og:site_name" content="学习博客">
-<meta property="og:description" content="Hibernate Framework 简介：Hibernate框架是一个全自动的ORM框架，它拥有强大的映射功能，提供了缓存机制、事务管理、拦截器机制、查询语句的多方面支持  本系列笔记可能会遇到的专业词汇有：  Framework, 框架，某一类问题的总体解决方案  ORM, Object Relationship Mapping, 对象关系映射  DATABASE, 数据库，存储数据的一种方">
+<meta property="og:description" content="学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-2/assets/hibernate_logo_whitebkg_200px.png">
 <meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-2/assets/first-cache-1.png">
@@ -113,10 +113,10 @@
 <meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-2/assets/second-cache-demo.png">
 <meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-2/assets/query-cache.png">
 <meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-2/assets/query-flow.png">
-<meta property="og:updated_time" content="2017-11-29T07:49:07.823Z">
+<meta property="og:updated_time" content="2017-12-12T07:43:36.066Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hibernate框架学习(二)">
-<meta name="twitter:description" content="Hibernate Framework 简介：Hibernate框架是一个全自动的ORM框架，它拥有强大的映射功能，提供了缓存机制、事务管理、拦截器机制、查询语句的多方面支持  本系列笔记可能会遇到的专业词汇有：  Framework, 框架，某一类问题的总体解决方案  ORM, Object Relationship Mapping, 对象关系映射  DATABASE, 数据库，存储数据的一种方">
+<meta name="twitter:description" content="学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作">
 <meta name="twitter:image" content="http://bella2011.github.io/2017/11/29/hibernate-2/assets/hibernate_logo_whitebkg_200px.png">
 
 
@@ -125,7 +125,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -395,6 +395,10 @@
 
           
 
+          
+              <div class="post-description">
+                  学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作
+              </div>
           
 
         </div>
@@ -906,7 +910,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Mist
   </a>
 </div>
 
