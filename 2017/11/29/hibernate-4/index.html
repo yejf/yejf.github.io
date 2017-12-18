@@ -84,7 +84,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="学习博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="编程之路" type="application/atom+xml" />
 
 
 
@@ -100,27 +100,27 @@
 <meta name="keywords" content="hibernate, hbm, orm, log, java, github, qbc, hql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hibernate框架学习(四)">
-<meta property="og:url" content="http://bella2011.github.io/2017/11/29/hibernate-4/index.html">
-<meta property="og:site_name" content="学习博客">
+<meta property="og:url" content="http://www.teacherye.com/2017/11/29/hibernate-4/index.html">
+<meta property="og:site_name" content="编程之路">
 <meta property="og:description" content="学习 Hibernate框架查询机制,通过学习本文档，可以掌握Hibernate框架的查询体系，深入HQL语法规则，理解QBC查询机制，通过方法调用来生成最终SQL语句很适合动态查询">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/query-architecture.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/hql-1.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/hql-structure.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/criteria-1.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/qbc-api.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/criteria-api.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/qbc-r.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/projections.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/order.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/dc-1.png">
-<meta property="og:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/property.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/query-architecture.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hql-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hql-structure.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/criteria-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/qbc-api.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/criteria-api.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/qbc-r.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/projections.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/order.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/dc-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/property.png">
 <meta property="og:updated_time" content="2017-12-12T07:47:15.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hibernate框架学习(四)">
 <meta name="twitter:description" content="学习 Hibernate框架查询机制,通过学习本文档，可以掌握Hibernate框架的查询体系，深入HQL语法规则，理解QBC查询机制，通过方法调用来生成最终SQL语句很适合动态查询">
-<meta name="twitter:image" content="http://bella2011.github.io/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png">
 
 
 
@@ -149,13 +149,13 @@
 
 
 
-  <link rel="canonical" href="http://bella2011.github.io/2017/11/29/hibernate-4/"/>
+  <link rel="canonical" href="http://www.teacherye.com/2017/11/29/hibernate-4/"/>
 
 
 
 
 
-  <title>Hibernate框架学习(四) | 学习博客</title>
+  <title>Hibernate框架学习(四) | 编程之路</title>
   
 
 
@@ -194,7 +194,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">学习博客</span>
+        <span class="site-title">编程之路</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -301,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bella2011.github.io/2017/11/29/hibernate-4/">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/11/29/hibernate-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="teacher ye">
@@ -310,7 +310,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="学习博客">
+      <meta itemprop="name" content="编程之路">
     </span>
 
     
@@ -376,6 +376,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/11/29/hibernate-4/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/11/29/hibernate-4/" itemprop="commentsCount"></span>
+                </a>
+              
             
           
 
@@ -777,6 +788,8 @@
           
   <div class="comments" id="comments">
     
+      <div id="SOHUCS"></div>
+    
   </div>
 
 
@@ -824,7 +837,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -835,7 +848,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -846,7 +859,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1077,6 +1090,21 @@
 
 
 
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
 
 
 
