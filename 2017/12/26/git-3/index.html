@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="编程之路">
 <meta property="og:description" content="理解tag的概念、工作原理，如何创建、删除tag, 我们如何基于github平台共享项目，多人协作，如何创建和合并PR[Pull Request], 掌握在github上面创建和管理项目的基本操作.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-02T15:07:19.090Z">
+<meta property="og:updated_time" content="2018-01-03T15:18:20.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git学习之(三)--标签管理、github操作">
 <meta name="twitter:description" content="理解tag的概念、工作原理，如何创建、删除tag, 我们如何基于github平台共享项目，多人协作，如何创建和合并PR[Pull Request], 掌握在github上面创建和管理项目的基本操作.">
@@ -415,7 +415,48 @@
       
 
       
-        <h2 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h2><h3 id="标签工作原理"><a href="#标签工作原理" class="headerlink" title="标签工作原理"></a>标签工作原理</h3><h3 id="标签操作"><a href="#标签操作" class="headerlink" title="标签操作"></a>标签操作</h3><h2 id="github操作"><a href="#github操作" class="headerlink" title="github操作"></a>github操作</h2><h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><h3 id="管理项目"><a href="#管理项目" class="headerlink" title="管理项目"></a>管理项目</h3><h4 id="设置ssh的KEY"><a href="#设置ssh的KEY" class="headerlink" title="设置ssh的KEY"></a>设置ssh的KEY</h4><h4 id="项目成员的管理"><a href="#项目成员的管理" class="headerlink" title="项目成员的管理"></a>项目成员的管理</h4><h4 id="基于PR的操作"><a href="#基于PR的操作" class="headerlink" title="基于PR的操作"></a>基于PR的操作</h4>
+        <h1 id="git-介绍"><a href="#git-介绍" class="headerlink" title="git 介绍"></a>git 介绍</h1><p>本教材旨在让你快速掌握git的使用，而不是一个系统学习的教材，通过本教案，你可以快速地运用git,使用git命令来达到你的版本控制的目的，但如果你想系统地学习git，可以参考如下站点<br><a href="https://www.liaoxuefeng.com" target="_blank" rel="noopener">廖雪峰的官方网站</a><br><a href="https://backlog.com/git-tutorial/cn" target="_blank" rel="noopener">猴子都能懂的GIT入门</a><br><a href="http://gitref.justjavac.com" target="_blank" rel="noopener">git参考手册</a><br><a href="https://rogerdudler.github.io/git-guide/index.zh.html" target="_blank" rel="noopener">git简易指南</a></p>
+<p>以上的学习资料都非常的简明、易懂，利于学习和理解，是写得很好的教材，值得学习<br>当然，git还有更深入的知识，如果你要深入理解git的话，还可以去看如下资料：<br><a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">Pro Git</a><br><a href="https://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html" target="_blank" rel="noopener">Git-Flow备忘清单</a></p>
+<p>git 是一个非常棒的版本控制软件，它目前有很完整的生态，下面让我们进入 git的学习之中吧…</p>
+<a id="more"></a>
+<h2 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h2><blockquote>
+<p>标签，也叫tag,在git中，它类似于一个不能移动的分支【我们知道，分支本质上是一个可移动的指定】，所以，标签就是钉死在某个提交点上的一种技术，相对提交点，我们可以在标签上附加上一些其它的信息，比如数字签名之类的</p>
+</blockquote>
+<h3 id="标签操作"><a href="#标签操作" class="headerlink" title="标签操作"></a>标签操作</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出所有的标签</span></span><br><span class="line">$ git tag</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果标签太多，还可以通过-l参数来过滤, 匹配字符中可以写 * 来通配</span></span><br><span class="line">$ git tag -l <span class="string">'匹配字符'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看单个指定的标签</span></span><br><span class="line">$ git show tag_name</span><br></pre></td></tr></table></figure>
+<p>下面我们来创建几个标签，需要注意的是在git中，以两种不同的标签，分别是：</p>
+<ul>
+<li>轻量标签[lightweight]</li>
+<li>附注标签[annotated]</li>
+</ul>
+<blockquote>
+<p>一个轻量标签很像一个不会改变的分支 - 它只是一个特定提交的引用。<br>然而，附注标签是存储在 Git 数据库中的一个完整对象。 它们是可以被校验的；其中包含打标签者的名字、电子邮件地址、日期时间；还有一个标签信息；并且可以使用 GNU Privacy Guard （GPG）签名与验证。 通常建议创建附注标签，这样你可以拥有以上所有信息；但是如果你只是想用一个临时的标签，或者因为某些原因不想要保存那些信息，轻量标签也是可用的</p>
+</blockquote>
+<p>下面我们分别来创建这两种标签</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 基于当前提交点来创建一个轻量标签</span></span><br><span class="line">$ git tag v1.0</span><br></pre></td></tr></table></figure>
+<p>如果你想基于之前某个提交点来创建另一个标签，我们可以使用<code>git log --oneline</code> 来得到提交点，然后再创建标签，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">117b6f7 Merge branch <span class="string">'testing'</span></span><br><span class="line">2393508 modify f4.txt</span><br><span class="line">2b4645f modify readme.txt</span><br><span class="line">79309a2 delete world.java file</span><br><span class="line">190db88 modify World.java</span><br><span class="line">0ff04d2 修改World.java文件</span><br><span class="line">e986401 添加World.java文件</span><br><span class="line">f6e2999 add new file f4.txt</span><br><span class="line">c5fd500 add new file f3.txt</span><br><span class="line">6d0a0e2 Merge branch <span class="string">'issue2'</span></span><br><span class="line">5cc9e23 add new file f2.txt</span><br><span class="line">d0f63b3 resolved conflict</span><br><span class="line">b6152d7 update readme.txt by master branch</span><br><span class="line">235e87d update readme.txt <span class="keyword">in</span> issue1 branch</span><br><span class="line">4324270 add readme.txt file</span><br></pre></td></tr></table></figure></p>
+<p>然后，我想基于<code>5cc9e23</code>提交点来创建一个标签，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag v0.1 5cc9e23</span><br></pre></td></tr></table></figure></p>
+<p>没有任何提示，则表示创建标签成功.</p>
+<p>如果要创建附注标签，则执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -a v0.2 -m <span class="string">'一个玩具版本，只有最基本的功能'</span> f6e2999</span><br></pre></td></tr></table></figure></p>
+<p>现在，我们通过命令<code>git show tag_name</code> 来看看轻量标签与附注标签的区别，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git show v0.1</span><br><span class="line"><span class="comment">#显示的结果如下：</span></span><br><span class="line">commit 5cc9e23fe5504127db5a1f714fae46c2f071ca57</span><br><span class="line">Author: yejf &lt;yejf@sz-tz.org&gt;</span><br><span class="line">Date:   Thu Dec 28 11:18:21 2017 +0800</span><br><span class="line"></span><br><span class="line">    add new file f2.txt</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，只有提交点的信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ git show v0.2</span><br><span class="line"><span class="comment">#显示的结果如下：</span></span><br><span class="line">tag v0.2</span><br><span class="line">Tagger: yejf &lt;yejf@sz-tz.org&gt;</span><br><span class="line">Date:   Wed Jan 3 23:06:10 2018 +0800</span><br><span class="line"></span><br><span class="line">一个玩具版本，只有最基本的功能</span><br><span class="line"></span><br><span class="line">commit f6e2999ec7aa1ce1b8792db85ca3d191ce12eceb</span><br><span class="line">Author: yejf &lt;yejf@sz-tz.org&gt;</span><br><span class="line">Date:   Thu Dec 28 11:29:18 2017 +0800</span><br><span class="line"></span><br><span class="line">    add new file f4.txt</span><br></pre></td></tr></table></figure>
+<p>可以看到，附注标签除了提交点外，还有创建标签的作者、创建日期信息。</p>
+<h3 id="推送到远程"><a href="#推送到远程" class="headerlink" title="推送到远程"></a>推送到远程</h3><blockquote>
+<p>默认情况下，<code>git push</code>操作并不会传递标签到远程仓库中，你必需显示地推送，执行：<code>git push origin [tagname]</code><br>如果你想把本地的创建标签都推送到远程，可以执行：<code>git push origin --tags</code></p>
+</blockquote>
+<p>现在，当其他人从仓库中克隆或拉取时，他们也能得到你推送的标签。</p>
+<h2 id="github操作"><a href="#github操作" class="headerlink" title="github操作"></a>github操作</h2><h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><h3 id="管理项目"><a href="#管理项目" class="headerlink" title="管理项目"></a>管理项目</h3><h4 id="设置ssh的KEY"><a href="#设置ssh的KEY" class="headerlink" title="设置ssh的KEY"></a>设置ssh的KEY</h4><h4 id="项目成员的管理"><a href="#项目成员的管理" class="headerlink" title="项目成员的管理"></a>项目成员的管理</h4><h4 id="基于PR的操作"><a href="#基于PR的操作" class="headerlink" title="基于PR的操作"></a>基于PR的操作</h4><h2 id="命令小结"><a href="#命令小结" class="headerlink" title="命令小结"></a>命令小结</h2><ul>
+<li>$ git tag tag_name</li>
+<li>$ git tag [-a] tag_name commit_id</li>
+<li>$ git show tag_name</li>
+<li>$ git tag</li>
+<li>$ git tag -l ‘匹配模式’</li>
+<li>$ git tag -a tag_name -m ‘日志’</li>
+<li>$ git push origin tag_name | [–tags]</li>
+</ul>
+
       
     </div>
     
@@ -449,8 +490,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/26/git-1/" rel="next" title="Git学习之(一)--基础操作、版本控制">
-                <i class="fa fa-chevron-left"></i> Git学习之(一)--基础操作、版本控制
+              <a href="/2017/12/26/git-2/" rel="next" title="Git学习之(二)--分支管理、远程仓库">
+                <i class="fa fa-chevron-left"></i> Git学习之(二)--分支管理、远程仓库
               </a>
             
           </div>
@@ -458,10 +499,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/26/git-2/" rel="prev" title="git学习之(二)--分支管理、远程仓库">
-                git学习之(二)--分支管理、远程仓库 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -628,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#标签管理"><span class="nav-number">1.</span> <span class="nav-text">标签管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标签工作原理"><span class="nav-number">1.1.</span> <span class="nav-text">标签工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标签操作"><span class="nav-number">1.2.</span> <span class="nav-text">标签操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github操作"><span class="nav-number">2.</span> <span class="nav-text">github操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建项目"><span class="nav-number">2.1.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理项目"><span class="nav-number">2.2.</span> <span class="nav-text">管理项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置ssh的KEY"><span class="nav-number">2.2.1.</span> <span class="nav-text">设置ssh的KEY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目成员的管理"><span class="nav-number">2.2.2.</span> <span class="nav-text">项目成员的管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于PR的操作"><span class="nav-number">2.2.3.</span> <span class="nav-text">基于PR的操作</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-介绍"><span class="nav-number">1.</span> <span class="nav-text">git 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标签管理"><span class="nav-number">1.1.</span> <span class="nav-text">标签管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标签操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">标签操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推送到远程"><span class="nav-number">1.1.2.</span> <span class="nav-text">推送到远程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github操作"><span class="nav-number">1.2.</span> <span class="nav-text">github操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建项目"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理项目"><span class="nav-number">1.2.2.</span> <span class="nav-text">管理项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置ssh的KEY"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">设置ssh的KEY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目成员的管理"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">项目成员的管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于PR的操作"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">基于PR的操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令小结"><span class="nav-number">1.3.</span> <span class="nav-text">命令小结</span></a></li></ol></li></ol></div>
             
 
           </div>
