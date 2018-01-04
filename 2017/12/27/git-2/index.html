@@ -100,24 +100,24 @@
 <meta name="keywords" content="git, svn, 分布式开发, 版本控制, merge, conflict, repository, remote repository, push, pull, clone">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git学习之(二)--分支管理、远程仓库">
-<meta property="og:url" content="http://www.teacherye.com/2017/12/26/git-2/index.html">
+<meta property="og:url" content="http://www.teacherye.com/2017/12/27/git-2/index.html">
 <meta property="og:site_name" content="编程之路">
 <meta property="og:description" content="理解git是如何创建、删除、合并分支的，如何解决冲突，以及如何与远程仓库建立连接，推送到远程仓库以及如何从远程仓库拉取最新的数据">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/commit-and-tree.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/commits-and-parents.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/branch-and-history.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/head-to-master.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/head-to-testing.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/advance-testing.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/checkout-master.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/master-merge-testing.png">
-<meta property="og:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/advance-master.png">
-<meta property="og:updated_time" content="2018-01-03T14:18:21.799Z">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/commit-and-tree.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/commits-and-parents.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/branch-and-history.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/head-to-master.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/head-to-testing.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/advance-testing.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/checkout-master.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/master-merge-testing.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/advance-master.png">
+<meta property="og:updated_time" content="2018-01-04T05:23:02.343Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git学习之(二)--分支管理、远程仓库">
 <meta name="twitter:description" content="理解git是如何创建、删除、合并分支的，如何解决冲突，以及如何与远程仓库建立连接，推送到远程仓库以及如何从远程仓库拉取最新的数据">
-<meta name="twitter:image" content="http://www.teacherye.com/2017/12/26/git-2/assets/commit-and-tree.png">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/12/27/git-2/assets/commit-and-tree.png">
 
 
 
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href="http://www.teacherye.com/2017/12/26/git-2/"/>
+  <link rel="canonical" href="http://www.teacherye.com/2017/12/27/git-2/"/>
 
 
 
@@ -298,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/12/26/git-2/">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/12/27/git-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Teacher Ye, Guan Success">
@@ -327,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-26T09:08:35+08:00">
-                2017-12-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-27T11:08:35+08:00">
+                2017-12-27
               </time>
             
 
@@ -380,8 +380,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/12/26/git-2/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/12/26/git-2/" itemprop="commentsCount"></span>
+                <a href="/2017/12/27/git-2/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/12/27/git-2/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -389,7 +389,7 @@
 
           
           
-             <span id="/2017/12/26/git-2/" class="leancloud_visitors" data-flag-title="Git学习之(二)--分支管理、远程仓库">
+             <span id="/2017/12/27/git-2/" class="leancloud_visitors" data-flag-title="Git学习之(二)--分支管理、远程仓库">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -442,11 +442,11 @@
 <p>那么问题来了？分支与提交点、暂存区、文件本身他们又是什么关系？git又是如何来管理分支的呢？它是如何做到如些快速地在多个分支之间切换、创建和删除分支的呢？</p>
 <p>首先，我们的管理是以提交点为始的，整个版本都是由一个又一个的提交点向前推进的，所以，理解提交点至关重要，下面就针对提交点我们做一下解释</p>
 <blockquote>
-<p>每一交的提交，都会把本次所涉及到的所有文件修改归总到一起，生成一个计算校验和【采用SHA-1哈希算法计算出来的】，这个过程也会记录提交者的姓名和邮箱【安装好git后我们就首先配置过的】，然后把所有暂存区的文件以blob格式写入到仓库中，并且返回每个文件的地址，同时，使用树状结构来存储这个文件列表树，这样一来，就可以想象成我们的提交点指向这个文件树，这个文件树中维护指向各个BLOB文件的地址，形成一个<code>快照[Snapshot]</code>, 如下：<br><img src="/2017/12/26/git-2/assets/commit-and-tree.png" alt="图示"></p>
+<p>每一交的提交，都会把本次所涉及到的所有文件修改归总到一起，生成一个计算校验和【采用SHA-1哈希算法计算出来的】，这个过程也会记录提交者的姓名和邮箱【安装好git后我们就首先配置过的】，然后把所有暂存区的文件以blob格式写入到仓库中，并且返回每个文件的地址，同时，使用树状结构来存储这个文件列表树，这样一来，就可以想象成我们的提交点指向这个文件树，这个文件树中维护指向各个BLOB文件的地址，形成一个<code>快照[Snapshot]</code>, 如下：<br><img src="/2017/12/27/git-2/assets/commit-and-tree.png" alt="图示"></p>
 </blockquote>
 <p>这个图中假设本次提交涉及到三个文件，可以看出，提交点有一个唯一的id字符串,它里面维护tree的地址，而tree中维护了涉及到的三个文件的地址. 现在我们可以说，Git 仓库中有五个对象,<code>三个 blob 对象（保存着文件快照）</code>、<code>一个树对象（记录着目录结构和 blob 对象索引）</code>以及一个<code>提交对象（包含着指向前述树对象的指针和所有提交信息）</code>  </p>
 <p>还记得我们前面讲过，git管理的是<code>修改</code>，并不是最原始的文件，所以，当我们再次添加、删除或修改一些文件后，执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add --all</span><br><span class="line">$ git commit -m <span class="string">"提交日志"</span></span><br></pre></td></tr></table></figure></p>
-<p>会产生另一个提交点，这个提交点的父提交点就是前面一个提交点，除了第一次提交的没有父提交点外，后面的每一次提交都有父提交点，如下：<br><img src="/2017/12/26/git-2/assets/commits-and-parents.png" alt="图示"></p>
+<p>会产生另一个提交点，这个提交点的父提交点就是前面一个提交点，除了第一次提交的没有父提交点外，后面的每一次提交都有父提交点，如下：<br><img src="/2017/12/27/git-2/assets/commits-and-parents.png" alt="图示"></p>
 <p>这样一来，git就是只需要管理<code>修改</code>即可，因为每一次的提交都是基于上一次的基础，只需要记录哪些文件发生了哪些变化即可。</p>
 <p>有了上面的知识，再来理解<code>分支</code>就相对简单了，因为分支就是指向提交对象的一个<code>可变指针</code>,说它可变，是因为它可以随意在各个提交点上移动，默认情况下，它指向哪个提交点呢？</p>
 <ul>
@@ -454,7 +454,7 @@
 <li>我们创建的分支，一开始就是指向当前所在的提交点，随着你产生新的提交点，它也是指向最新的提交点</li>
 <li>而我们知道，每个提交点都有指向它前一个提交点[父提交点]的指针.</li>
 </ul>
-<p>那当有多个分支时，git是如何知道当前我们正在使用哪个分支呢？答案就是HEAD指针，它默认指向master分支，当然，我们也可以让他指向其它的分支，这个稍后介绍，下图是在第3个提交点时创建了另外一个分支，名为v1.0：<br><img src="/2017/12/26/git-2/assets/branch-and-history.png" alt="图示"><br>注：每个提交点都对应的一个修改的快照</p>
+<p>那当有多个分支时，git是如何知道当前我们正在使用哪个分支呢？答案就是HEAD指针，它默认指向master分支，当然，我们也可以让他指向其它的分支，这个稍后介绍，下图是在第3个提交点时创建了另外一个分支，名为v1.0：<br><img src="/2017/12/27/git-2/assets/branch-and-history.png" alt="图示"><br>注：每个提交点都对应的一个修改的快照</p>
 <h3 id="创建、删除、合并分支"><a href="#创建、删除、合并分支" class="headerlink" title="创建、删除、合并分支"></a>创建、删除、合并分支</h3><blockquote>
 <p>有了上面的知识，我们就理解了分支的原理，现在我们可以通过命令来创建、删除、列举、合并分支</p>
 </blockquote>
@@ -462,12 +462,12 @@
 <p>我们也可以通一条命令来完成<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b new_branch_name</span><br></pre></td></tr></table></figure></p>
 <p>这条命令相当于上面的2条操作，创建并切换到新分支上</p>
 <p>案例:<br>我们创建一个 testing 分支：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch testing</span><br></pre></td></tr></table></figure></p>
-<p>创建成功后，这时并不会切换到这个新分支上，此时的图示如下：<br><img src="/2017/12/26/git-2/assets/head-to-master.png" alt="图示"></p>
+<p>创建成功后，这时并不会切换到这个新分支上，此时的图示如下：<br><img src="/2017/12/27/git-2/assets/head-to-master.png" alt="图示"></p>
 <p>也就是在当前分支的最新提交点上，创建出另一个可移动的指针而已，它与master同时指向最新的提交点。</p>
 <p>我们可以通过<code>git log</code> 命令来查看各个分支当前所指的对象，要使用 –decorate 选项<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --decorate --oneline</span><br><span class="line">79309a2 (HEAD -&gt; master, testing) delete world.java file</span><br><span class="line">190db88 modify World.java</span><br><span class="line">0ff04d2 修改World.java文件</span><br><span class="line">e986401 添加World.java文件</span><br><span class="line">f6e2999 (tag: v2.0) add new file f4.txt</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
 <p>可以看出，HEAD指向的是master，testing和master都指向<code>79309a2</code>提交点</p>
 <p>使用<code>git checkout</code> 可以切换分支，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout testing</span><br><span class="line">Switched to branch <span class="string">'testing'</span></span><br></pre></td></tr></table></figure></p>
-<p>现在，HEAD就指向testing了，其它的什么也没有变，如下图：<br><img src="/2017/12/26/git-2/assets/head-to-testing.png" alt="图示"></p>
+<p>现在，HEAD就指向testing了，其它的什么也没有变，如下图：<br><img src="/2017/12/27/git-2/assets/head-to-testing.png" alt="图示"></p>
 <p>如果你此时通过<code>git log</code> 命令来查看，结果是：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --decorate --oneline</span><br><span class="line">79309a2 (HEAD -&gt; testing, master) delete world.java file</span><br><span class="line">190db88 modify World.java</span><br><span class="line">0ff04d2 修改World.java文件</span><br><span class="line">e986401 添加World.java文件</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
 <p>HEAD指向了testing 分支，所以，切换分支，也就是把HEAD指针指向一个新的分支名，当然，工作区的文件也会根据分支的不同而不同。</p>
 <h4 id="列举所有分支"><a href="#列举所有分支" class="headerlink" title="列举所有分支"></a>列举所有分支</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git branch</span><br><span class="line"></span><br><span class="line">* master</span><br><span class="line">  testing</span><br></pre></td></tr></table></figure>
@@ -488,12 +488,12 @@
 </blockquote>
 <p>其中,fast forward模式是高效的，它就是直接移动指针快速向前，我们来看一个例子：<br>我们创建一个新的分支，名为 testing,  并切换到此分支，执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b testing</span><br><span class="line">Switched to a new branch <span class="string">'testing'</span></span><br></pre></td></tr></table></figure></p>
 <p>现在，我们修改 f4.txt 文件，添加一行内容 <code>this is a test line in testing branch</code>， 然后添加并提交，执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -a -m <span class="string">"修改f4.txt文件，增加了一行"</span></span><br><span class="line">[testing db690e2] 修改f4.txt文件，增加了一行</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br></pre></td></tr></table></figure></p>
-<p>现在的情况是，testing分支中比master分支中多了一个提交点，下面是示意图:<br><img src="/2017/12/26/git-2/assets/advance-testing.png" alt="图示"><br>可以看出，HEAD指针随着提交自动向前移动，它指向了最新的提交点，而master并没有发生变化。它仍然指向我们切换分支前的提交点位置，这就比较有意思了，现在我们切换回 master 分支，看看会发生什么， 执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">'master'</span></span><br></pre></td></tr></table></figure></p>
-<p>此时我们同样可以用一个图片来表达一下，如下：<br><img src="/2017/12/26/git-2/assets/checkout-master.png" alt="图示"><br>可以想象，HEAD指向了master分支，同时，工作区中的所有内容都恢复到master分支指向的那个提交点的状态，也就是说，刚才我们在testing分支中所做的修改，此时<code>不见了</code>【但并不意味着它真的不见了 :)】<br>这样做的好处是我们可以随时回到某一个状态，从这个状态再次出发，而不受testing分支的影响。</p>
+<p>现在的情况是，testing分支中比master分支中多了一个提交点，下面是示意图:<br><img src="/2017/12/27/git-2/assets/advance-testing.png" alt="图示"><br>可以看出，HEAD指针随着提交自动向前移动，它指向了最新的提交点，而master并没有发生变化。它仍然指向我们切换分支前的提交点位置，这就比较有意思了，现在我们切换回 master 分支，看看会发生什么， 执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">'master'</span></span><br></pre></td></tr></table></figure></p>
+<p>此时我们同样可以用一个图片来表达一下，如下：<br><img src="/2017/12/27/git-2/assets/checkout-master.png" alt="图示"><br>可以想象，HEAD指向了master分支，同时，工作区中的所有内容都恢复到master分支指向的那个提交点的状态，也就是说，刚才我们在testing分支中所做的修改，此时<code>不见了</code>【但并不意味着它真的不见了 :)】<br>这样做的好处是我们可以随时回到某一个状态，从这个状态再次出发，而不受testing分支的影响。</p>
 <p><strong>所以，切换分支是会改变工作区中的文件的。</strong></p>
 <p>好了，现在我打算使用testing分支中的修改，我们要做的就是合并分支，首先切换到master分支，然后合并，执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git merge testing</span><br><span class="line">Updating 117b6f7..db690e2</span><br><span class="line">Fast-forward</span><br><span class="line"> f4.txt | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，git采用了Fast-forward策略，也就是快进策略，直接把master和HEAD一起前进到testing的位置即可，如下图：<br><img src="/2017/12/26/git-2/assets/master-merge-testing.png" alt="图示"></p>
-<p>上面演示的是一种比较理想的情况，国为master一直未动，那如果在testing分支做出修改的同时，master 分支也进行了更新，产生了新的提交点，如下面这种情况：<br><img src="/2017/12/26/git-2/assets/advance-master.png" alt="图示"><br>可以明显地看出，两个分支都向前跨了一步，产生了分叉，这种情况下，合并就不是简单的快进模式，不过好在git也不需要我们去多做什么，它会自动处理这个合并，采用<code>recursive</code>模式寻找恰当的合并基础（译注：即共同祖先），然后也是同样的简单和高效。 这些高效的特性使得 Git 鼓励开发人员频繁地创建和使用分支。</p>
+<p>可以看到，git采用了Fast-forward策略，也就是快进策略，直接把master和HEAD一起前进到testing的位置即可，如下图：<br><img src="/2017/12/27/git-2/assets/master-merge-testing.png" alt="图示"></p>
+<p>上面演示的是一种比较理想的情况，国为master一直未动，那如果在testing分支做出修改的同时，master 分支也进行了更新，产生了新的提交点，如下面这种情况：<br><img src="/2017/12/27/git-2/assets/advance-master.png" alt="图示"><br>可以明显地看出，两个分支都向前跨了一步，产生了分叉，这种情况下，合并就不是简单的快进模式，不过好在git也不需要我们去多做什么，它会自动处理这个合并，采用<code>recursive</code>模式寻找恰当的合并基础（译注：即共同祖先），然后也是同样的简单和高效。 这些高效的特性使得 Git 鼓励开发人员频繁地创建和使用分支。</p>
 <p>下面我们显示一下上面的操作：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b issue<span class="comment">#2</span></span><br><span class="line">Switched to a new branch <span class="string">'issue#2'</span></span><br></pre></td></tr></table></figure></p>
 <p>然后，在此分支下面修改 f3.txt 文件，这里我先故意不操作f4.txt文件，等下在master分支中我们修改f4.txt文件, 修改完成后，执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -a -m <span class="string">"修改f3.txt文件，增加一行"</span></span><br><span class="line">[issue<span class="comment">#2 dda75aa] 修改f3.txt文件，增加一行</span></span><br><span class="line"> 1 file changed, 3 insertions(+)</span><br></pre></td></tr></table></figure></p>
 <p>这样一来，issue#2分支多了一个提交点，现在，我们切换到 master 分支，也增加一个提交，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">'master'</span></span><br></pre></td></tr></table></figure></p>
@@ -595,8 +595,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/26/git-3/" rel="next" title="git学习之(三)--标签管理、github操作">
-                <i class="fa fa-chevron-left"></i> git学习之(三)--标签管理、github操作
+              <a href="/2017/12/26/git-1/" rel="next" title="Git学习之(一)--基础操作、版本控制">
+                <i class="fa fa-chevron-left"></i> Git学习之(一)--基础操作、版本控制
               </a>
             
           </div>
@@ -605,8 +605,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/26/ssh/" rel="prev" title="SSH学习和github的SSH配置">
-                SSH学习和github的SSH配置 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/12/29/git-3/" rel="prev" title="git学习之(三)--标签管理、github操作">
+                git学习之(三)--标签管理、github操作 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
