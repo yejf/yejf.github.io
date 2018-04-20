@@ -100,11 +100,11 @@
 <meta name="keywords" content="Spring, MVC, SpringMVC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC学习8-Validation和Log">
-<meta property="og:url" content="http://www.teacherye.com/2018/04/13/springmvc/07-validation/index.html">
+<meta property="og:url" content="http://www.teacherye.com/2018/04/19/springmvc/07-validation/index.html">
 <meta property="og:site_name" content="快程乐码">
 <meta property="og:description" content="Spring mvc， MVC框架">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-19T09:18:14.715Z">
+<meta property="og:updated_time" content="2018-04-19T09:26:55.884Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC学习8-Validation和Log">
 <meta name="twitter:description" content="Spring mvc， MVC框架">
@@ -136,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="http://www.teacherye.com/2018/04/13/springmvc/07-validation/"/>
+  <link rel="canonical" href="http://www.teacherye.com/2018/04/19/springmvc/07-validation/"/>
 
 
 
@@ -298,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2018/04/13/springmvc/07-validation/">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2018/04/19/springmvc/07-validation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Teacher Ye, Guan Success">
@@ -327,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-13T11:01:47+08:00">
-                2018-04-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T11:01:47+08:00">
+                2018-04-19
               </time>
             
 
@@ -391,8 +391,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2018/04/13/springmvc/07-validation/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/13/springmvc/07-validation/" itemprop="commentsCount"></span>
+                <a href="/2018/04/19/springmvc/07-validation/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/19/springmvc/07-validation/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -400,7 +400,7 @@
 
           
           
-             <span id="/2018/04/13/springmvc/07-validation/" class="leancloud_visitors" data-flag-title="SpringMVC学习8-Validation和Log">
+             <span id="/2018/04/19/springmvc/07-validation/" class="leancloud_visitors" data-flag-title="SpringMVC学习8-Validation和Log">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -498,7 +498,7 @@
 <h4 id="思路2-使用代码访问数据库进行校验"><a href="#思路2-使用代码访问数据库进行校验" class="headerlink" title="思路2:使用代码访问数据库进行校验"></a>思路2:使用代码访问数据库进行校验</h4><blockquote>
 <p>写起来简单易读,适合新人使用,比如:</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = &quot;/register&quot;, method = RequestMethod.POST)</span><br><span class="line">    //@Valid : 在封装之后,在使用之前,根据 JSR303 注解进行校验,并产生错误信息</span><br><span class="line">    public String register(@Valid User user, </span><br><span class="line">    		BindingResult result, Model model) &#123;</span><br><span class="line">        if(result.hasErrors())&#123;</span><br><span class="line">            System.out.println(&quot;发现错误信息&quot;);</span><br><span class="line">            model.addAttribute(&quot;errors&quot;, getErrorMap(result));</span><br><span class="line">            return &quot;/index.jsp&quot;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">        	//基于数据库的查询...</span><br><span class="line">        	boolean flag = false;</span><br><span class="line">        	if(flag)&#123;</span><br><span class="line">//        		/如果校验不过</span><br><span class="line">        		model.addAttribute(&quot;errors&quot;, getErrorMap(result));</span><br><span class="line">        		return &quot;/index.jsp&quot;;</span><br><span class="line">        	&#125;else&#123;</span><br><span class="line">//        		//如果校验通过</span><br><span class="line">        		System.out.println(&quot;校验通过&quot;);</span><br><span class="line">        		userService.save(user);</span><br><span class="line">        		model.addAttribute(&quot;user&quot;, user);</span><br><span class="line">        		return &quot;/WEB-INF/jsp/result.jsp&quot;;</span><br><span class="line">        	&#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/register"</span>, method = RequestMethod.POST)</span><br><span class="line">    <span class="comment">//@Valid : 在封装之后,在使用之前,根据 JSR303 注解进行校验,并产生错误信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">register</span><span class="params">(@Valid User user, </span></span></span><br><span class="line"><span class="function"><span class="params">    		BindingResult result, Model model)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(result.hasErrors())&#123;</span><br><span class="line">            System.out.println(<span class="string">"发现错误信息"</span>);</span><br><span class="line">            model.addAttribute(<span class="string">"errors"</span>, getErrorMap(result));</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"/index.jsp"</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        	<span class="comment">//基于数据库的查询...</span></span><br><span class="line">        	<span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">        	<span class="keyword">if</span>(flag)&#123;</span><br><span class="line"><span class="comment">//        		/如果校验不过</span></span><br><span class="line">        		model.addAttribute(<span class="string">"errors"</span>, getErrorMap(result));</span><br><span class="line">        		<span class="keyword">return</span> <span class="string">"/index.jsp"</span>;</span><br><span class="line">        	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="comment">//        		//如果校验通过</span></span><br><span class="line">        		System.out.println(<span class="string">"校验通过"</span>);</span><br><span class="line">        		userService.save(user);</span><br><span class="line">        		model.addAttribute(<span class="string">"user"</span>, user);</span><br><span class="line">        		<span class="keyword">return</span> <span class="string">"/WEB-INF/jsp/result.jsp"</span>;</span><br><span class="line">        	&#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="JSR303提供"><a href="#JSR303提供" class="headerlink" title="JSR303提供"></a>JSR303提供</h3><table>
 <thead>
 <tr>
@@ -645,7 +645,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/13/springmvc/06-response/" rel="next" title="SpringMVC学习7-响应和下载">
+              <a href="/2018/04/16/springmvc/06-response/" rel="next" title="SpringMVC学习7-响应和下载">
                 <i class="fa fa-chevron-left"></i> SpringMVC学习7-响应和下载
               </a>
             
@@ -655,8 +655,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/19/springmvc/11-optional-config/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/20/springmvc/08-extension/" rel="prev" title="SpringMVC学习9-Interceptor和Optional Config">
+                SpringMVC学习9-Interceptor和Optional Config <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -736,7 +736,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

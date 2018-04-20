@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT, java, web, oracle, mysql, spring, hibernate" />
+  <meta name="keywords" content="Spring, MVC, SpringMVC" />
 
 
 
@@ -96,17 +96,18 @@
 
 
 
-<meta name="description" content="SpringMVC 可选配置(非必须)WebMvcConfigurerAdapterWebMvcConfig 继承 WebMvcConfigurerAdapter， Override 父类方法，来快速配置常用信息。 1234567891011121314151617181920212223242526272829303">
+<meta name="description" content="Spring mvc， MVC框架">
+<meta name="keywords" content="Spring, MVC, SpringMVC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="快程乐码">
-<meta property="og:url" content="http://www.teacherye.com/2018/04/19/springmvc/11-optional-config/index.html">
+<meta property="og:title" content="SpringMVC学习6-文件上传">
+<meta property="og:url" content="http://www.teacherye.com/2018/04/15/springmvc/05-file-upload/index.html">
 <meta property="og:site_name" content="快程乐码">
-<meta property="og:description" content="SpringMVC 可选配置(非必须)WebMvcConfigurerAdapterWebMvcConfig 继承 WebMvcConfigurerAdapter， Override 父类方法，来快速配置常用信息。 1234567891011121314151617181920212223242526272829303132333435363738@Configuration@ComponentS">
+<meta property="og:description" content="Spring mvc， MVC框架">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-19T09:22:39.995Z">
+<meta property="og:updated_time" content="2018-04-19T09:26:45.989Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="快程乐码">
-<meta name="twitter:description" content="SpringMVC 可选配置(非必须)WebMvcConfigurerAdapterWebMvcConfig 继承 WebMvcConfigurerAdapter， Override 父类方法，来快速配置常用信息。 1234567891011121314151617181920212223242526272829303132333435363738@Configuration@ComponentS">
+<meta name="twitter:title" content="SpringMVC学习6-文件上传">
+<meta name="twitter:description" content="Spring mvc， MVC框架">
 
 
 
@@ -135,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://www.teacherye.com/2018/04/19/springmvc/11-optional-config/"/>
+  <link rel="canonical" href="http://www.teacherye.com/2018/04/15/springmvc/05-file-upload/"/>
 
 
 
 
 
-  <title> | 快程乐码</title>
+  <title>SpringMVC学习6-文件上传 | 快程乐码</title>
   
 
 
@@ -297,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2018/04/19/springmvc/11-optional-config/">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2018/04/15/springmvc/05-file-upload/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Teacher Ye, Guan Success">
@@ -314,7 +315,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">SpringMVC学习6-文件上传</h1>
         
 
         <div class="post-meta">
@@ -326,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T15:37:33+08:00">
-                2018-04-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-15T11:01:47+08:00">
+                2018-04-15
               </time>
             
 
@@ -336,6 +337,50 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/MVC/" itemprop="url" rel="index">
+                    <span itemprop="name">MVC</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/MVC/SpringMVC/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringMVC</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -346,8 +391,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2018/04/19/springmvc/11-optional-config/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/19/springmvc/11-optional-config/" itemprop="commentsCount"></span>
+                <a href="/2018/04/15/springmvc/05-file-upload/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/15/springmvc/05-file-upload/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -355,7 +400,7 @@
 
           
           
-             <span id="/2018/04/19/springmvc/11-optional-config/" class="leancloud_visitors" data-flag-title="">
+             <span id="/2018/04/15/springmvc/05-file-upload/" class="leancloud_visitors" data-flag-title="SpringMVC学习6-文件上传">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -373,6 +418,10 @@
           
 
           
+              <div class="post-description">
+                  Spring mvc， MVC框架
+              </div>
+          
 
         </div>
       </header>
@@ -387,37 +436,44 @@
       
 
       
-        <h1 id="SpringMVC-可选配置-非必须"><a href="#SpringMVC-可选配置-非必须" class="headerlink" title="SpringMVC 可选配置(非必须)"></a>SpringMVC 可选配置(非必须)</h1><h2 id="WebMvcConfigurerAdapter"><a href="#WebMvcConfigurerAdapter" class="headerlink" title="WebMvcConfigurerAdapter"></a>WebMvcConfigurerAdapter</h2><p>WebMvcConfig 继承 WebMvcConfigurerAdapter， Override 父类方法，来快速配置常用信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@ComponentScan</span><br><span class="line">@EnableWebMvc</span><br><span class="line">public class WebMvcConfig extends WebMvcConfigurerAdapter &#123;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * InternalResourceViewResolver</span><br><span class="line">   * @return</span><br><span class="line">   */</span><br><span class="line">  @Bean</span><br><span class="line">  public InternalResourceViewResolver getInternalResourceViewResolver()&#123;</span><br><span class="line">      InternalResourceViewResolver resolver = new InternalResourceViewResolver();</span><br><span class="line">      resolver.setPrefix(&quot;/WEB-INF/jsp/&quot;);</span><br><span class="line">      resolver.setSuffix(&quot;.jsp&quot;);</span><br><span class="line">      return resolver;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * Configure a handler to delegate unhandled requests</span><br><span class="line">   * by forwarding to the Servlet container&apos;s &quot;default&quot; servlet,</span><br><span class="line">   * such as : /</span><br><span class="line">   * @param configurer</span><br><span class="line">   */</span><br><span class="line">  @Override</span><br><span class="line">  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) &#123;</span><br><span class="line">      configurer.enable();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   *  mapping classpath resources to public static resources</span><br><span class="line">   *  such as : images,js,css</span><br><span class="line">   * @param registry</span><br><span class="line">   */</span><br><span class="line">  @Override</span><br><span class="line">  public void addResourceHandlers(ResourceHandlerRegistry registry) &#123;</span><br><span class="line">      registry.addResourceHandler(&quot;/images/**&quot;).addResourceLocations(&quot;classpath:/images/&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="Spring-MVC"><a href="#Spring-MVC" class="headerlink" title="Spring MVC"></a>Spring MVC</h1><blockquote>
+<p>SpringMVC是基于MVC思想的JAVA WEB实现框架，是Spring家族的一员，它基于前置控制器来接收并分发请求，支持参考验证、请求参数封装、拦截、Restful等功能，是目前较为流行的MVC框架</p>
+</blockquote>
+<p>本系列学习笔记包含如下的课程内容：</p>
 <ul>
-<li>getInternalResourceViewResolver: 配置常用视图路径和后缀</li>
-<li>configureDefaultServletHandling: 默认根目录</li>
-<li>addResourceHandlers：将私有资源映射为公开资源</li>
+<li>MVC思想</li>
+<li>Hello案例</li>
+<li>请求和响应处理</li>
+<li>文件上传和下载处理</li>
+<li>参数验证</li>
+<li>请求拦截</li>
+<li>RESTful风格</li>
+<li>日志</li>
 </ul>
-<h2 id="Request-Method"><a href="#Request-Method" class="headerlink" title="Request Method"></a>Request Method</h2><p>通过 RequestMethod 来指定请求类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(method = RequestMethod.GET)</span><br><span class="line">public Map&lt;String, Appointment&gt; get() &#123;</span><br><span class="line">    return appointmentBook.getAppointmentsForToday();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@RequestMapping(path = &quot;/&#123;day&#125;&quot;, method = RequestMethod.POST)</span><br><span class="line">public Map&lt;String, Appointment&gt; getForDay(@PathVariable @DateTimeFormat(iso=ISO.DATE) Date day, Model model) &#123;</span><br><span class="line">    return appointmentBook.getAppointmentsForDay(day);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>或者进一步使用具体 Mapping 类型 (仅最新版本才提供)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping</span><br><span class="line">@PostMapping</span><br><span class="line">@PutMapping</span><br><span class="line">@DeleteMapping</span><br></pre></td></tr></table></figure>
-<h2 id="View"><a href="#View" class="headerlink" title="View"></a>View</h2><ul>
-<li>JSP &amp; JSTL</li>
-<li>Thymeleaf</li>
-<li>Groovy Markup Templates</li>
-<li>Velocity &amp; FreeMarker<br><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/view.html" target="_blank" rel="noopener">http://docs.spring.io/spring/docs/current/spring-framework-reference/html/view.html</a></li>
+<hr>
+<a id="more"></a>
+<h2 id="File-Upload"><a href="#File-Upload" class="headerlink" title="File Upload"></a>File Upload</h2><blockquote>
+<p>文件上传是 Web 应用的常见功能用例，SpringMVC 提供 MultipartResolver 接口来处理。</p>
+</blockquote>
+<h2 id="配置-pom-xml"><a href="#配置-pom-xml" class="headerlink" title="配置 pom.xml"></a>配置 pom.xml</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="MultipartResolver"><a href="#MultipartResolver" class="headerlink" title="MultipartResolver"></a>MultipartResolver</h2><blockquote>
+<p>A strategy interface for multipart file upload resolution.<br>There is no default resolver implementation used for Spring DispatcherServlets, to define an implementation, create a bean with the id “multipartResolver” in a DispatcherServlet’s application context, like <code>org.springframework.web.multipart.commons.CommonsMultipartResolver</code> for Jakarta Commons FileUpload.</p>
+</blockquote>
+<h2 id="配置-MultipartResolver-实现类"><a href="#配置-MultipartResolver-实现类" class="headerlink" title="配置 MultipartResolver 实现类"></a>配置 MultipartResolver 实现类</h2><p>在配置信息类中声明一个方法，来提供 MultipartResolver 实现类，注意方法名就是默认 bean id.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * MultipartResolver</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> MultipartResolver <span class="title">multipartResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    CommonsMultipartResolver multipartResolver = <span class="keyword">new</span> CommonsMultipartResolver();</span><br><span class="line">    multipartResolver.setDefaultEncoding(<span class="string">"UTF-8"</span>);</span><br><span class="line">    multipartResolver.setMaxUploadSize(<span class="number">20</span> * <span class="number">1024</span> * <span class="number">1024</span>); <span class="comment">//20MB</span></span><br><span class="line">    <span class="keyword">return</span> multipartResolver;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，如果你采用xml配置，在xml中配置一个叫 multipartResolver的Bean即可.</p>
+<h2 id="Form-表单"><a href="#Form-表单" class="headerlink" title="Form 表单"></a>Form 表单</h2><p>写一个 form 表单来提交需要上传的文件</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">action</span>=<span class="string">"$&#123;path&#125;/request/demo4"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    文件:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"myFile"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"上传文件"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>注意：  </p>
+<ul>
+<li><code>input type=&quot;file&quot;</code>  </li>
+<li>enctype 必须声明为 <code>multipart/form-data</code>，否则仅会上传文件名字符串</li>
 </ul>
-<h2 id="form-tag-lib"><a href="#form-tag-lib" class="headerlink" title="form tag lib"></a>form tag lib</h2><p>The form tag library comes bundled in spring-webmvc.jar.<br>The library descriptor is called spring-form.tld.<br>To use the tags from this library, add the following directive to the top of your JSP page:  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot; %&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;form:form&gt;</span><br><span class="line">  &lt;table&gt;</span><br><span class="line">      &lt;tr&gt;</span><br><span class="line">          &lt;td&gt;First Name:&lt;/td&gt;</span><br><span class="line">          &lt;td&gt;&lt;form:input path=&quot;firstName&quot;/&gt;&lt;/td&gt;</span><br><span class="line">      &lt;/tr&gt;</span><br><span class="line">      &lt;tr&gt;</span><br><span class="line">          &lt;td&gt;Last Name:&lt;/td&gt;</span><br><span class="line">          &lt;td&gt;&lt;form:input path=&quot;lastName&quot;/&gt;&lt;/td&gt;</span><br><span class="line">      &lt;/tr&gt;</span><br><span class="line">      &lt;tr&gt;</span><br><span class="line">          &lt;td colspan=&quot;2&quot;&gt;</span><br><span class="line">              &lt;input type=&quot;submit&quot; value=&quot;Save Changes&quot;/&gt;</span><br><span class="line">          &lt;/td&gt;</span><br><span class="line">      &lt;/tr&gt;</span><br><span class="line">  &lt;/table&gt;</span><br><span class="line">&lt;/form:form&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="Supported-Method-Arguments"><a href="#Supported-Method-Arguments" class="headerlink" title="Supported Method Arguments"></a>Supported Method Arguments</h2><ul>
-<li>Request/Response objects</li>
-<li>Session object</li>
-<li>Spring’s WebRequest object</li>
-<li>java.util.Locale</li>
-<li>java.io.Reader (access to request content)</li>
-<li>java.io.Writer (access to response content)</li>
-<li>java.security.Principal</li>
-<li>ModelMap</li>
-<li>org.springframework.validation.Errors</li>
-<li>org.springframework.validation.BindingResult</li>
+<h2 id="控制器"><a href="#控制器" class="headerlink" title="控制器"></a>控制器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/demo4"</span>, method = RequestMethod.POST)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">demo4</span><span class="params">(@RequestParam MultipartFile myFile,</span></span></span><br><span class="line"><span class="function"><span class="params">                    Model model,</span></span></span><br><span class="line"><span class="function"><span class="params">                    HttpSession session)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">//获得原来文件名(含后缀名)</span></span><br><span class="line">    String originalFilename = myFile.getOriginalFilename();</span><br><span class="line">    <span class="keyword">int</span> pos = originalFilename.lastIndexOf(<span class="string">"."</span>);</span><br><span class="line">    <span class="comment">//原文件后缀名</span></span><br><span class="line">    String suffix = originalFilename.substring(pos);</span><br><span class="line">    <span class="comment">//保存文件</span></span><br><span class="line">    ServletContext application = session.getServletContext();</span><br><span class="line">    String realPath = application.getRealPath(<span class="string">"uploadFiles"</span>);</span><br><span class="line">    <span class="comment">//产生一个uuid随机文件名</span></span><br><span class="line">    String uuid = UUID.randomUUID().toString();</span><br><span class="line">    String fullPath = realPath + File.separator + uuid + suffix;</span><br><span class="line">    System.out.println(<span class="string">"fullPath:"</span> + fullPath);</span><br><span class="line">    FileUtils.copyInputStreamToFile(myFile.getInputStream(), <span class="keyword">new</span> File(fullPath));</span><br><span class="line">    model.addAttribute(<span class="string">"originalFilename"</span>, originalFilename);</span><br><span class="line">    model.addAttribute(<span class="string">"fullPath"</span>, fullPath);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"result4"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>MultipartFile: 用来接收和封装上传的文件</li>
+<li>application.getRealPath()：获得运行期项目根目录</li>
+<li>org.apache.commons.io.FileUtils: 提供了方便的 io 方法</li>
 </ul>
 
       
@@ -434,6 +490,16 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/springmvc/" rel="tag"># springmvc</a>
+          
+            <a href="/tags/mvc框架/" rel="tag"># mvc框架</a>
+          
+        </div>
+      
 
       
       
@@ -443,8 +509,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/13/springmvc/07-validation/" rel="next" title="SpringMVC学习8-Validation和Log">
-                <i class="fa fa-chevron-left"></i> SpringMVC学习8-Validation和Log
+              <a href="/2018/04/14/springmvc/04-request/" rel="next" title="SpringMVC学习5-请求对象">
+                <i class="fa fa-chevron-left"></i> SpringMVC学习5-请求对象
               </a>
             
           </div>
@@ -452,6 +518,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/16/springmvc/06-response/" rel="prev" title="SpringMVC学习7-响应和下载">
+                SpringMVC学习7-响应和下载 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -530,7 +600,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -618,7 +688,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringMVC-可选配置-非必须"><span class="nav-number">1.</span> <span class="nav-text">SpringMVC 可选配置(非必须)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebMvcConfigurerAdapter"><span class="nav-number">1.1.</span> <span class="nav-text">WebMvcConfigurerAdapter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Request-Method"><span class="nav-number">1.2.</span> <span class="nav-text">Request Method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View"><span class="nav-number">1.3.</span> <span class="nav-text">View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#form-tag-lib"><span class="nav-number">1.4.</span> <span class="nav-text">form tag lib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supported-Method-Arguments"><span class="nav-number">1.5.</span> <span class="nav-text">Supported Method Arguments</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-MVC"><span class="nav-number">1.</span> <span class="nav-text">Spring MVC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#File-Upload"><span class="nav-number">1.1.</span> <span class="nav-text">File Upload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-pom-xml"><span class="nav-number">1.2.</span> <span class="nav-text">配置 pom.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MultipartResolver"><span class="nav-number">1.3.</span> <span class="nav-text">MultipartResolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-MultipartResolver-实现类"><span class="nav-number">1.4.</span> <span class="nav-text">配置 MultipartResolver 实现类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Form-表单"><span class="nav-number">1.5.</span> <span class="nav-text">Form 表单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制器"><span class="nav-number">1.6.</span> <span class="nav-text">控制器</span></a></li></ol></li></ol></div>
             
 
           </div>
