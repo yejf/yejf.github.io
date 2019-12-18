@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="快程乐码">
 <meta property="og:description" content="如何在vmware中安装和配置centos，在centos中如何安装和配置lightdm桌面，并解决中文字方块显示问题">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-18T08:55:03.448Z">
+<meta property="og:updated_time" content="2019-12-18T09:04:47.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安装和配置centOS7[含桌面环境]">
 <meta name="twitter:description" content="如何在vmware中安装和配置centos，在centos中如何安装和配置lightdm桌面，并解决中文字方块显示问题">
@@ -539,7 +539,7 @@
 <li>systemctl list-dependencies <service>  //获取服务的依赖项列表</service></li>
 </ul>
 <h2 id="安装redis数据库"><a href="#安装redis数据库" class="headerlink" title="安装redis数据库"></a>安装redis数据库</h2><ul>
-<li><p>第一步：下载 redis的安装包<br><a href="https://redis.io/download" target="_blank" rel="noopener">下载</a></p>
+<li><p>第一步：下载 redis的安装包<br><a href="https://redis.io/download" target="_blank" rel="noopener">下载redis</a><br>或者通过<code>wget download.redis.io/releases/redis-5.0.7.tar.gz</code> 下载</p>
 </li>
 <li><p>第二步：利用 tar 命令解压</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf redis-xxx.tar.gz</span><br></pre></td></tr></table></figure>
@@ -562,10 +562,13 @@
 <ul>
 <li>2.1 把redis解压目录下的<code>redis.conf</code>文件copy一份到redis-server安装目录，默认是<code>/usr/local/bin</code> [可以通过whereis redis-server 来查看]</li>
 <li>2.2 修改 <code>/usr/local/bin/redis.conf</code>文件，把 daemonize的值改为yes</li>
-<li>2.3 在<code>/etc/systemd/system/</code>目录下创建一个 redis.service 文件，内容如下：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=redis-server</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/bin/redis-server /usr/local/bin/redis.conf</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<li><p>2.3 在<code>/etc/systemd/system/</code>目录下创建一个 redis.service 文件，内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=redis-server</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/bin/redis-server /usr/local/bin/redis.conf</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>2.4 执行<code>systemctl enable redis.service</code> 来启用 redis 服务</p>
+</li>
+<li>2.5 执行<code>systemctl start redis.service</code> 来启动 redis 服务【以后开机不用再执行此行命令，会自启动】</li>
 </ul>
-<p>-2.4 执行<code>systemctl enable redis.service</code> 来启用 redis 服务<br>-2.5 执行<code>systemctl start redis.service</code> 来启动 redis 服务【以后开机不用再执行此行命令，会自启动】</p>
 
       
     </div>
