@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle, rdbms, sql, plsql" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta name="keywords" content="oracle, rdbms, sql, plsql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle数据库学习笔记(一)">
+<meta property="og:url" content="http://www.teacherye.com/2017/02/19/oracle/oracle-1/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T07:26:06.977Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle数据库学习笔记(一)">
+<meta name="twitter:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/02/19/oracle/oracle-1/"/>
+
+
+
+
+
+  <title>Oracle数据库学习笔记(一) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/02/19/oracle/oracle-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle数据库学习笔记(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-19T10:01:47+08:00">
+                2017-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/" itemprop="url" rel="index">
+                    <span itemprop="name">关系型</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/oracle/" itemprop="url" rel="index">
+                    <span itemprop="name">oracle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/02/19/oracle/oracle-1/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/02/19/oracle/oracle-1/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/02/19/oracle/oracle-1/" class="leancloud_visitors" data-flag-title="Oracle数据库学习笔记(一)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Oracle-数据库"><a href="#Oracle-数据库" class="headerlink" title="Oracle 数据库"></a>Oracle 数据库</h1><blockquote>
+<p>Oracle是一个强大的关系型数据库产品，功能丰富，产品安全性有保障，是Oracle公司的主打产品</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li>DB, <code>DataBase</code>, 数据库</li>
+<li>DBMS,<code>DataBase Management System</code>, 数据库管理系统</li>
+<li>RDBMS,<code>Relationship DataBase Management System</code>,  关系型数据库管理系统</li>
+<li>SQL, <code>Standard Query Language</code>, 标准化查询语言</li>
+</ul>
+<p>本系列学习笔记包含如下的课程内容：</p>
+<ul>
+<li>数据库的基本概念</li>
+<li>DDL 命令<ul>
+<li>Create</li>
+<li>ALTER</li>
+<li>DROP</li>
+</ul>
+</li>
+<li>DML 命令<ul>
+<li>insert</li>
+<li>update</li>
+<li>delete</li>
+</ul>
+</li>
+<li>DQL 命令<ul>
+<li>select 命令</li>
+<li>关联查询</li>
+<li>分组查询</li>
+<li>子查询</li>
+</ul>
+</li>
+<li>DCL 命令</li>
+<li>DTL 命令<ul>
+<li>commit</li>
+<li>rollback</li>
+<li>savepoint</li>
+</ul>
+</li>
+<li>数据字典</li>
+<li>数据库对象<ul>
+<li>序列</li>
+<li>索引</li>
+<li>视图</li>
+<li>同义词</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="数据库的一些基本概念"><a href="#数据库的一些基本概念" class="headerlink" title="数据库的一些基本概念"></a>数据库的一些基本概念</h2><ul>
+<li><strong>数据库(DB, Database)</strong>:按照数据结构来组织、存储和管理数据的仓库</li>
+<li><strong>数据库管理系统(DBMS, Database Management System)</strong>:<br>是一种管理类软件系统，专门用来做数据存储、管理。</li>
+<li><strong>数据库分类</strong>:</li>
+</ul>
+<ol>
+<li>网状型数据库 2.树形数据库 3. 关系型数据库 4. 对象数据库</li>
+</ol>
+<ul>
+<li><strong>Oracle数据库</strong>，它是一个比较大型的关系型数据库管理系统</li>
+<li><strong>Larry Ellison</strong>是oracle公司的创始人</li>
+<li>关系型数据库管理系统有哪些产品？</li>
+</ul>
+<ol>
+<li>Oracle(用的最多/功能最强大/收费最高(60到70万每年)) </li>
+<li>DB2(IBM公司的)  </li>
+<li>SQL SERVER(微软的)</li>
+<li>MySQL(之前是sun公司的产品现在一并归入到了ORALE)</li>
+<li>Sqlite(手机上的小型数据库)<br><strong>……</strong></li>
+</ol>
+<ul>
+<li><p><strong>SQL</strong> (Structure Query Language, 结构化查询语言)</p>
+<p>   1974年由IBM公司提出,1976年ANSI把SQL标准进行了规范化并且在1986和1992年对该标准进行了改进.2003年又进行了比较大的改进.<br>(2003年的标准为现阶段的主流标准,其写法又称为03写法)</p>
+<p>   它是用来和RDBMS产品进行交互的语言，是随着RDBMS产品一起发布的，<br>作为操作数据库管理系统的一个标准</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>SQL的5种命令</strong></li>
+</ul>
+<ol>
+<li><p>DQL, Data Query Language【数据查询语句】<br> 关键字: <strong>SELECT</strong></p>
+</li>
+<li><p>DCL, Data Control Language【数据控制语句】<br> 关键字: <strong>GRANT</strong> 、 <strong>REVOKE</strong></p>
+</li>
+<li><p>DML, Data Manipulating Language【数据操作语句】<br> 关键字: <strong>INSERT</strong>、 <strong>UPDATE</strong>、 <strong>DELETE</strong></p>
+</li>
+<li><p>DTL 命令，Data Transaction Language【数据事务语句】<br> 关键字: <strong>COMMIT</strong>、 <strong>ROLLBACK</strong>、 <strong>SAVEPOINT</strong></p>
+</li>
+<li><p>DDL 命令，Data Definition Language【数据定义语句】<br> 关键字: <strong>CREATE</strong>、 <strong>DROP</strong>、 <strong>ALTER</strong>、 <strong>COMMENT ON</strong>、 <strong>TRUNATE</strong>、 <strong>RENAME TO….</strong></p>
+</li>
+</ol>
+<hr>
+<ul>
+<li><strong>安装与配置Oracle数据库。</strong></li>
+<li>Oracle的版本:<br>…..8i -&gt; 9i -&gt; 10g -&gt; 11g -&gt; 12c<br>i 代表internet(互联网)<br>g 代表grid 网格运算和分布式运算<br>c 代表cloud 云计算</li>
+<li>oracle安装完成之后会在”服务”新增5个服务,其中最重要的两个服务为:  </li>
+</ul>
+<ol>
+<li><p>OracleServiceXE 它是ORACLE主引擎,该服务的关闭会导致整个ORACLE系统不能使用</p>
+</li>
+<li><p>OracleXETNSListener: 它是第三方服务的监听器,它负责把其他第三方的连接进行传入和传出,该服务的关闭将导致第三方客户端的不可使用</p>
+</li>
+</ol>
+<ul>
+<li>oracle 数据库由服务端和客户端组成：</li>
+<li><p><strong>服务端</strong>：由一堆的数据库后台进程和监听器以及数据库所组成,安装完成后新增的5个服务就属于后台进程和监听器的范畴</p>
+</li>
+<li><p><strong>客户端</strong>有多种:  </p>
+</li>
+</ul>
+<ol>
+<li>SqlPlus(命令行形式的客户端,它是官方自带的轻量的客户端)  </li>
+<li>PL/SQL(第三方收费客户端/功能最强大的ORACLE客户端,图形界面)  </li>
+<li>SQL developer(ORACLE自己的开发的,基于JAVA的客户端软件)  </li>
+<li>Navigator(之前是专门提供给MYSQL的客户端,SUN公司被收购后,归ORACLE公司所有,现在同样支持ORACLE的连接和使用)  </li>
+<li><p>Navicat(香港卓软科技有限公司)</p>
+<p> 从9i~10g，提供了基于浏览器访问的服务 isqlplus也就是说，不需要专门的客户端软件，通过浏览器就能打开。<br>如：打开浏览器，输入 <a href="http://127.0.0.1:8080/apex" target="_blank" rel="noopener">http://127.0.0.1:8080/apex</a> </p>
+</li>
+</ol>
+<hr>
+<ul>
+<li><p>准备工作:<br>创建用户的2个步骤:</p>
+</li>
+<li><p><strong>1. 利用管理员身份创建一个普通用户。</strong><br>语法：</p>
+<blockquote>
+<p><strong><em>create user 用户名 identified by 密码</em></strong><br><strong><em>[default tablespace 表空间名字];</em></strong>  </p>
+</blockquote>
+<p>  默认是使用USER的表空间，密码的设定不能以数字开头  </p>
+</li>
+<li><font color="#0000FF">练习：创建一个用户名为jsd1611密码为jsd1611的用户</font>  
+
+<p>  <code>create user jsd1611 identified by jsd1611;</code></p>
+</li>
+<li><p><strong>2. 授权给一个用户（即设置角色）</strong> , 语法：</p>
+<blockquote>
+<p><strong><em>grant 权限, 权限…… to 用户名;</em></strong>  </p>
+</blockquote>
+<p>  下表为oracle中内置的3个常用角色, 分别为  </p>
+<p>  角色名|操作权限<br>  -|-<br>  dba|系统管理权限<br>  connect|创建会话连接权限<br>  resource|操作基本数据库对象的权限 </p>
+</li>
+<li><font color="#0000FF">练习:把connect以及resource两个角色授予用户</font>  
+</li>
+<li><p><strong>切换用户语法:</strong>  </p>
+<blockquote>
+<p><strong><em>conn 用户名/密码;</em></strong></p>
+</blockquote>
+</li>
+<li><p><strong>修改密码语法:</strong></p>
+<blockquote>
+<p><strong><em>alter user 用户名 identified by 密码;</em></strong>  </p>
+</blockquote>
+<p>  注意: 用户拥有修改自己当前用户的密码的权限，创建当前用户的高权限用户同样拥有修改权限，<br>  当前连接着的用户不能够被管理员删除</p>
+</li>
+<li><p><strong>删除用户语法:</strong></p>
+<blockquote>
+<p><strong><em>drop user 用户名 [cascade];</em></strong>  </p>
+</blockquote>
+<p>  注意:只有创建该用户或者更高权限的账户才拥有删除该用户的权限</p>
+</li>
+<li><p>补充:</p>
+<ul>
+<li>设置用户密码过期: alter user 用户名 password expire; (该操作同样要求管理员权限)</li>
+<li>锁定用户: alter user 用户名 account lock;</li>
+<li>账户解锁: alter user 用户名 account unlock;</li>
+</ul>
+</li>
+<li><font color="#0000FF">练习</font>  
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-- 创建一个用户: 账号名为 test 密码为test</span><br><span class="line">create user test identified by test;</span><br><span class="line">-- 给这个账号授权 connect 和 resource</span><br><span class="line">grant connect, resource to test;</span><br><span class="line">-- 然后再创建一个用户test001/a123456</span><br><span class="line">create user test001 identified by a123456;</span><br><span class="line">-- 连接到test用户 把密码修改为test02</span><br><span class="line">conn test/test;</span><br><span class="line">-- 修改成功</span><br><span class="line">alter user test identified by test02;</span><br><span class="line">-- 并尝试修改test001用户的密码(修改不成功)</span><br><span class="line">alter user test001 identified by test02;</span><br><span class="line">-- 最后使用管理员账户system</span><br><span class="line">conn system/密码; </span><br><span class="line">-- 删除用户test和test001</span><br><span class="line">drop user test;</span><br><span class="line">drop user test001;</span><br></pre></td></tr></table></figure>
+  <p style="color:red">注意:SQL中使用’–’或者/<em>…</em>/来表示注释内容</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>SQL<em>PLUS 是ORACLE数据库的专用客户端软件，它是随着ORACLE产品<br>一起发布的，也就说，你安装好了ORACLE软件，也就自动安装了SQL</em>PLUS<br>客户端。</p>
+<p>  注：sqlplus是一款基于命令行的软件，它不是IDE工具。</p>
+</li>
+<li><p>SQL*PLUS中的常用命令:</p>
+</li>
+</ul>
+<ol>
+<li>conn[ect] 用户名/密码<br> 表示切换用户</li>
+<li><p>start或者@ [空格]  *.sql(SQL脚本的路径)<br> 执行数据库脚本  </p>
+<p> <strong>数据库脚本</strong>：用于创建数据库对象语句集合<br> <strong>目的</strong>：在数据库中创建存储数据的表格并且在表格中初始化数据</p>
+</li>
+<li>show user<br> 显示当前的命令用户  </li>
+<li>desc 表名<br> 查看表的结构  </li>
+<li>clear screen<br> 清屏  </li>
+<li>回忆记录<br> 方向键上下 (常用)  </li>
+<li><p>edit 文件名<br> 编辑多行sql(了解)  </p>
+<p> 我们可以使用 help 命令来查看任何一个SQL*PLUS命令的帮助文档。如:  </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">help conn</span><br><span class="line">help index;</span><br></pre></td></tr></table></figure>
+<p> 注：SQL*PLUS命令与SQL命令是两码事。</p>
+</li>
+</ol>
+<hr>
+<ul>
+<li><p>表[table]  </p>
+<p>  表是数据库中最常见的对象, 它利用 <strong>“行与列”</strong> 来存储数据, 我们的数据也是放在表中的。  </p>
+</li>
+<li><p>Navicat快捷键  </p>
+<p>  快捷键|作用<br>  -|-<br>  Ctrl + q|打开一个新的查询窗口<br>  Ctrl + r|执行所有SQL语句<br>  Ctrl + Shift + r|执行选中的SQL语句<br>  Ctrl + /|注释<br>  Ctrl + shift + /|解除注释<br>  Ctrl + l|删除行<br>  F7|执行鼠标光标后的一行SQL语句</p>
+</li>
+</ul>
+<hr>
+<h1 id="初级查询"><a href="#初级查询" class="headerlink" title="初级查询"></a>初级查询</h1><h2 id="单表无条件查询"><a href="#单表无条件查询" class="headerlink" title="单表无条件查询"></a>单表无条件查询</h2><ul>
+<li><p>查询语句DQL</p>
+<p>  查询的本质是做两件事:  1. 找什么  【定位 列名】  2. 去哪里找 【定位 表名】</p>
+<p>  语法:  </p>
+<blockquote>
+<p><strong><em>SELECT [DISTINCT] [alias.]列名 [as] 列别名[,[alias.]列名 [as] 列别名]…</em></strong><br><strong><em>FROM 表名 [as] alias</em></strong></p>
+</blockquote>
+<p>  DISTINCT 关键字表示用来排除重复记录。</p>
+</li>
+</ul>
+<ul>
+<li><font color="#0000FF">练习：</font>  
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 从s_emp表中查询出员工的名字，薪水和职位</span><br><span class="line">SELECT first_name, salary, title FROM s_emp;</span><br><span class="line">-- 从s_emp表中查出员工的姓氏，名字</span><br><span class="line">SELECT last_name &quot;姓 氏&quot;, first_name AS 名字 FROM s_emp;</span><br><span class="line">-- 找出员工的所有信息</span><br><span class="line">SELECT * FROM s_emp;</span><br><span class="line">--- 找出本公司员工的所有职位（title）</span><br><span class="line">SELECT DISTINCT title FROM s_emp;</span><br><span class="line">-- 找出所有员工的全名、工资和入职日期</span><br><span class="line">SELECT first_name || &apos; &apos; || last_name 全名, salary, start_date FROM s_emp;</span><br><span class="line">-- 找出所有的客户名及他的电话号码</span><br><span class="line">SELECT name, phone FROM s_customer;</span><br><span class="line">-- 找出每个订单的费用、支付方式、出货日期</span><br><span class="line">SELECT total, payment_type, date_shipped FROM s_ord;</span><br></pre></td></tr></table></figure>
+<p>  注意: SQL中可以使用运算符对列值等进行逻辑运算和算术运算等</p>
+</li>
+</ul>
+<h2 id="Oracle的常用数据类型"><a href="#Oracle的常用数据类型" class="headerlink" title="Oracle的常用数据类型"></a>Oracle的常用数据类型</h2><ul>
+<li><p><strong>数字型（可以做所有的数学运算）</strong>  </p>
+<p>  类型|表示含义<br>  -|-<br>  number|代表整数，默认长度为38 表示范围    -99…99(38位数)~ 99…99(38位)<br>  number(p)|代表整数，长度为p<br>  number(5) |代表整数字段有效位数为5的数 范围是-99999~ 99999<br>  number(p,s)|代表浮点数，p表示有效位，s代表精度(精确到几位)  </p>
+</li>
+<li><p>有效位数指的是从左边第一个不为 0 的数算起，到末位数字为止的所有数字，小数点和负号不计入有效位数。  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">number(4, 2)    表示有效位是4位, 精确到小数点后面是2位。</span><br><span class="line">若存储数值为99.99          正确存储</span><br><span class="line">若存储数值为99.128         存储为99.13</span><br><span class="line">number(2, 4)    表示有效位是2位, 精确到小数点后面4位。</span><br><span class="line">若存储数值为0.0099         正确存储</span><br><span class="line">若存储数值为0.00931        存储为0.0093</span><br><span class="line">若存储数值为0.9932         报错</span><br><span class="line">number(2, -1)   表示有效位数为2位精确到十位 </span><br><span class="line">若存储数值为93             存储为90</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>字符型（可以做拼接运算，oracle用||做拼接符）</strong>  </p>
+<p>  类型|表示含义<br>  -|-<br>  varchar2(n)|变长字符串,最大长度为4000 bytes,为SQL标准<br>  varchar(n)|同上,区别在于varchar2为oracle特有,oracle会保证varchar2在今后的兼容性</p>
+</li>
+<li><p>varchar2又有两种表示写法:</p>
+</li>
+</ul>
+<ol>
+<li>varchar2(n byte) 表示该字段能最长存储n比特的字符串,强调空间的概念,默认bytes表示</li>
+<li><p>varchar2(n char) 表示该字段能最长存储n个字符的字符串,强调数量的概念</p>
+<p> 其中, 中文根据不同字符的编码占不同的大小, UTF-8编码一个汉字占3个byte, GBK编码一个汉字占2个byte,<br> 英文占1个byte</p>
+</li>
+</ol>
+<ul>
+<li><p>补充<br>  nvarchar2(n), 它没有byte和char之分,并且汉字都占2个byte,最大长度为4000 bytes<br>  它的字符集设定只能使用AL16UTF16或者UTF8,它在数据库创建时就会根据国家字符集合进行规定</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">varchar2(20) 代表字符串最长为20bytes;</span><br><span class="line">若存储数据为&quot;abcd&quot;  长度为4bytes</span><br><span class="line">若存储数据为&quot;张三&quot;  长度为4bytes(GBK编码)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>char(n)  表示定长字符, n最大为2000 bytes  </p>
+</li>
+<li><p>nchar(n) 表示定长n个字符, 最大长度2000 bytes  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">    若使用char(20)存储数据&quot;abcd&quot;    存储为abcd + (16空格),长度为20 </span><br><span class="line">    ```    </span><br><span class="line"></span><br><span class="line">- 效率的话char大于varchar2</span><br><span class="line"></span><br><span class="line">- 同varchar相似,char也有两种表示写法</span><br><span class="line">1. char(20) 代表定长20 bytes,等价于char(20 byte)  </span><br><span class="line">2. char(20 char) 定长20 字符</span><br><span class="line"></span><br><span class="line">- **日期型，可以做加减运算**</span><br><span class="line"></span><br><span class="line">    类型|表示含义</span><br><span class="line">    -|-</span><br><span class="line">    date|代表日期，默认有年、月、日(年月日时分秒)</span><br><span class="line">    time|代表时间（时分秒）</span><br><span class="line">    timestamp|代表日期与时间（年月日时分秒，还有小数位：3.2秒）</span><br><span class="line"></span><br><span class="line">- **大对象(4G)，不支持查看结果**</span><br><span class="line">1. blob,  binary large object , 字节大对象,用来存放二进制数据。  </span><br><span class="line">    如：mp3, 图片, avi, ... </span><br><span class="line">2. clob,  character large object, 字符大对象，用来存放大的字符数据。  </span><br><span class="line">    如:大文本信息</span><br><span class="line"></span><br><span class="line">- 注意:不同的类型可以参与的运算是不一样的，目前我们主要讲解数字与字符。  </span><br><span class="line">&lt;font color=&quot;#FF0000&quot;&gt;oracle 里任意值若与null进行运算, 结果都是null&lt;/font&gt;</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">- &lt;font color=&quot;#0000FF&quot;&gt;练习：&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p>  – 查询出每个员工的姓名以年薪 <a href="不考虑提成率">以月薪*12</a><br>  SELECT first_name, salary <em> 12 年薪 FROM s_emp;<br>  – 查询出每个员工的姓名以年薪 [以月薪</em>12](考虑提成率)<br>  SELECT first_name, salary <em> (1 + nvl(commission_pct, 0) / 100) </em> 12 年薪 FROM s_emp;<br>  – 从s_emp表中查出员工的全名<br>  SELECT first_name || ‘ ‘ || last_name 全名 FROM s_emp;<br>  – 字符串拼接（<strong>*是</strong>入职的，工资是<strong>，职位是</strong>）<br>  SELECT first_name || ‘是’ || start_date || ‘入职的，工资是’ || salary || ‘，职位是’ || title FROM s_emp;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 补充: 空值置换函数  </span><br><span class="line">    + 对空值[null]值的处理：</span><br><span class="line">    oracle提供的空值处理函数 NVL 来转换, 语法：</span><br><span class="line">&gt; ***NVL(列值, 替代值)  当列值为null，返回替代值。***</span><br><span class="line">    + 如:nvl(commission_pct, 0) 表示如果commisson_pct不为null,返回commission_pct;反之，返回0.</span><br><span class="line">    + 注：nvl()中的两个值要为同一数据类型</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 条件查询  </span><br><span class="line"></span><br><span class="line">- 在基本查询的基础上，添加了行记录的过滤。语法：</span><br><span class="line">&gt;***SELECT [DISTINCT] [alias.]列名 [as] 列别名[,[alias.]列名 [as] 列别名]...    </span><br><span class="line">FROM 表名 [as] alias  </span><br><span class="line">[WHERE 子句]  </span><br><span class="line">[order by 字段一 asc/desc, 字段二 asc/desc]***  </span><br><span class="line"></span><br><span class="line">- 注意：  </span><br><span class="line">    where 子句可以指定条件来过滤记录,它对字面量大小写是敏感的  </span><br><span class="line">    order by子句可以指定排序条件进行记录的排序</span><br><span class="line"></span><br><span class="line">- 示例: **找出在41部门ID(对应字段为dept_id)的员工名、工资、职称**  </span><br><span class="line">    **1.查询全部**   </span><br><span class="line">    elect first_name, salary, title from s_emp;  </span><br><span class="line">    **2.对查询结果进行条件筛选**  </span><br><span class="line">    where dept_id = 41;  </span><br><span class="line">    **3.得到最终结果语句**  </span><br><span class="line">    select first_name, salary, title, dept_id from s_emp</span><br><span class="line">    where dept_id = 41;</span><br><span class="line"></span><br><span class="line">- &lt;font color=&quot;#0000FF&quot;&gt;练习：&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p>  – 找出职称是Sales Representative的员工名、工资<br>  SELECT first_name, salary FROM s_emp WHERE title = ‘Sales Representative’;<br>  – 找出manager_id为1的员工<br>  SELECT * FROM s_emp WHERE manager_id = 1;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-------</span><br><span class="line"></span><br><span class="line">- **where语句中的运算符**</span><br><span class="line">1. 算术运算符  </span><br><span class="line">   \+ \- \* /   </span><br><span class="line">2. 比较运算符   </span><br><span class="line">   &gt;, &lt;, &gt;=, &lt;=, =, !=, &lt;&gt;, ^=(后面三个表示的都是不等于)</span><br><span class="line"></span><br><span class="line">3. 逻辑运算符  </span><br><span class="line">   AND  </span><br><span class="line">   OR  </span><br><span class="line">   NOT  </span><br><span class="line">   BETWEEN AND(包含边界条件)  </span><br><span class="line"></span><br><span class="line">- **salary &gt;= 1500 and salary &lt;= 2000 等价于</span><br><span class="line">    salary between 1500 and 2000**</span><br><span class="line"></span><br><span class="line">- &lt;font color=&quot;#0000FF&quot;&gt;练习：&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p>  – 找出在41部门且工资超过1200元的员工<br>  SELECT <em> FROM s_emp WHERE dept_id = 41 AND salary &gt; 1200;<br>  – 找出工资在1200至1400元之间的员工(包含)<br>  – 注意BETWEEN AND运算符使用时小的数值在前大的数值在后<br>  SELECT </em> FROM s_emp WHERE salary BETWEEN 1200 AND 1400;<br>  SELECT * FROM s_emp WHERE salary &gt;= 1200 AND salary &lt;= 1400;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 特殊的运算符  </span><br><span class="line">    in(list)     判断是否在指定的list列表中,值跟值之间用逗号分开</span><br></pre></td></tr></table></figure>
+<p>  salary in (1300, 1200, 1500) 等价于<br>  salary = 1300 or salary = 1200 or salary = 1500</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not in(list) 与上面相反</span><br></pre></td></tr></table></figure>
+<p>  salary not in (1300, 1200, 1500) 等价于<br>  salary &lt;&gt; 1300 and salary &lt;&gt; 1200 and salary &lt;&gt; 1500</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">    is null      是否为null  (= null) 不能等于null  </span><br><span class="line">    is not null  是否不为null  </span><br><span class="line">    like         模糊匹配 like &apos;%a%&apos;; &apos;a___&apos;  </span><br><span class="line">    &apos;%&apos; 表示匹配所有字符  </span><br><span class="line">    as% 可以匹配 &apos;as&apos;, &apos;assssss&apos;, &apos;asa&apos;,&apos;33333as77777&apos; 但是不能匹配&apos;aaaaa&apos;  </span><br><span class="line">    &apos;_&apos; 表示匹配单个字符  </span><br><span class="line">    a_ 能匹配&apos;aa&apos;, &apos;as&apos;  </span><br><span class="line">    不能匹配&apos;ass&apos;, &apos;a&apos;  </span><br><span class="line"></span><br><span class="line">- 示例：</span><br><span class="line">    --- 找出在41或42或50部门的员工  </span><br><span class="line">    select * from s_emp where dept_id in (41,42,50);</span><br><span class="line"></span><br><span class="line">    select * from s_emp where dept_id = 41 or dept_id = 42 </span><br><span class="line">    or dept_id = 50;  </span><br><span class="line">    -- 找出没有提成率的员工  </span><br><span class="line">    select * from s_emp where commission_pct is null;</span><br><span class="line"></span><br><span class="line">- 模糊匹配运算符 like, 它支持两个匹配模式：</span><br><span class="line">    %   可以匹配任意多个字符</span><br><span class="line">    _    可以匹配任意单个字符</span><br><span class="line"></span><br><span class="line">- &lt;font color=&quot;#0000FF&quot;&gt;练习：&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p>  – 找出职称中含有VP的员工<br>  SELECT <em> FROM s_emp WHERE title LIKE ‘%VP%’;<br>  – 找出first_name中第2个字母是i的员工<br>  SELECT </em> FROM s_emp WHERE first_name LIKE ‘_i%’;<br>  – 第二个字母是i并且长度只有2<br>  SELECT <em> FROM s_emp WHERE first_name LIKE ‘_i’;<br>  – 找出last_name中倒数第3个字母是o的员工<br>  SELECT </em> FROM s_emp WHERE last_name LIKE ‘%o__’;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 字符的转义</span><br><span class="line">    利用 escape 关键字来转义如：  </span><br><span class="line">    -- 找出first_name中以_开头的员工    </span><br><span class="line">    select * from s_emp where like &apos;\_%&apos; escape &apos;\&apos;;  </span><br><span class="line">   -- 找出first_name以&apos;A_&apos;开头的员工  </span><br><span class="line">   select * from s_emp where like &apos;AAA_%&apos; escape &apos;A&apos;;</span><br><span class="line"></span><br><span class="line">- &lt;font color=&quot;#0000FF&quot;&gt;练习：&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p>  –找出first<em>name中第二字符为’</em>‘的员工且不以’%’结尾的员工<br>  – first_name中不包含’\’且第二个字符为’\’的员工<br>  SELECT <em> FROM s_emp WHERE<br>  first_name NOT LIKE ‘%\%’ AND<br>  first<em>name LIKE ‘</em>_%’ ESCAPE ‘\’;<br>  – first_name中第二个字符为’\’且长度至少为3且不以’%’结尾的员工<br>  SELECT </em> FROM s_emp WHERE<br>  first<em>name LIKE ‘</em>_%’ AND<br>  first_name NOT LIKE ‘%\%’ ESCAPE ‘\’;<br>  – first<em>name中第二字符为’</em>‘的员工且不以’%’结尾的员工<br>  SELECT * FROM s_emp WHERE<br>  first_name NOT LIKE ‘%\%’ ESCAPE ‘\’<br>  AND first<em>name LIKE ‘</em>_%’ ESCAPE ‘\’;<br>  注意:escape影响的范围是单个like条件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">- 排序：</span><br><span class="line">    在语句的后面带上 ORDER BY 子句即可,且只能是在所有字句的最后。  </span><br><span class="line">   支持两种排序：  </span><br><span class="line">    1.asc  升序, 默认就是升序  </span><br><span class="line">    2.desc 降序</span><br><span class="line"></span><br><span class="line">    语法：</span><br><span class="line">&gt; ***....</span><br><span class="line">order by 列名|表达式|列的序号|别名 [asc|desc]   [,列名|表达式|...]***</span><br><span class="line"></span><br><span class="line">- 示例：  </span><br><span class="line">    --- 找出员工名及所在部门、工资，并按部门号的升序排序，如果相同,再按工资的降序排序。  </span><br><span class="line">    select first_name,dept_id,salary from s_emp order by dept_id, salary desc;  </span><br><span class="line"></span><br><span class="line">    select first_name,dept_id,salary from s_emp order by 2, 3 desc;  </span><br><span class="line"></span><br><span class="line">    select * from s_emp order by 2, 3 desc; // 也可以使用,将按照数据表里的原先列排序  </span><br><span class="line"></span><br><span class="line">    select first_name,dept_id,salary &quot;薪资&quot; from s_emp order by 2, &quot;薪资&quot; desc;  </span><br><span class="line"></span><br><span class="line">- &lt;font color=&quot;#0000FF&quot;&gt;练习：&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p>  – 找出有提成率的员工<br>  select <em> from s_emp where commission_pct is not null;<br>  – 找出费用超过10000元的订单编号以及支付方式<br>  select id,payment_type,total from s_ord where total &gt; 10000;<br>  – 找出工资在950（含）至1200（含）元的员工姓名和职称<br>  select first_name, title, salary from s_emp where<br>  salary between 950 and 1200;<br>  – 找出名字中含有字母a的员工<br>  select </em> from s_emp where first_name like ‘%a%’;<br>  – 找出名字中第二个字母是a的员工<br>  select <em> from s_emp where first_name like ‘_a%’;<br>  – 查询出职称是Stock Clerk的员工全名、工资，并按工资的降序排列<br>  select first_name || ‘ ‘ || last_name 全名,salary from s_emp where title = ‘Stock Clerk’ order by salary desc;<br>  — 查询出年薪低于25000的员工名、职称、年薪，并按年薪降序排列（考虑提成率）<br>  select first_name, title,<br>  salary </em> (1 + nvl(commission_pct, 0) / 100) <em> 12 年薪 from<br>  s_emp where salary </em> (1 + nvl(commission_pct, 0) / 100) <em> 12 &lt; 25000 order by 3 desc;<br>  select first_name, title,<br>  salary </em> (1 + nvl(commission_pct, 0) / 100) <em> 12 年薪 from<br>  s_emp where salary </em> (1 + nvl(commission_pct, 0) / 100) <em> 12 &lt; 25000 order by 年薪 desc;<br>  – 查询出部门号为41或者42且工资大于1200少于1500(包含)且名字中不包含a的员工名,并按照年薪降序排列<br>  select first_name from s_emp where<br>  dept_id in (41, 42) and salary &gt; 1200 and salary &lt;= 1500<br>  and first_name not like ‘%a%’ order by salary </em> (1 + nvl(commission_pct, 0) / 100) * 12 desc;<br>  ```</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+            <a href="/tags/rdbms/" rel="tag"># rdbms</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/20/oracle/oracle-2/" rel="prev" title="Oracle数据库学习笔记(二)">
+                Oracle数据库学习笔记(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle-数据库"><span class="nav-number">1.</span> <span class="nav-text">Oracle 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库的一些基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">数据库的一些基本概念</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初级查询"><span class="nav-number">2.</span> <span class="nav-text">初级查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单表无条件查询"><span class="nav-number">2.1.</span> <span class="nav-text">单表无条件查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle的常用数据类型"><span class="nav-number">2.2.</span> <span class="nav-text">Oracle的常用数据类型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

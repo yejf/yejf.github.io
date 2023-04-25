@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle, rdbms, sql, plsql" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习基于ORACLE数据库的PLSQL编程，procedure,function,trigger,package,package body,type">
+<meta name="keywords" content="oracle, rdbms, sql, plsql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PLSQL学习笔记(二)">
+<meta property="og:url" content="http://www.teacherye.com/2017/04/20/plsql/plsql02/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习基于ORACLE数据库的PLSQL编程，procedure,function,trigger,package,package body,type">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T07:22:31.898Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PLSQL学习笔记(二)">
+<meta name="twitter:description" content="学习基于ORACLE数据库的PLSQL编程，procedure,function,trigger,package,package body,type">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/04/20/plsql/plsql02/"/>
+
+
+
+
+
+  <title>PLSQL学习笔记(二) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/04/20/plsql/plsql02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PLSQL学习笔记(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-20T10:01:47+08:00">
+                2017-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/SQL/PLSQL/" itemprop="url" rel="index">
+                    <span itemprop="name">PLSQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/04/20/plsql/plsql02/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/04/20/plsql/plsql02/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/04/20/plsql/plsql02/" class="leancloud_visitors" data-flag-title="PLSQL学习笔记(二)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习基于ORACLE数据库的PLSQL编程，procedure,function,trigger,package,package body,type
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Oracle-PLSQL"><a href="#Oracle-PLSQL" class="headerlink" title="Oracle PLSQL"></a>Oracle PLSQL</h1><blockquote>
+<p>PL/SQL is a procedural language designed specifically to embrace SQL statements within its syntax. PL/SQL program units are compiled by the Oracle Database server and stored inside the database. And at run-time, both PL/SQL and SQL run within the same server process, bringing optimal efficiency. PL/SQL automatically inherits the robustness, security, and portability of the Oracle Database.</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li>procedure, 存储过程</li>
+<li>function, 函数</li>
+<li>trigger, 触发器</li>
+<li>package/package body, 包和包体</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="Oracle存储过程"><a href="#Oracle存储过程" class="headerlink" title="Oracle存储过程"></a>Oracle存储过程</h2><ul>
+<li><p>Oracle中的procedure就类似于JAVA中没有返回值的方法，只是执行一些代码，不需要返回，<br>它和之前的PLSQL子程序的不同点在于：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">匿名子程序块                                 Procedure子程序块</span><br><span class="line">1.它不存在于数据库中                         1.它可以存储于数据库中</span><br><span class="line">2.每次使用时都会进行重新编译                  2.可以在任何需要的地方调用</span><br><span class="line">3.不能在其他块中相互调用</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><em>创建Procedure的基本语法</em></strong></p>
+<blockquote>
+<p>create [or replace] procedure 存储过程名<br>[(参数名 in|out|in out 参数数据类型)] is|as<br>变量声明部分<br>begin<br>　　存储过程执行部分<br>end 存储过程名  </p>
+</blockquote>
+</li>
+<li><p>参数的三种模式说明</p>
+<p>  模式|作用<br>  -|-<br>  in|参数的默认模式，这种模式就是在程序运行的时候已经具有值，在程序体中值不会改变<br>  out|参数只能在过程体内部赋值，表示该参数可以将某个值传递回调用他的过程<br>  in out|表示高参数可以向该过程中传递值，也可以将某个值传出去</p>
+</li>
+<li><p>存储过程示例：</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> p_sample(</span><br><span class="line">    param_in <span class="keyword">in</span> <span class="built_in">number</span> := <span class="number">10</span>,</span><br><span class="line">    param_out <span class="keyword">out</span> <span class="built_in">number</span>,</span><br><span class="line">    param_inout <span class="keyword">in</span> <span class="keyword">out</span> <span class="built_in">number</span></span><br><span class="line">) <span class="keyword">is</span></span><br><span class="line">    param_temp  <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    param_temp := param_in;</span><br><span class="line">    dbms_output.put_line('The value of param_temp is ' || param_temp);</span><br><span class="line">    <span class="comment">-- param_in := 200;</span></span><br><span class="line">    param_temp := param_out;</span><br><span class="line">    dbms_output.put_line('The value of param_temp is ' || param_temp);</span><br><span class="line">　</span><br><span class="line">    dbms_output.put_line('The value of param_out is ' || param_out);</span><br><span class="line">    param_out := 1000;</span><br><span class="line">    dbms_output.put_line('After updating, The value of param_out is ' || param_out);</span><br><span class="line">　</span><br><span class="line">    dbms_output.put_line('The value of param_inout is ' || param_inout);</span><br><span class="line">    param_inout := 789;</span><br><span class="line">    dbms_output.put_line('After updating, The value of param_inout is ' || param_inout);</span><br><span class="line"><span class="keyword">end</span> p_sample;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何调用此过程</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 调用方式一：编辑一个匿名子程序来调用p_sample存储过程</span><br><span class="line">declare</span><br><span class="line">    a number := 15;</span><br><span class="line">    b number := 25;</span><br><span class="line">    c number := 35;</span><br><span class="line">begin</span><br><span class="line">    dbms_output.put_line(&apos;a before === &apos; || a);</span><br><span class="line">    dbms_output.put_line(&apos;b before === &apos; || b);</span><br><span class="line">    dbms_output.put_line(&apos;c before === &apos; || c);</span><br><span class="line">    p_sample(a, b, c);</span><br><span class="line">    dbms_output.put_line(&apos;a after === &apos; || a);</span><br><span class="line">    dbms_output.put_line(&apos;b after === &apos; || b);</span><br><span class="line">    dbms_output.put_line(&apos;c after === &apos; || c);</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 调用方式二：利用sqlplus终端的命令 execute 命令来执行</span><br><span class="line">-- 因为三个参数中有out的模块，所以不能传值</span><br><span class="line">variable a number;  //定义一个变量</span><br><span class="line">print :a;           //打印一个变量的值</span><br><span class="line">execute p_sample(15, :a, :a);</span><br><span class="line">execute p_sample(param_in=&gt;:a, param_out=&gt;:a, param_inout=&gt;:a);</span><br><span class="line">出错时可以用show errors;来查看具体错误信息</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看创建的过程名:<code>select object_name from user_procedures;</code>  </p>
+<p style="color:red;">注意：只有是in模式的才可以给默认值，建议使用第一种方法进行调用</p></li>
+<li>删除存储过程命令<code>drop procedure 存储过程名;</code></li>
+</ul>
+<h2 id="Oracle自定义函数"><a href="#Oracle自定义函数" class="headerlink" title="Oracle自定义函数"></a>Oracle自定义函数</h2><ul>
+<li><p><strong><em>创建自定义函数语法：</em></strong></p>
+<blockquote>
+<p>create [or replace] function 函数名(<br>　　参数一 参数模型 数据类型,<br>　　参数一 参数模型 数据类型,<br>　　….<br>　　参数n  参数模型 数据类型<br>) return 数据类型<br>as/is<br>　　临时变量名1 数据类型;<br>　　临时变量名2 数据类型;<br>　　临时变量名3 数据类型;<br>　　….<br>begin<br>　　函数体<br>　　return 表达式;<br>end [函数名];  </p>
+</blockquote>
+</li>
+<li><p>关于函数示例代码：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">create or replace function am2num(</span><br><span class="line">    num1 in number,</span><br><span class="line">    num2 in number</span><br><span class="line">) return number</span><br><span class="line">as</span><br><span class="line">    t1 number;</span><br><span class="line">    t2 number;</span><br><span class="line">    t3 number;</span><br><span class="line">begin</span><br><span class="line">    t1 := num1 + num2;</span><br><span class="line">    t2 := num1 - num2;</span><br><span class="line">    t3 := t1 + t2;</span><br><span class="line">    return (t3 + 2);</span><br><span class="line">end am2num;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除自定义函数的命令<code>drop function 自定义函数名;</code></p>
+</li>
+<li>测试代码：<code>select am2num(4, 2) from dual;</code></li>
+</ul>
+<h2 id="Oracle包"><a href="#Oracle包" class="headerlink" title="Oracle包"></a>Oracle包</h2><ul>
+<li>包的作用:包可以将任何出现在块声明的语句(如：过程,函数,游标,类型,变量)放于包中,包相当于一个容器<br>用户可以从其他PL/SQL块中对其进行引用等同于包为PL/SQL提供了全程变量</li>
+<li><p>包分为两部分：包头和包体， <strong><em>创建包头的语法：</em></strong></p>
+<blockquote>
+<p>create or replace package 包名<br>　　as|is<br>　　　　procedure 过程名();<br>　　　　function 函数名() return 数据类型;<br>　　　　变量定义;<br>　　　　异常定义;<br>　　　　游标定义;<br>　　　　……<br>　　　　……<br>end 包名;</p>
+</blockquote>
+</li>
+<li><p>定义包头应当遵循以下原则:</p>
+</li>
+</ul>
+<ol>
+<li>包元素位置可以任意安排。然而在声明部分，对象必须在引用前进行声明</li>
+<li>包头可以不对任何类型的元素进行说明。例如，包头可以只带过程和函数说明语句而不声明任何异常和类型</li>
+<li>对过程和函数的任何声明都必须只对子程序和其参数进行描述，代码的实现只能在包体中出现。<br>它不同于块声明，在块声明中，过程和函数的代码可同时出现在声明部分</li>
+</ol>
+<ul>
+<li><p><strong><em>创建包体的语法：</em></strong></p>
+<blockquote>
+<p>create or replace package body 包名<br>　　as|is<br>　　　　procedure 过程定义;<br>　　　　function 函数定义;<br>　　　　……;<br>end 包名;</p>
+</blockquote>
+</li>
+<li><p>包体是与包头相互独立的，包体只能在包头完成编译后才能进行编译，包体中带有包头中<br>描述的子程序的具体实现的代码段。<br>除此之外，包体还可以包括具有包体全局属性的附加声明部分，但这些附加声明对于包头是不见的</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">-- 先定义一个包头</span><br><span class="line">create or replace package sample_package</span><br><span class="line">is </span><br><span class="line">    procedure addemp(</span><br><span class="line">        emp_id number,</span><br><span class="line">        emp_name varchar2,</span><br><span class="line">        emp_lastname varchar2</span><br><span class="line">    );</span><br><span class="line">end;</span><br><span class="line">　</span><br><span class="line">-- 实现包体</span><br><span class="line">create or replace package body sample_package</span><br><span class="line">is </span><br><span class="line">    procedure addemp(</span><br><span class="line">         emp_id number,</span><br><span class="line">         emp_name varchar2,</span><br><span class="line">         emp_lastname varchar2</span><br><span class="line">     ) is</span><br><span class="line">         begin</span><br><span class="line">             insert into tbl_emp(id , name , lastname) values(emp_id, emp_name, emp_lastname);</span><br><span class="line">             commit;</span><br><span class="line">    end addemp;</span><br><span class="line">end sample_package;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用执行<code>execute sample_package.addemp(1,&#39;wfj&#39;,&#39;wfj&#39;);</code></p>
+</li>
+<li><p>包中的函数和过程可以重载但是以下条件不能重载:<br>1). 如果两个子程序的参数仅在名称和参数类型上不同，这两个程序不能重载</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- in, out为参数类型, number为数据类型.两个过程仅在参数类型上不同，不能重载</span><br><span class="line">procedure overloadME(p_theparameter in number);</span><br><span class="line">procedure overloadME(p_theparameter out number);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2). 不能根据两个函数的返回类型对其重载</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- 两个函数仅仅在返回类型不同，不能重载</span><br><span class="line">function overloadME return date;</span><br><span class="line">function overloadME return numer;</span><br></pre></td></tr></table></figure>
+</code></pre><p>3). 重载子程序的参数的类族必须不同</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- char和varchar2属性同一类族，不能重载</span><br><span class="line">procedure overloadME(p_theparameter in char);</span><br><span class="line">procedure overloadME(p_theparameter in varchar2);</span><br></pre></td></tr></table></figure>
+</code></pre><p>4). 打包子程序也可以重载</p>
+<h2 id="Oracle触发器"><a href="#Oracle触发器" class="headerlink" title="Oracle触发器"></a>Oracle触发器</h2><ul>
+<li>触发器与存储过程、函数一样在数据库中以独立对象存在，不同点在于其他两者需要用户显式调用，<br>触发器由一个事件来触发自动隐式地运行，它不能接受参数</li>
+<li>Oracle事件是指对数据库的表进行的insert、update及delete或对视图进行类似的操作</li>
+<li>用途：触发器常用来完成由数据库的完整性约束难以完成的复杂业务规则的约束，<br>或用来监视对数据库的各种操作，实现审计的功能</li>
+<li>分类：DML触发器、替代触发器、系统触发器</li>
+<li>触发器的组成：触发时间、触发时间、触发操作、触发对象、触发条件、触发频率</li>
+<li><p style="color:red;">注意：在一个表上的触发器越多，对在该表上的DML操作的性能影响就越大</p></li>
+<li><p><strong><em>创建触发器的语法：</em></strong></p>
+<blockquote>
+<p>create [or replace] trigger 触发器名称<br>{before | after }<br>{insert | delete | update [of column [, column…]]}<br>[or {insert | delete | update [of column [, column…]]}]…<br>on [模式名.]表名 | [模式名.]视图名<br>[referencing {old [as] old | new [as] new| parent as parent}]　<br>[for each row]　<br>[when condition]　<br>pl/sql_block | call procedure_name;</p>
+</blockquote>
+</li>
+<li><p>触发器的示例：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">create or replace trigger sample_trigger </span><br><span class="line">    after delete or insert or update </span><br><span class="line">    on tbl_emp</span><br><span class="line">declare</span><br><span class="line">    i number := 0;</span><br><span class="line">begin</span><br><span class="line">    select count(*) into i from tbl_emp;</span><br><span class="line">    dbms_output.put_line(&apos;there are &apos; || i || &apos; recoreds in the table.&apos;);</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除触发器语法：<code>drop trigger 触发器名</code></p>
+</li>
+<li><p>如何执行动态的SQL语句</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">create or replace procedure test(tablename varchar2)</span><br><span class="line">is</span><br><span class="line">    v_sql varchar2(100);</span><br><span class="line">begin</span><br><span class="line">    -- delete from tbl_emp where id =1;</span><br><span class="line">    v_sql := &apos;delete from &apos; || tablename || &apos; where id = 1&apos;;</span><br><span class="line">    -- v_sql :=&apos;drop table &apos;|| tablename;</span><br><span class="line">    execute immediate v_sql;</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试代码<code>execute test(&#39;tbl_emp&#39;);</code></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+            <a href="/tags/plsql/" rel="tag"># plsql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/19/plsql/plsql01/" rel="next" title="PLSQL学习笔记(一)">
+                <i class="fa fa-chevron-left"></i> PLSQL学习笔记(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/21/plsql/plsql03/" rel="prev" title="PLSQL学习笔记(三)">
+                PLSQL学习笔记(三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle-PLSQL"><span class="nav-number">1.</span> <span class="nav-text">Oracle PLSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle存储过程"><span class="nav-number">1.1.</span> <span class="nav-text">Oracle存储过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle自定义函数"><span class="nav-number">1.2.</span> <span class="nav-text">Oracle自定义函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle包"><span class="nav-number">1.3.</span> <span class="nav-text">Oracle包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle触发器"><span class="nav-number">1.4.</span> <span class="nav-text">Oracle触发器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

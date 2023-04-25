@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle, rdbms, sql, plsql" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta name="keywords" content="oracle, rdbms, sql, plsql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle数据库学习笔记(三)">
+<meta property="og:url" content="http://www.teacherye.com/2017/02/21/oracle/oracle-3/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T07:26:25.802Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle数据库学习笔记(三)">
+<meta name="twitter:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/02/21/oracle/oracle-3/"/>
+
+
+
+
+
+  <title>Oracle数据库学习笔记(三) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/02/21/oracle/oracle-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle数据库学习笔记(三)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-21T12:01:47+08:00">
+                2017-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/" itemprop="url" rel="index">
+                    <span itemprop="name">关系型</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/oracle/" itemprop="url" rel="index">
+                    <span itemprop="name">oracle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/02/21/oracle/oracle-3/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/02/21/oracle/oracle-3/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/02/21/oracle/oracle-3/" class="leancloud_visitors" data-flag-title="Oracle数据库学习笔记(三)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Oracle-数据库"><a href="#Oracle-数据库" class="headerlink" title="Oracle 数据库"></a>Oracle 数据库</h1><blockquote>
+<p>Oracle是一个强大的关系型数据库产品，功能丰富，产品安全性有保障，是Oracle公司的主打产品</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li>DB, <code>DataBase</code>, 数据库</li>
+<li>DBMS,<code>DataBase Management System</code>, 数据库管理系统</li>
+<li>RDBMS,<code>Relationship DataBase Management System</code>,  关系型数据库管理系统</li>
+<li>SQL, <code>Standard Query Language</code>, 标准化查询语言</li>
+</ul>
+<p>本系列学习笔记包含如下的课程内容：</p>
+<ul>
+<li>数据库的基本概念</li>
+<li>DDL 命令<ul>
+<li>Create</li>
+<li>ALTER</li>
+<li>DROP</li>
+</ul>
+</li>
+<li>DML 命令<ul>
+<li>insert</li>
+<li>update</li>
+<li>delete</li>
+</ul>
+</li>
+<li>DQL 命令<ul>
+<li>select 命令</li>
+<li>关联查询</li>
+<li>分组查询</li>
+<li>子查询</li>
+</ul>
+</li>
+<li>DCL 命令</li>
+<li>DTL 命令<ul>
+<li>commit</li>
+<li>rollback</li>
+<li>savepoint</li>
+</ul>
+</li>
+<li>数据字典</li>
+<li>数据库对象<ul>
+<li>序列</li>
+<li>索引</li>
+<li>视图</li>
+<li>同义词</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="数据字典"><a href="#数据字典" class="headerlink" title="数据字典"></a>数据字典</h2><ul>
+<li><p>数据字典也叫系统表，它由ORACLE数据库产生，并且可以供用户进行查询。<br>Oracle是采用表[系统表]来管理表[用户表]的数据库。</p>
+</li>
+<li><p>我们要讲的第一张数据字典的表名：dictionary<br>通过查询 dictionary 表，可以得知所有的数据字典名。</p>
+</li>
+<li><p>Oracle中数据字典一般按照<br><strong>‘前缀_数据库对象名e|es’</strong>的规则进行命名</p>
+</li>
+<li>前缀有：<ul>
+<li>dba　　有关整个数据库中对象的信息  </li>
+<li>all　　　当前用户有权限可以访问的所有对象  </li>
+<li>user　　当前用户拥有的所有对象  </li>
+</ul>
+</li>
+<li><p>常用数据库对象有：</p>
+<ul>
+<li>user　　　　代表用户</li>
+<li>table　　　　代表表</li>
+<li>constraint　 代表约束</li>
+<li>sequence　　代表序列</li>
+<li>index　　　　代表索引</li>
+<li>view　　　　代表视图</li>
+</ul>
+</li>
+<li><p>我们把上述前缀和数据库对象组合之后大致可以猜到常用的数据字典名字：</p>
+<ul>
+<li>user_users　　　　　　可以查看用户信息</li>
+<li>user_tables　　　　　　可以查看用户拥有的表</li>
+<li>user_constraints　　　可以查看表中的约束信息</li>
+<li>user_cons_columns　　　可以查看约束的列值</li>
+<li>user_sequences　　　　可以查看用户拥有的所有序列</li>
+<li>user_indexes　　　　　可以查看用户拥有的所有索引</li>
+<li>user_views　　　　　　可以查看用户拥有的所有视图</li>
+</ul>
+</li>
+<li><p style="color:#0000FF">练习</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 查看所有表的所有约束信息</span><br><span class="line">-- 查看当前用户下有哪些表格</span><br><span class="line">-- 查看TBL_EMP表中所有的约束名和约束类型</span><br><span class="line">-- 查看当前用户的角色及角色对应的操作权限</span><br><span class="line">-- 可以利用数据字典生成SQL脚本</span><br><span class="line">select &apos;DROP TABLE &apos;||table_name||&apos; CASCADE CONSTRAINTS;&apos; from user_tables;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>#DTL语句<br>关键字|作用<br>-|-<br>commit|用来提交数据库事务<br>rollback|用来回滚数据库事务<br>savepoint|在操作中，用来保存事务点，一个事务中可以划分成很多的事务点</p>
+<ul>
+<li><p>什么是数据库事务呢？<br>简单的一句话来概括：一组相关的SQL操作。<br>对于Oracle数据库来讲，从你利用客户端与服务端建立连接/会话开始，<br>我们的所有操作都处在<br><strong>事务</strong>之中。所以，我们在会话中结束一个事务之时，也表示下一个事务开始。<br>作用:用来保证数据的平稳性和可预测性<br>例如:银行转账业务</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">update tbl_account set balance - 10000 where id = 1;</span><br><span class="line">update tbl_account set balance + 10000 where id = 2;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>事务的4大特性[ACID]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a.原子性 [Atomic]</span><br><span class="line">    是指事务不可分割，处在同一事务的操作要么一起成功，要么一起失败。</span><br><span class="line">b.一致性 [Consistency]</span><br><span class="line">    当事务结束时，内存状态与数据库一定是一致的。</span><br><span class="line">c.隔离性 [Isolation]</span><br><span class="line">    多个事务之间互不干扰。</span><br><span class="line">    注：如果多个事务同时操作同一表中的同一些记录时，会产生并发。</span><br><span class="line">d.持久性 [Durability]</span><br><span class="line">    事务一旦正确提交，则数据将固下到数据库，绝不会丢失。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>目前大部分的数据库产品都支持事务。</p>
+<ul>
+<li><p>DML如何结束事务？<br>利用commit命令或rollback命令;<br>commit 表示提务事务，就是把内存中的改变持久化到数据库[数据文件]。<br>rollback 表示回滚事务，就是把内存中的改变撤消到事务开始时的状态。</p>
+<p style="color:red;">注意: 当SQL异常终止或者系统发生故障时会自动回滚</p>
+</li>
+<li><p>Oracle中操作事务的命令：</p>
+<blockquote>
+<p>1.commit，提交事务<br>把事务中所有的数据持久化到磁盘中<br>2.rollback [to 回滚点]，回滚事务<br>把事务中所做的操作全部取消，回到初始状态<br>3.savepoint 回滚点，设置回滚点<br>事务回滚时，回到起点</p>
+</blockquote>
+</li>
+<li>总结：</li>
+</ul>
+<ol>
+<li>目前主流的数据库都是支持事务的，而且其中Oracle支持的最好</li>
+<li>一个事务不能读取到另一个事务还没有提交的数据</li>
+<li>DDL语句都会自动提交事务</li>
+<li>DML语句不会自动提交事务,需要手动commit</li>
+</ol>
+<p>##数据库并发处理机制</p>
+<ul>
+<li>为什么需要进行并发处理？<br>当多个事务同时对同一个表的同一些行做增、删、改操作时，就会存在<br>并发访问的问题，如果不对这些情况做出处理，则无法保证数据的一致性。</li>
+<li><p>数据库可能产生的并发问题包括：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1.脏读</span><br><span class="line">一个事务正在访问数据，并且对这个数据进行修改，而这种修改还没有提交到</span><br><span class="line">数据库中，而另一个事务也访问了这个数据，并且使用了这个数据。</span><br><span class="line">　</span><br><span class="line">解决方法：一个事务在修改数据时，该数据不能被其他事务访问</span><br><span class="line">　</span><br><span class="line">2.不可重复读</span><br><span class="line">一个事务多次读取同一条记录，如果此时另一个事务也访问并且修改了该数据，</span><br><span class="line">则就会出现多次读取出现数据不一致的情况，原来的数据变成了不可重复读取的数据</span><br><span class="line">　</span><br><span class="line">解决方法：只有在修改事务完全提交后才可以读取到数据</span><br><span class="line">　</span><br><span class="line">3.幻读</span><br><span class="line">一个事务修改表中的多行记录，但是此时另一个事务对该表格进行了插入数据的操作，</span><br><span class="line">则第一个事务会发现表格中会出现没有被修改的行，就像发生了幻觉一样。</span><br><span class="line">　</span><br><span class="line">解决方法：在一个事务提交数据之前，其他事务不能添加数据</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Oracle中利用“锁”机制来做多事务并发访问控制。<br>锁定能够保证当某个用户正在更新表里的一行数据时，<br>其他用户不能同时更新相同的数据行，而且也不能删除或修改被更新的表。</p>
+<ul>
+<li><p>锁定分为两种级别：行级别（TX锁）和表级别（TM锁）。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">行级别(TX锁)</span><br><span class="line">　</span><br><span class="line">对于Oracle数据库来说，行级锁只有X锁定模式，没有S锁定模式。</span><br><span class="line">　</span><br><span class="line">表级别(TM锁)</span><br><span class="line">　</span><br><span class="line">1.表级排他锁（X）         exclusive mode</span><br><span class="line">2.表级共享锁（S）         share mode</span><br><span class="line">3.共享行级排他锁（SRX）   share row exclusive</span><br><span class="line">注：这三种锁是通过专门的命令来申请的</span><br><span class="line">　</span><br><span class="line">语法：</span><br><span class="line">lock table 表名 in mode;</span><br><span class="line">　</span><br><span class="line">例如：</span><br><span class="line">-- 以共享锁锁表</span><br><span class="line">lock table tbl_emp in share mode;</span><br><span class="line">　</span><br><span class="line">-- 以排他锁锁表</span><br><span class="line">lock table tbl_emp in exclusive mode;</span><br><span class="line">　</span><br><span class="line">4.行级共享锁（RS）        row share</span><br><span class="line">5.行级排他锁（RX）        row exclusive</span><br><span class="line">注：这两种锁无需通过专门命令来申请，而是通过DDL和DML来自动申请</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p style="color:red;">注意：</p><br>1. 所有DML语句默认情况下都会自动申请RX锁，每一行记录都会有唯一的RX锁<br>2. DQL不会主动申请锁,但在项目中为了满足业务要求，有时select语句需要申请RX锁<br>如：<br><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from s_emp for update;</span><br><span class="line">select * from s_emp for update wait 5;</span><br><span class="line">select * from s_emp for update nowait;</span><br></pre></td></tr></table></figure><br><br>nowait 选项表示如果申请不到资源[锁]，则直接抛出异常<br>wait n 选项表示等待n秒钟后，还申请不到资源，则抛出异常;如果在等待期间，申请到了，则正常执行。<br><p style="color:red;">注意：事务的隔级级别越高，则并发性就越低。<br>所以，不要轻易申请X锁。当然，SELECT命令也不要轻易申请RX锁。</p><br>#其他数据库对象：<br>##序列 [sequence]<br>作用：此对象是用来生成唯一性的整数值的，所以，它很适合用来产生主键。<br>- <strong><em>创建序列语法:</em></strong><br>&gt;CREATE SEQUENCE 序列名<br>[START WITH n]　　　　　　　– 从几开始，默认1<br>[INCREMENT BY n]　　　　　　– 每次自增几，默认1<br>[MAXVALUE n|NOMAXVALUE]　　– 序列最高峰值n<br>[MINVALUE n|NOMINVALUE]　　– 序列最低峰值n<br>[CYCLE|NOCYCLE]　　　　　　– 是否循环<br>[CACHE n | NOCACHE]　　　　– 提供n个预分配的序列，保存在内存中<br>[order | noorder]　　　　　– 有序还是无序序列<br>- 创建序列会后怎么用呢？<br>序列提供了两个伪列供我们使用<br>NEXTVAL　　　　每次取序列的下一个值<br>CURRVAL　　　　每次都是从当前会话中取出此序列的当前值。<br>也就是说，在一个会话中，一定要先取到NEXTVAL后，才能取到CURRVAL<br><p style="color:red;">注意：序列的值一旦生成，是不能回滚的。多个表的主键值可以来自于同一个序列。</p><br>- 例如<br><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">创建一个序列：</span><br><span class="line">CREATE SEQUENCE customer_id</span><br><span class="line">start with 5</span><br><span class="line">increment by 5;</span><br><span class="line">　</span><br><span class="line">-- 用在插入语句中</span><br><span class="line">insert into tbl_user(id,u_name,u_pwd,u_status)</span><br><span class="line">values(user_id.nextval,&apos;一鼎&apos;,&apos;123456&apos;,&apos;正常&apos;);</span><br><span class="line">insert into tbl_user(id,u_name,u_pwd,u_status)</span><br><span class="line">values(user_id.nextval,&apos;钱斌&apos;,&apos;123456&apos;,&apos;正常&apos;);</span><br><span class="line">　</span><br><span class="line">insert into tbl_customer(id,name,location)</span><br><span class="line">values(customer_id.nextval,&apos;张三丰&apos;,&apos;武当&apos;);</span><br><span class="line">insert into tbl_order(id,ordno,cost,status,customer_id)</span><br><span class="line">values(user_id.nextval,&apos;20141107001&apos;,548.6,&apos;处理中&apos;,customer_id.currval);</span><br></pre></td></tr></table></figure><br><br>- <strong><em>删除序列语法:</em></strong><br>&gt; DROP SEQUENCE 序列名;<br><br>    ##索引 [Index]<br>作用：是一种为了快速找到目标数据记录的一种机制，它由列值与目标<br>数据的物理存储位置组成。<br>- 索引的创建有两种方式：<br>1.自动创建<br>当表中的某些列添加了主键或唯一性约束时，ORACLE会自动为这些列。<br>创建唯一性索引，索引名就是约束名<br>2.<br><strong><em>手动创建语法</em></strong>：<br>&gt;create index 索引名 on table_name(列名[,列名][,…]);<br><br>    如：<code>create index index_tbl_emp_fname on s_emp(first_name);</code><br><p style="color:red;">注意：<br>1.索引有自己独立的存储空间和命名空间<br>2.创建索引也会相对牺牲一些数据库性能</p><br>- 思考，当我们查询记录时，数据库管理系统是如何帮助我们定位到目标记录的？<br>索引的原理：<br>    <strong>1.默认情况下，索引是采用BTres（二叉树）的数据结构</strong><br>    <strong>2.伪劣（rowid），存放的数据行记录真正的“物理地址”</strong><br><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select * form s_emp where id = 1;</span><br><span class="line">-- 根据物理地址查询某一行记录</span><br><span class="line">-- 先获取行记录的rowid</span><br><span class="line">select rowid from s_emp where id = 1;</span><br><span class="line">-- 根据行记录rowid查找相应的记录</span><br><span class="line">select * from s_emp where rowid = AAADZ6AABAAAKYaAAA;</span><br><span class="line">可以看到，每行记录都有与之对应的唯一rowid值。</span><br><span class="line">由于rowid的值是无法记忆的，所以，Oracle提供了索引对象。</span><br></pre></td></tr></table></figure><br><br><strong>3.索引建立的原理：</strong><br>把创建索引的列值与rowid合成一个键值对，这个键值对就是索引，<br>然后把他们存放到指定的数据结构（二叉树，位图）中，并且是独立的索引空间<br><strong>4.索引的查询原理</strong><br>当我们的查询语句中的where条件的列建立了索引，查询就会分为2步：<br>a.先查索引，在句列中的值直接找到rowid<br>b.根据第一步得到的rowid直接定位到相应的行记录结束查询<br><strong>5.建立索引的策略：</strong><br><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a.主键列和唯一性列                                       适合</span><br><span class="line">b.不经常发生改变的列                                     适合</span><br><span class="line">c.满足以上2个条件,经常作为查询条件的列                     适合</span><br><span class="line">b.重复值太多的列                                         不适合</span><br><span class="line">d.null值太多的列                                         不适合</span><br><span class="line">e.经常更新的列                                           不适合</span><br></pre></td></tr></table></figure><br><br>- <strong><em>删除索引语法:</em></strong><br>&gt;DROP INDEX 索引名;<br><br>    ##视图[View]<br>视图是数据库的一种高级对象，同表一样。它作为表的另一种表现形式与表共享存储空间<br>或者更为直接地说，视图本质是一条合法的SELECT命令。<br><strong><em>创建视图语法</em></strong>：<br>&gt;CREATE [OR REPLACE] VIEW 视图名[(<br>    列名 DATATYPE<br>    [,列名 DATATYPE]<br>    [,…]<br>) ]<br>AS 子查询语句<br>[WITH CHECK OPTION [CONSTRAINT 约束名]]<br>[WITH READ ONLY]<br><p style="color:red;">注意：<br>WITH READ ONLY　　表示这个视图只能做SELECT操作，而不能做DML操作<br>WITH CHECK OPTION　　表示视图中的数据绝对不能更新条件中的列值。</p>
+
+<ul>
+<li><p>例如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create or replace view v_emp as</span><br><span class="line">    select id,first_name &quot;fname&quot;,start_date,salary,dept_id from s_emp</span><br><span class="line">    where dept_id = 41</span><br><span class="line">with check option constraints v_emp_ck_dept_id41;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>因为视图属于高级对象仅仅赋予resource角色不能满足需求<br>所以创建视图前需要给用户授予创建视图的权限</p>
+</li>
+<li>视图与表是共享数据存储的，所以用户通过视图去更新了列的值，<br>则相应的，表中的对应记录也就更新了。</li>
+<li>视图的作用：<br>1). 减少复杂性，增强数据的安全性<br>2). 为了配合对象权限做分级管理。</li>
+<li><p>演示案例：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">首先，创建两个用户</span><br><span class="line">create user csj identified by csj;</span><br><span class="line">grant connect,resource to csj;</span><br><span class="line">　</span><br><span class="line">Create user zsj identified by zsj;</span><br><span class="line">grant connect,resource to zsj;</span><br><span class="line">　</span><br><span class="line">其次，利用jsd1611这个用户，依据s_emp表来创建两个不同的视图：</span><br><span class="line">CREATE or replace view v1 as </span><br><span class="line">    select id,first_name,salary from s_emp where dept_id = 42</span><br><span class="line">with check option;</span><br><span class="line">　</span><br><span class="line">CREATE or replace view v2 as </span><br><span class="line">    select id,first_name,salary from s_emp where dept_id = 31</span><br><span class="line">with check option;</span><br><span class="line">　</span><br><span class="line">最后，授权</span><br><span class="line">把v1视图的读权限给到 csj 用户</span><br><span class="line">grant select,update,insert on v1 to csj;</span><br><span class="line">　</span><br><span class="line">把v2视图的读、写权限给到zsj用户</span><br><span class="line">grant select,update,insert on v2 to zsj;</span><br><span class="line">　</span><br><span class="line">最终，利用 zsj与csj 登录后，可以查看不同的对象</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>两种视图：<br>1).简单视图<br>  是指这个查询只能是单表，并且不能使用函数、表达式。<br>  简单视图可以做DML操作，当然，如果你加了WITH READ ONLY选项，<br>  那就不能做DML操作。<br>2).复杂视图<br>  是指这个查询可以跨多表做关联，当然，也可以使用函数、表达式等。<br>  复杂视图是不能做DML操作的，不管你有没有加WITH READ ONLY选项。</p>
+</li>
+<li><p><strong><em>删除视图语法:</em></strong></p>
+<blockquote>
+<p>DROP VIEW view_name;</p>
+</blockquote>
+</li>
+<li><p>补充：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 查询当前用户可以执行的主要操作 </span><br><span class="line">select * from session_privs;</span><br><span class="line">-- 查询某个权限可执行的所有操作</span><br><span class="line">select * from DBA_SYS_PRIVS where grantee = &apos;DBA&apos;;(需要DBA)</span><br><span class="line">-- 查询当前用户被赋予的系统角色</span><br><span class="line">select * from SESSION_ROLES order by role;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>视图的分类：关系视图，内嵌视图，对象视图，物化视图</p>
+</li>
+<li><p>什么是Schema，以下内容来自官方文档:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A Schema is a colleacion of database objects(used by user), schema objects are the </span><br><span class="line">logical structures that directly refer to the database&apos;s data. A user is is a name </span><br><span class="line">defined in the database that can connect to and access objects. schema and users help </span><br><span class="line">database administartors manage database security.</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+            <a href="/tags/rdbms/" rel="tag"># rdbms</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/20/oracle/oracle-2/" rel="next" title="Oracle数据库学习笔记(二)">
+                <i class="fa fa-chevron-left"></i> Oracle数据库学习笔记(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/22/oracle/oracle-4/" rel="prev" title="Oracle数据库学习笔记(四)">
+                Oracle数据库学习笔记(四) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle-数据库"><span class="nav-number">1.</span> <span class="nav-text">Oracle 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据字典"><span class="nav-number">1.1.</span> <span class="nav-text">数据字典</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

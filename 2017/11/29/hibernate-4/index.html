@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hibernate, hbm, orm, log, java, github, qbc, hql" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习 Hibernate框架查询机制,通过学习本文档，可以掌握Hibernate框架的查询体系，深入HQL语法规则，理解QBC查询机制，通过方法调用来生成最终SQL语句很适合动态查询">
+<meta name="keywords" content="hibernate, hbm, orm, log, java, github, qbc, hql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架学习(四)">
+<meta property="og:url" content="http://www.teacherye.com/2017/11/29/hibernate-4/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习 Hibernate框架查询机制,通过学习本文档，可以掌握Hibernate框架的查询体系，深入HQL语法规则，理解QBC查询机制，通过方法调用来生成最终SQL语句很适合动态查询">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/query-architecture.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hql-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hql-structure.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/criteria-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/qbc-api.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/criteria-api.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/qbc-r.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/projections.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/order.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/dc-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/property.png">
+<meta property="og:updated_time" content="2018-04-19T04:09:32.162Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate框架学习(四)">
+<meta name="twitter:description" content="学习 Hibernate框架查询机制,通过学习本文档，可以掌握Hibernate框架的查询体系，深入HQL语法规则，理解QBC查询机制，通过方法调用来生成最终SQL语句很适合动态查询">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/11/29/hibernate-4/"/>
+
+
+
+
+
+  <title>Hibernate框架学习(四) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/11/29/hibernate-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hibernate框架学习(四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-29T14:29:28+08:00">
+                2017-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/Hibernate/" itemprop="url" rel="index">
+                    <span itemprop="name">Hibernate</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/11/29/hibernate-4/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/11/29/hibernate-4/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/11/29/hibernate-4/" class="leancloud_visitors" data-flag-title="Hibernate框架学习(四)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习 Hibernate框架查询机制,通过学习本文档，可以掌握Hibernate框架的查询体系，深入HQL语法规则，理解QBC查询机制，通过方法调用来生成最终SQL语句很适合动态查询
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Hibernate-Framework"><a href="#Hibernate-Framework" class="headerlink" title="Hibernate Framework"></a>Hibernate Framework</h1><blockquote>
+<p><strong>简介：</strong><br><a href="http://www.hibernate.org/orm" target="_blank" rel="noopener">Hibernate</a>框架是一个全自动的ORM框架，它拥有强大的映射功能，提供了缓存机制、事务管理、拦截器机制、查询语句的多方面支持</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li><p>Framework, 框架，某一类问题的总体解决方案</p>
+</li>
+<li><p>ORM, <code>Object Relationship Mapping</code>, 对象关系映射</p>
+</li>
+<li><p>DATABASE, 数据库，存储数据的一种方式</p>
+</li>
+<li><p>HQL, <code>Hibernate Query Language</code>, Hibernate查询语句</p>
+</li>
+<li><p>Transaction, 事务，一组相关的操作</p>
+</li>
+<li><p>Session, 会话</p>
+</li>
+</ul>
+<p>本系列笔记包含如下的课程内容：</p>
+<ul>
+<li>Hibernate框架原理和开发流程</li>
+<li>框架缓存机制</li>
+<li>对象关系映射</li>
+<li>框架提供的查询机制<ul>
+<li>基于底层的<code>SQL</code>查询机制</li>
+<li>基于<code>HQL</code>查询机制</li>
+<li>基于<code>Criteria</code>查询机制</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="Hibernate-查询体系"><a href="#Hibernate-查询体系" class="headerlink" title="Hibernate 查询体系"></a>Hibernate 查询体系</h2><p><a href="http://hibernate.org/orm" target="_blank" rel="noopener"><img src="/2017/11/29/hibernate-4/assets/hibernate_logo_whitebkg_200px.png" alt="logo"></a></p>
+<blockquote>
+<p><em>此章节重点讲解 Hibernate框架的查询体系</em></p>
+</blockquote>
+<p><strong>章节重点：</strong></p>
+<ul>
+<li>HQL查询</li>
+<li>QBC查询  </li>
+<li>SQL查询  </li>
+<li>调试</li>
+</ul>
+<p><strong>章节难点：</strong></p>
+<ul>
+<li>Criteria查询</li>
+<li>HQL高级查询</li>
+</ul>
+<blockquote>
+<p>Hibernate框架提供了一个抽象层次的查询体系，如下：  </p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-4/assets/query-architecture.png" alt="图示"></p>
+<p>其中，最底层的SQL查询基本上就是JDBC级别的封装，而Criteria接口采用了面向对象的操作方式，程序员无需写任何的SQL或类SQL语句，直接通过方法来生成SQL语句，抽象层次较高。</p>
+<h3 id="HQL查询"><a href="#HQL查询" class="headerlink" title="HQL查询"></a>HQL查询</h3><blockquote>
+<p>HQL, 全称：Hibernate Query Language, Hibernate查询语句，它具备如下特性：</p>
+</blockquote>
+<ul>
+<li>基于SQL语法;</li>
+<li>面向对象的查询语言;</li>
+<li>使用可命名参数;</li>
+<li>提供更简单的分页查询操作;</li>
+<li>如果有select *,则必须省略.</li>
+</ul>
+<p>如：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String hql = <span class="string">"from User as u where u.name like :name"</span>;</span><br><span class="line">或</span><br><span class="line">String hql = <span class="string">"from User as u where u.age between ? and ?"</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在Hibernate框架中，使用org.hibernate.Query 接口来执行HQL字符串，它是以面向对象的方式来陈述的查询接口<br>通过 Session 接口的 createQuery(String hql)方法，来获取一个Query实例</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String hql = <span class="string">"from Department"</span>; <span class="comment">//查询出所有的部门</span></span><br><span class="line">Query q = ses.createQuery(hql); <span class="comment">//创建Query实例</span></span><br></pre></td></tr></table></figure>
+<p>Query接口的常用方法如下：</p>
+<ul>
+<li>list() 方法， 将查询的结果封装成一个List集合对象，不带泛型，需要强制类型转换</li>
+<li>uniqueResult() 方法，将查询的结果封装为单个对象，如果不存在，则返回null</li>
+<li>setParameter(String param, Object value) 方法，用来为hql中指定的动态参数设值</li>
+<li>setFirstResult(int first) 方法，设置本次查询的第一条记录的下标（初始值是0）</li>
+<li>setMaxResults(int max) 方法，设置本次查询最多返回max条数据</li>
+</ul>
+<p><strong>HQL原理</strong></p>
+<blockquote>
+<p>在开发时，程序员专注于面向对象的编辑 HQL 语句；<br>在运行时，Hibernate 自动将 HQL 翻译成相应的 SQL 并执行。</p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-4/assets/hql-1.png" alt="图示"></p>
+<p><strong>HQL语法</strong></p>
+<blockquote>
+<p>一个 HQL 语句可以包含关键字、目标、别名和函数。</p>
+</blockquote>
+<ul>
+<li>关键字<ul>
+<li>由Hibernate规定，它具有特殊语义，HQL大部分关键字都来自于SQL。</li>
+<li>比如: select、from、where等。</li>
+</ul>
+</li>
+<li>目标    <ul>
+<li>是HQL处理的内容，它可以是类、id属性、普通属性和关系属性。</li>
+</ul>
+</li>
+<li>别名<ul>
+<li>是指向当前目标的引用，使用它可以在HQL访问当前的目标。</li>
+<li>比如 ：User u 、 u.name等。</li>
+</ul>
+</li>
+<li>函数<ul>
+<li>可以对某个目标实施某种运算或处理，比如求和，取最大值等。</li>
+<li>比如: max(u.age)，sum(emp.salary)等。</li>
+</ul>
+</li>
+</ul>
+<p><strong>HQL结构</strong></p>
+<p><img src="/2017/11/29/hibernate-4/assets/hql-structure.png" alt="图示"></p>
+<ul>
+<li>from 关键字<ul>
+<li>表示查询指定的实体对象</li>
+<li>如： from User as u 或 from User u 或 from User</li>
+</ul>
+</li>
+<li>select 关键字<ul>
+<li>select 语句决定了from语句中的哪些对象将出现在返回的结果集中,如果不使用select，结果集中将包含from语句列出的所有对象。</li>
+<li>如： select c.name,c.address from Customer as c</li>
+<li>如果需要排重，可以使用 distinct 关键字</li>
+</ul>
+</li>
+<li>select 函数<ul>
+<li>select 语句中可以使用函数，对某些属性统计并返回结果。</li>
+<li>常用的函数有： count(…)， avg(…)，sum(…)，min(…)，max(…)，与SQL中的基本一致。</li>
+<li>如：select count(*) from Customer c</li>
+<li>注意：以上都使用uniqueResult()方法获得，返回类型是Object,可以通过 debug 来确定数据类型</li>
+</ul>
+</li>
+<li>where 关键字<ul>
+<li>where关键字用来限定哪些对象将会包含在返回的列表中,通常使用”类名别名.属性名”的方法</li>
+<li>如： from Customer c where c.name like ?</li>
+<li>如： from Contact con where con.customer.name = ?</li>
+</ul>
+</li>
+<li>运算符<ul>
+<li>算数运算符<ul>
+<li>+,-, *, /</li>
+</ul>
+</li>
+<li>比较运算符<ul>
+<li>=,&gt;=,&lt;=,&lt;&gt;,!=,like,between,not between</li>
+</ul>
+</li>
+<li>逻辑运算符<ul>
+<li>and, or, not</li>
+</ul>
+</li>
+<li>空运算符<ul>
+<li>is null, is not null, is empty, is not empty</li>
+</ul>
+</li>
+<li>包含运算符<ul>
+<li>in, not in, member of, not member of</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>order by <ul>
+<li>order by语句可以将返回的结果按照类的某个属性进行排序,可以使用asc或desc指定升序或降序，如果不写默认为asc。</li>
+<li>如： from Contact con order by con.name</li>
+<li>如： from Contact con order by con.age desc</li>
+</ul>
+</li>
+<li>join fetch<ul>
+<li>使用 join fetch 可以让 Hibernate 在查询时也提取关联对象的信息,不要再进行延迟加载。</li>
+<li>如：from Customer c <code>join fetch</code> c.contactSet where c.level &gt; :level</li>
+</ul>
+</li>
+</ul>
+<p><strong>常用的HQL案例</strong></p>
+<ul>
+<li>根据用户名来查询用户<br>  <code>from User as u where u.name = :name</code></li>
+<li>根据客户名来查询订单<br>  <code>from Order as o where o.customer.name = :name</code>  //使用了隐式关联</li>
+<li>根据订单下单时间来查询订单<br>  <code>from Order as o where o.order_date between ? and ?</code> //order_date表示下单时间</li>
+<li>查询出用户名及用户的角色名<br>  <code>select u.name, r.name from User as u join u.roles as r</code>  //显示关联</li>
+<li>根据用户名来查询属于此用户角色信息<br>  <code>select r from Role r join r.users u where u.name = :name</code>  //使用select指定只查角色</li>
+</ul>
+<p>以上都是常见的HQL语法，在HQL中，还支持子查询和投影查询</p>
+<p><strong>子查询</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//子查询的HQL案例</span></span><br><span class="line"><span class="comment">//查询出工资超公司平均工资的员工</span></span><br><span class="line">String hql = <span class="string">"from Emp as e where e.salary &gt; select avg(salary) from Emp"</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>投影查询</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用select来投影指定的列，并且通过Hibernate特殊语法来封装成java对象</span></span><br><span class="line">String hql = <span class="string">"select new com.tz.view.CustView(c.name,count(o.id) from Customer c join c.orders o order by count(o.id) desc"</span>; <span class="comment">//统计出客户与各自的订单数,并按订单数降序排序</span></span><br></pre></td></tr></table></figure>
+<p>当然，你事先得编写一个<code>视图类</code> CustView, 如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.tz.view;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustView</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//客户名</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> count; <span class="comment">//订单数</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//一定要提供与投影查询一致的构造方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CustView</span><span class="params">(String name, <span class="keyword">int</span> count)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.name = name;</span><br><span class="line">		<span class="keyword">this</span>.count = count;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//setter/getter省略</span></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>HQL处理UPDATE和DELETE</strong></p>
+<blockquote>
+<p>语法： <strong>( UPDATE | DELETE ) FROM? EntityName (WHERE where_conditions)?</strong></p>
+</blockquote>
+<p><em>好处：这种方式删除指定的记录比通过对象的方式删除要高效得多。</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//更新满足条件的客户名称</span></span><br><span class="line">Session session = getSession();</span><br><span class="line">Transaction tx = ses.beginTransaction();</span><br><span class="line"><span class="comment">//定义HQL</span></span><br><span class="line">String hql = <span class="string">"update Customer as c where c.name = :newName where c.name = :oldName"</span>;</span><br><span class="line"><span class="keyword">int</span> updatedEntities = session.createQuery(hql)</span><br><span class="line">        	.setString(<span class="string">"newName"</span>, newName)</span><br><span class="line">        	.setString(<span class="string">"oldName"</span>, oldName)</span><br><span class="line">        	.executeUpdate();</span><br><span class="line">tx.commit();</span><br><span class="line">session.close();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//如果要更新版本的时间戳，则可以：</span></span><br><span class="line">Session session = getSession();</span><br><span class="line">Transaction tx = session.beginTransaction();</span><br><span class="line">String hql = <span class="string">"update versioned Customer set name = :newName where name = :oldName"</span>;</span><br><span class="line"><span class="keyword">int</span> updatedEntities = session.createQuery(hql)</span><br><span class="line">        .setString(<span class="string">"newName"</span>, newName)</span><br><span class="line">        .setString(<span class="string">"oldName"</span>, oldName)</span><br><span class="line">        .executeUpdate();</span><br><span class="line">tx.commit();</span><br><span class="line">session.close();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//删除操作</span></span><br><span class="line">Session session = sessionFactory.openSession();</span><br><span class="line">Transaction tx = session.beginTransaction();</span><br><span class="line">String hql = <span class="string">"delete Customer c where c.name = :oldName"</span>;</span><br><span class="line"><span class="keyword">int</span> deletedEntities = session.createQuery(hql)</span><br><span class="line">        .setString(<span class="string">"oldName"</span>, oldName)</span><br><span class="line">        .executeUpdate();</span><br><span class="line">tx.commit();</span><br><span class="line">session.close();</span><br></pre></td></tr></table></figure>
+<h3 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h3><blockquote>
+<p>分页查询很简单，无需我们编写底层的分页查询SQL，而只需要调用如下的方法即可</p>
+</blockquote>
+<ul>
+<li>setFirstResult(int first)</li>
+<li>setMaxResults(int max)</li>
+</ul>
+<blockquote>
+<p>为什么要使用分页？</p>
+<p>铁律一:<br>只要存在实体类的列表页面,通常都会做分页处理.<br><strong>原因：</strong><br>1）提高查询效率,只需查询一小部分数据;<br>2）优化用户体验，无需面对海量数据,就像翻书一样浏览数据。</p>
+<p>铁律二:<br>在分页基础上,还需提供搜索功能,进一步改善用户体验.<br><strong>原因：</strong><br>想象一个没有搜索功能的淘宝首页….</p>
+</blockquote>
+<p><strong>案例代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//分页显示图书信息,每页显示 10行, 如果要查第2页，则</span></span><br><span class="line">String hql = <span class="string">"from Book as b"</span>;</span><br><span class="line">Query q = ses.createQuery(hql);</span><br><span class="line"><span class="comment">//调用方法指定分页</span></span><br><span class="line">q.setFirstResult((<span class="number">2</span>-<span class="number">1</span>)*<span class="number">10</span>); <span class="comment">//指定起始位置，第2页，就是从第10行开始，【因为每页10行】</span></span><br><span class="line">q.setMaxResults(<span class="number">10</span>); <span class="comment">//至多只查询出10条记录</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">q.list();</span><br></pre></td></tr></table></figure>
+<p>以上的查询，生成的sql语句中，会根据不同的DB平台来生成分页的语法，而程序员们无需考虑底层的分页语法.</p>
+<h3 id="Criteria查询"><a href="#Criteria查询" class="headerlink" title="Criteria查询"></a>Criteria查询</h3><blockquote>
+<p>org.hibernate.Criteria 是一个简单易用的，通过约束条件来进行查询的接口。可以轻松的解决类似搜索页面(其中存在N个搜索条件，且存在超过2的N次方的组合情况)的需求问题</p>
+</blockquote>
+<p>通过Criteria接口进行查询，也叫 Query By Criteria, 简称QBC， 它是最高层次的查询抽象，程序员无需编写任何的查询字符串，而是采用方法调用来生成SQL。</p>
+<p>通过 Session接口的 createCriteria(Class c) 来创建Criteria实例.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//示例</span></span><br><span class="line">Criteria c = ses.createCriteria(User.class, <span class="string">"u"</span>); <span class="comment">//相当于 from User as u</span></span><br><span class="line"><span class="comment">//添加条件</span></span><br><span class="line">c.add(Restrictions.eq(<span class="string">"u.name"</span>,<span class="string">"jack"</span>)); <span class="comment">//相当于： where u.name = 'jack'</span></span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">c.list(); <span class="comment">//与 Query一样</span></span><br></pre></td></tr></table></figure>
+<p><strong>Criteria原理</strong></p>
+<blockquote>
+<p>Hibernate 自动将 Criteria 翻译成相应的 SQL 并执行。</p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-4/assets/criteria-1.png" alt="图示"></p>
+<p><strong>Criteria常用API</strong></p>
+<p><img src="/2017/11/29/hibernate-4/assets/qbc-api.png" alt="图示"></p>
+<blockquote>
+<p>从上面的类图中可以看出，几个核心的接口和类是：</p>
+</blockquote>
+<ul>
+<li>Criterion 添加where条件的准则接口，通过Restrictions工厂类可以获取此接口的实例</li>
+<li>Restrictions 限制类，用来生成where条件</li>
+<li>Projection 添加投影查询、分组查询的接口，通过Projections工厂类可以获取此接口的实例</li>
+<li>Projections 工厂类，用来生成投影、分组的实例</li>
+<li>Order  排序类</li>
+</ul>
+<blockquote>
+<p>其它的类型都是派生于Criterion接口和Projection接口</p>
+</blockquote>
+<p><strong>Criteria接口</strong>中有如下方法：</p>
+<p><img src="/2017/11/29/hibernate-4/assets/criteria-api.png" alt="图示"></p>
+<p><strong>Restrictions类</strong>有如下方法：</p>
+<p><img src="/2017/11/29/hibernate-4/assets/qbc-r.png" alt="图示"></p>
+<p><strong>Projections类</strong>有如下方法：</p>
+<p><img src="/2017/11/29/hibernate-4/assets/projections.png" alt="图示"></p>
+<p><strong>Order类</strong>有如下方法：</p>
+<p><img src="/2017/11/29/hibernate-4/assets/order.png" alt="图示"></p>
+<blockquote>
+<p>详情可以查看 [Criteria] 的在线API<br>详情可以查看 [Restrictions] 的在线API<br>详情可以查看 [Projections] 的在线API<br>详情可以查看 [Order] 的在线API  </p>
+</blockquote>
+<p><strong>代码案例</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//统计客户总数</span></span><br><span class="line"><span class="comment">//1.创建Criteria对象</span></span><br><span class="line">Criteria c = ses.createCriteria(Customer.class);</span><br><span class="line"><span class="comment">//添加count分组函数</span></span><br><span class="line">c.setProjection(Projections.rowCount());</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">Long count = (Long)c.uniqueResult();</span><br><span class="line"><span class="comment">//</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据客户id来查询属于此客户的订单 </span></span><br><span class="line"><span class="comment">//1. 创建Criteria对象</span></span><br><span class="line">Criteria c = ses.createCriteria(Order.class,<span class="string">"o"</span>);</span><br><span class="line"><span class="comment">//2. 添加与Customer的关联</span></span><br><span class="line">c.createAlias(<span class="string">"o.customer"</span>, <span class="string">"c"</span>);</span><br><span class="line"><span class="comment">//3. 添加条件</span></span><br><span class="line">c.add(Restrictions.eq(<span class="string">"c.id"</span>,id));</span><br><span class="line"><span class="comment">//4. 执行</span></span><br><span class="line">List&lt;Order&gt; orders = (List&lt;Order&gt;)c.list();</span><br><span class="line"><span class="comment">//</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//动态多条件查询</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Order&gt; <span class="title">query</span><span class="params">(String ordNo,<span class="keyword">double</span> min, <span class="keyword">double</span> max, Date start, Date end)</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="comment">//1.创建Criteria</span></span><br><span class="line">	Criteria c = ses.createCriteria(Order.class, <span class="string">"o"</span>);</span><br><span class="line">	<span class="comment">//2. 添加条件</span></span><br><span class="line">	<span class="keyword">if</span>(ordNo != <span class="keyword">null</span> &amp;&amp; ordNo.trim().length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		c.add(Restrictions.eq(<span class="string">"o.ordNo"</span>, ordNo));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(min &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		c.add(Restrictions.gt(<span class="string">"o.cost"</span>,min));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(max &gt; <span class="number">0</span> &amp;&amp; max &gt; min) &#123;</span><br><span class="line">		c.add(Restrictions.lt(<span class="string">"o.cost"</span>, max));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(start != <span class="keyword">null</span>) &#123;</span><br><span class="line">		c.add(Restrictions.ge(<span class="string">"o.ship_date"</span>,start));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(end != <span class="keyword">null</span>) &#123;</span><br><span class="line">		c.add(Restrictions.le(<span class="string">"o.ship_date"</span>, end));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="comment">//执行</span></span><br><span class="line">	<span class="keyword">return</span> c.list();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><blockquote>
+<p>在HQL中，可以使用子查询的语法，在Criteria查询中，也可以使用子查询，不过这里要引入另一个类：DetachedCriteria, 有关此类的详细说明，可以查看[DetachedCriteria] API</p>
+</blockquote>
+<p>DetachedCriteria，也叫离线的Criteria,也就是此类的实例可以不由session进行创建，而利用Criteria的准则来构建SQL，待到要执行之时，再关联上session即可，所以，利用这个原理，可以实现子查询的功能。</p>
+<p>下面，来看一下DetachedCriteria的API介绍和方法列表：</p>
+<p><img src="/2017/11/29/hibernate-4/assets/dc-1.png" alt="图示"></p>
+<blockquote>
+<p>可以看出，这个类实现了CriteriaSpecification接口，而Criteria则是此接口的子接口，换句话说，CriteriaImpl类也实现了这个接口，所以，DetachedCriteria的操作方法与Criteria几乎一样。</p>
+</blockquote>
+<p><strong>案例</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用 DetachedCriteria构建一个“查询”: 平均订单费用</span></span><br><span class="line">DetachedCriteria dc = DetachedCriteria.forClass(Order.class,<span class="string">"o"</span>);</span><br><span class="line"><span class="comment">//添加查询的要求</span></span><br><span class="line">dc.setProjection(Projections.avg(<span class="string">"o.cost"</span>)); <span class="comment">//求订单的平均费用</span></span><br><span class="line"><span class="comment">//当然，如果还有其它的要求或条件，也可以同 Criteria 一样，添加各种Restrictions或Projections</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//现在，如何来使用这个子查询？</span></span><br><span class="line"><span class="comment">//1. 创建Criteria</span></span><br><span class="line">Criteria c = ses.createCriteria(Order.class,<span class="string">"ord"</span>);</span><br><span class="line"><span class="comment">//添加条件： cost 大于 平均订单费用</span></span><br><span class="line"><span class="comment">//注：此处要把 "ord.cost" 这个属性转换成 Property 实例,因为Restrictions不能做子查询的比较</span></span><br><span class="line">Property pro = Property.forName(<span class="string">"ord.cost"</span>); <span class="comment">//</span></span><br><span class="line"><span class="comment">//再利用 Property的方法进行子查询的比较</span></span><br><span class="line">c.add(p.gt(dc)); <span class="comment">//连在一起写就是： c.add(Property.forName("ord.cost").gt(dc));</span></span><br><span class="line"><span class="comment">//最后，执行 c 即可</span></span><br><span class="line">c.list(); </span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<p>下面，给出 Property 类的API片断如下：</p>
+<p><img src="/2017/11/29/hibernate-4/assets/property.png" alt="图示"></p>
+<blockquote>
+<p>当然，DetachedCriteria 也可以单独使用，只是在调用时，必需要把它与session关联，这样才可以执行。</p>
+</blockquote>
+<p>如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DetachedCriteria dc = DetachedCriteria.forClass(Customer.class,<span class="string">"c"</span>);</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//如要执行, 与 session关联即可</span></span><br><span class="line">Criteria c = dc.getExecutableCriteria(session);</span><br><span class="line"><span class="comment">//后面的操作就与 Criteria 一样了</span></span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<h3 id="SQL查询"><a href="#SQL查询" class="headerlink" title="SQL查询"></a>SQL查询</h3><blockquote>
+<p>用来执行本地化的sql语句的接口，在Hibernate查询体系中，抽象的层次最低，但有较高的查询效率。<br>  通过 Session.createSQLQuery(String sql) 来创建</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基本例子</span></span><br><span class="line">String sql = <span class="string">"select * from tbl_customer"</span>;</span><br><span class="line">List list = ses.createSQLQuery(sql).addEntity(Customer.class).list();</span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<p>标量查询</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询客户的name,phone,id 三个列值</span></span><br><span class="line">String sql = <span class="string">"select c.name,c.phone,c.id from tbl_customer"</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">List&lt;Object[]&gt; results = ses.createSQLQuery(sql).list();</span><br><span class="line"><span class="comment">//这种情况下，返回的集合中的元素类型一定是 Object[]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加条件</span></span><br><span class="line">String sql = <span class="string">"select c.id, c.name,c.phone from tbl_customer where c.name like ?"</span>;</span><br><span class="line"><span class="comment">//</span></span><br><span class="line">ses.createSQLQuery(sql)</span><br><span class="line">	.setParameter(<span class="number">0</span>, <span class="string">"jack%"</span>);</span><br><span class="line"><span class="comment">// 与上面一样，返回的也将是 对象数组的集合</span></span><br></pre></td></tr></table></figure>
+<p>实体查询</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询所有的客户</span></span><br><span class="line">String sql = <span class="string">"select * from tbl_customer"</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">List&lt;Customer&gt; customers = ses.createSQLQuery(sql)</span><br><span class="line">							.addEntity(Customer.class)</span><br><span class="line">							.list();</span><br><span class="line"><span class="comment">//由于使用 addEntity方法添加了Customer类做为查询的结果，所以，返回的集合中的元素类型就是Customer</span></span><br></pre></td></tr></table></figure>
+<p>关联查询</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"select &#123;o.*&#125;,&#123;c.*&#125; from hbm_order o, hbm_customer c where o.customer_id = c.id"</span>;</span><br><span class="line">Session ses = HibernateUtil.getSession();</span><br><span class="line">Transaction tx = ses.beginTransaction();</span><br><span class="line"><span class="comment">//</span></span><br><span class="line">SQLQuery query = ses.createSQLQuery(sql);</span><br><span class="line">query.addEntity(<span class="string">"o"</span>,Order.class)</span><br><span class="line">		.addJoin(<span class="string">"c"</span>, <span class="string">"o.customer"</span>);</span><br><span class="line"><span class="comment">//此方式，采用多对一的关联，查询出来的结果集合的内容是Object[], 其中，第1个元素是Order,第2个元素是Customer</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"select &#123;o.*&#125;,&#123;c.*&#125; from hbm_order o, hbm_customer c where o.customer_id = c.id"</span>;</span><br><span class="line">Session ses = HibernateUtil.getSession();</span><br><span class="line">Transaction tx = ses.beginTransaction();</span><br><span class="line"><span class="comment">//</span></span><br><span class="line">SQLQuery query = ses.createSQLQuery(sql);</span><br><span class="line">query.addEntity(<span class="string">"c"</span>,Customer.class)</span><br><span class="line">		.addJoin(<span class="string">"o"</span>, <span class="string">"c.orders"</span>);</span><br><span class="line"><span class="comment">//此方式，采用一对多的关联，查询出来的结果集合的内容是Object[], 其中，第1个元素是Customer,第2个元素是Order</span></span><br></pre></td></tr></table></figure>
+<h3 id="本章小节"><a href="#本章小节" class="headerlink" title="本章小节"></a>本章小节</h3><ul>
+<li>熟练掌握HQL的查询</li>
+<li>熟练掌握Criteria的查询</li>
+<li>了解SQLQuery的查询</li>
+</ul>
+<h3 id="参考API"><a href="#参考API" class="headerlink" title="参考API"></a>参考API</h3><p>   <a href="http://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Criteria.html" target="_blank" rel="noopener">criteria</a><br>   <a href="http://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/criterion/Restrictions.html" target="_blank" rel="noopener">Restrictions</a><br>   <a href="http://docs.jboss.org/hibernate/orm/3.2/api/" target="_blank" rel="noopener">Projections</a><br>   <a href="http://docs.jboss.org/hibernate/orm/3.2/api/" target="_blank" rel="noopener">Order</a><br>   <a href="http://docs.jboss.org/hibernate/orm/3.5/api/org/hibernate/criterion/DetachedCriteria.html" target="_blank" rel="noopener">DetachedCriteria</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/hibernate/" rel="tag"># hibernate</a>
+          
+            <a href="/tags/持久层/" rel="tag"># 持久层</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/29/hibernate-3/" rel="next" title="Hibernate框架学习(三)">
+                <i class="fa fa-chevron-left"></i> Hibernate框架学习(三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/01/mybatis-1/" rel="prev" title="MyBatis框架学习(一)">
+                MyBatis框架学习(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hibernate-Framework"><span class="nav-number">1.</span> <span class="nav-text">Hibernate Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate-查询体系"><span class="nav-number">1.1.</span> <span class="nav-text">Hibernate 查询体系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HQL查询"><span class="nav-number">1.1.1.</span> <span class="nav-text">HQL查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分页查询"><span class="nav-number">1.1.2.</span> <span class="nav-text">分页查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Criteria查询"><span class="nav-number">1.1.3.</span> <span class="nav-text">Criteria查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子查询"><span class="nav-number">1.1.4.</span> <span class="nav-text">子查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL查询"><span class="nav-number">1.1.5.</span> <span class="nav-text">SQL查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本章小节"><span class="nav-number">1.1.6.</span> <span class="nav-text">本章小节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考API"><span class="nav-number">1.1.7.</span> <span class="nav-text">参考API</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

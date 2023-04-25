@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mybatis, log, java, github, mapping, cache, api" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习 myBatis框架缓存机制和API分析, 通过此文档，可以深入理解mybatis框架的原理，通过对API的分析，探知mybatis框架的工作原理，理解一级缓存和二级缓存">
+<meta name="keywords" content="mybatis, log, java, github, mapping, cache, api">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis框架学习(四)">
+<meta property="og:url" content="http://www.teacherye.com/2017/12/05/mybatis-4/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习 myBatis框架缓存机制和API分析, 通过此文档，可以深入理解mybatis框架的原理，通过对API的分析，探知mybatis框架的工作原理，理解一级缓存和二级缓存">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/assets/cache01.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/assets/cache02.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/images/twocache.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/assets/second-cache.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/assets/ecache.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/assets/mybatis-Api.png">
+<meta property="og:updated_time" content="2020-05-28T13:13:47.167Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyBatis框架学习(四)">
+<meta name="twitter:description" content="学习 myBatis框架缓存机制和API分析, 通过此文档，可以深入理解mybatis框架的原理，通过对API的分析，探知mybatis框架的工作原理，理解一级缓存和二级缓存">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/12/05/mybatis-4/assets/cache01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/12/05/mybatis-4/"/>
+
+
+
+
+
+  <title>MyBatis框架学习(四) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/12/05/mybatis-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MyBatis框架学习(四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-05T09:53:26+08:00">
+                2017-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/mybatis/" itemprop="url" rel="index">
+                    <span itemprop="name">mybatis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/12/05/mybatis-4/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/12/05/mybatis-4/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/12/05/mybatis-4/" class="leancloud_visitors" data-flag-title="MyBatis框架学习(四)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习 myBatis框架缓存机制和API分析, 通过此文档，可以深入理解mybatis框架的原理，通过对API的分析，探知mybatis框架的工作原理，理解一级缓存和二级缓存
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MyBatis-Framework"><a href="#MyBatis-Framework" class="headerlink" title="MyBatis Framework"></a>MyBatis Framework</h1><blockquote>
+<p><strong>简介：</strong><br><a href="http://www.mybatis.org/mybatis-3/getting-started.html" target="_blank" rel="noopener">MyBatis</a> 框架是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li>Framework, 框架，某一类问题的总体解决方案</li>
+<li>ORM, <code>Object Relationship Mapping</code>, 对象关系映射</li>
+<li>DATABASE, 数据库，存储数据的一种方式</li>
+<li>Mapper, <code>是一种mybatis做持久层的称谓</code>, 相当于DAO层，所不同的是Mapper只需要提供接口和对应的xml文件，无需实现</li>
+<li>SqlSession, myBatis会话, 一般做为局部变量进行操作</li>
+<li>SqlSessionFactory, SqlSession的工厂，用来创建SqlSession实例</li>
+</ul>
+<p>本系列笔记包含如下的课程内容：</p>
+<ul>
+<li>myBatis入门教程和日志配置</li>
+<li>myBatis框架配置文件和映射文件<ul>
+<li>配置文件详解</li>
+<li>xml映射文件详解</li>
+<li>注解映射详解</li>
+</ul>
+</li>
+<li>关联映射和动态SQL机制</li>
+<li><span style="color:red">缓存机制和API分析</span><ul>
+<li>一级缓存</li>
+<li>二级缓存</li>
+<li>核心API分析</li>
+</ul>
+</li>
+<li>myBatis+Spring 整合</li>
+<li>Spring+MyBatis+SpringMVC 整合</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="mybatis缓存机制"><a href="#mybatis缓存机制" class="headerlink" title="mybatis缓存机制"></a>mybatis缓存机制</h2><p>什么是查询缓存</p>
+<ol>
+<li>mybatis提供查询缓存，用于减轻数据压力，提高数据库性能。</li>
+<li>mybaits提供一级缓存，和二级缓存。</li>
+</ol>
+<p>如图：<br><img src="/2017/12/05/mybatis-4/assets/cache01.png" alt="alt text"></p>
+<ol>
+<li>一级缓存是SqlSession级别的缓存。在操作数据库时需要构造 sqlSession对象，在对象中有一个数据结构（HashMap）用于存储缓存数据。不同的sqlSession之间的缓存数据区域（HashMap）是互相不影响的。</li>
+<li>二级缓存是mapper级别的缓存，多个SqlSession去操作同一个Mapper的sql语句，多个SqlSession可以共用二级缓存，二级缓存是跨SqlSession的。</li>
+<li>为什么要用缓存？<br>如果缓存中有数据就不用从数据库中获取，大大提高系统性能。</li>
+</ol>
+<h3 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h3><blockquote>
+<p>默认情况下，mybatis是开启一级缓存的<br>如图：<br><img src="/2017/12/05/mybatis-4/assets/cache02.png" alt="alt text"></p>
+</blockquote>
+<ol>
+<li><p>第一次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户信息，如果没有，从数据库查询用户信息。得到用户信息，将用户信息存储到一级缓存中。</p>
+</li>
+<li><p>如果sqlSession去执行commit操作（执行插入、更新、删除），清空SqlSession中的一级缓存，这样做的目的为了让缓存中存储的是最新的信息，避免脏读。</p>
+</li>
+<li><p>第二次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户信息，如缓存中有，直接从缓存中获取用户信息。</p>
+</li>
+</ol>
+<h4 id="一级缓存测试"><a href="#一级缓存测试" class="headerlink" title="一级缓存测试"></a>一级缓存测试</h4><p>按照上边一级缓存原理步骤去测试。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 一级缓存测试</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFirstCache</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	SqlSession sqlSession = MyBatisUtil.getSqlSession();</span><br><span class="line">	UserMapper mapper = sqlSession.getMapper(UserMapper.class);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第一次发起请求,查询id为10的用户</span></span><br><span class="line">	User u1 = mapper.findUserById(<span class="number">10</span>);</span><br><span class="line">	System.out.println(u1);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//如果sqlSession去执行commit操作(执行插入,更新,清除),清空sqlSession的一级缓存</span></span><br><span class="line">	<span class="comment">//这样做的目的是为了让缓存总能存储的是最新的信息,避免脏读.</span></span><br><span class="line">	<span class="comment">//sqlSession.clearCache();//清空一级缓存</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第二次发起请求,查询id为10的用户.如果之前没有commit操作,或者clearCache()操作,此处将不会发出sql</span></span><br><span class="line">	User u2 = mapper.findUserById(<span class="number">10</span>);</span><br><span class="line">	System.out.println(u2);</span><br><span class="line">	<span class="comment">//关闭sqlSession对象</span></span><br><span class="line">	sqlSession.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="一级缓存应用"><a href="#一级缓存应用" class="headerlink" title="一级缓存应用"></a>一级缓存应用</h4><blockquote>
+<p>默认开启一级缓存是有好处的，可以大大减少与DB的交互<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">正式开发，是将mybatis和spring进行整合开发，事务控制在service中。一个service方法中包括很多mapper方法调用。</span><br><span class="line"></span><br><span class="line">service&#123;</span><br><span class="line">	<span class="comment">//开始执行时，开启事务，创建SqlSession对象</span></span><br><span class="line">	<span class="comment">//第一次调用mapper的方法findUserById(1)</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第二次调用mapper的方法findUserById(1)，从一级缓存中取数据</span></span><br><span class="line">	<span class="comment">//方法结束，sqlSession关闭</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">如果是执行两次service调用查询相同 的用户信息，不走一级缓存，因为session方法结束，sqlSession就关闭，一级缓存就清空。</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h3><blockquote>
+<p>原理图示 【默认情况下，二级缓存是关闭的】<br><img src="/2017/12/05/mybatis-4/images/twocache.png" alt="alt text"></p>
+<p>文字说明：<br>首先开启mybatis的二级缓存。  </p>
+<ul>
+<li>sqlSession1去查询用户id为1的用户信息，查询到用户信息会将查询数据存储到二级缓存中。</li>
+<li>如果SqlSession3去执行相同 mapper下sql，执行commit提交，清空该 mapper下的二级缓存区域的数据。</li>
+<li>sqlSession2去查询用户id为1的用户信息，去缓存中找是否存在数据，如果存在直接从缓存中取出数据。</li>
+</ul>
+<p>二级缓存与一级缓存区别:</p>
+<pre><code>- 二级缓存的范围更大，多个sqlSession可以共享一个UserMapper的二级缓存区域。
+</code></pre><p>注：</p>
+<ul>
+<li>UserMapper有一个二级缓存区域（按namespace分） ，其它mapper也有自己的二级缓存区域（按namespace分）。每一个namespace的mapper都有一个二缓存区域，两个mapper的namespace如果相同，这两个mapper执行sql查询到数据将存在相同 的二级缓存区域中。</li>
+</ul>
+</blockquote>
+<h4 id="开启二级缓存"><a href="#开启二级缓存" class="headerlink" title="开启二级缓存"></a>开启二级缓存</h4><blockquote>
+<p>mybaits的二级缓存是mapper范围级别，除了在mybatis-config.xml设置二级缓存的总开关，还要在具体的mapper.xml中开启二级缓存。</p>
+</blockquote>
+<p>步骤：</p>
+<ol>
+<li><p>在核心配置文件mybatis-config.xml中加入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">&lt;!-- 在mybatis中二级缓存默认是关闭的,这里需要开启。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">"cacheEnabled"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在UserMapper.xml中开启二缓存，UserMapper.xml下的sql执行完成会存储到它的缓存区域（HashMap）。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 开启本mpper的namespace下的二级缓存</span></span><br><span class="line"><span class="comment">     type:指定cache接口的实现类的类型,mybatis默认使用PerpetualCache</span></span><br><span class="line"><span class="comment">	 要和ehcache或redis整合,需要设置type成ehcache实现cache接口的实现类.</span></span><br><span class="line"><span class="comment"> --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cache</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>注：mybatis框架内部使用的二级缓存是 PertualCache, 我们可以进行如下的配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">cache</span></span></span><br><span class="line"><span class="tag">        <span class="attr">eviction</span>=<span class="string">"FIFO"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">size</span>=<span class="string">"512"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">readOnly</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">flushInterval</span>=<span class="string">"600000"</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>以上属性的说明，请参考下图<br><img src="/2017/12/05/mybatis-4/assets/second-cache.png" alt="alt text"></p>
+</blockquote>
+<h4 id="pojo类实现序列化接口"><a href="#pojo类实现序列化接口" class="headerlink" title="pojo类实现序列化接口"></a>pojo类实现序列化接口</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实现可序列化接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">64427697254485564L</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">	<span class="keyword">private</span> String username;<span class="comment">// 用户姓名</span></span><br><span class="line">	<span class="keyword">private</span> String sex;<span class="comment">// 性别</span></span><br><span class="line">	<span class="keyword">private</span> Date birthday;<span class="comment">// 生日</span></span><br><span class="line">	<span class="keyword">private</span> String address;<span class="comment">// 地址</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//为了实现多对多功能,需要添加此属性</span></span><br><span class="line">	<span class="keyword">private</span> List&lt;Orders&gt; orders;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了将缓存数据取出执行反序列化操作，因为二级缓存数据存储介质多种多样，不一定在内存。</p>
+<h4 id="二级缓存测试代码"><a href="#二级缓存测试代码" class="headerlink" title="二级缓存测试代码"></a>二级缓存测试代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 二级缓存测试</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCache2</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	SqlSession sqlSession1 = sqlSessionFactory.openSession();</span><br><span class="line">	SqlSession sqlSession2 = sqlSessionFactory.openSession();</span><br><span class="line">	SqlSession sqlSession3 = sqlSessionFactory.openSession();</span><br><span class="line">	<span class="comment">// 创建代理对象</span></span><br><span class="line">	UserMapper userMapper1 = sqlSession1.getMapper(UserMapper.class);</span><br><span class="line">	<span class="comment">// 第一次发起请求，查询id为1的用户</span></span><br><span class="line">	User user1 = userMapper1.findUserById(<span class="number">1</span>);</span><br><span class="line">	System.out.println(user1);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//这里执行关闭操作，将sqlsession中的数据写到二级缓存区域</span></span><br><span class="line">	sqlSession1.close();</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//使用sqlSession3执行commit()操作</span></span><br><span class="line">	UserMapper userMapper3 = sqlSession3.getMapper(UserMapper.class);</span><br><span class="line">	User user  = userMapper3.findUserById(<span class="number">1</span>);</span><br><span class="line">	user.setUsername(<span class="string">"管成功"</span>);</span><br><span class="line">	userMapper3.updateUser(user);</span><br><span class="line">	<span class="comment">//执行提交，清空UserMapper下边的二级缓存</span></span><br><span class="line">	sqlSession3.commit();</span><br><span class="line">	sqlSession3.close();</span><br><span class="line">	</span><br><span class="line">	UserMapper userMapper2 = sqlSession2.getMapper(UserMapper.class);</span><br><span class="line">	<span class="comment">// 第二次发起请求，查询id为1的用户</span></span><br><span class="line">	User user2 = userMapper2.findUserById(<span class="number">1</span>);</span><br><span class="line">	System.out.println(user2);</span><br><span class="line"></span><br><span class="line">	sqlSession2.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="useCache属性配置"><a href="#useCache属性配置" class="headerlink" title="useCache属性配置"></a>useCache属性配置</h4><blockquote>
+<p>在select元素中，使用useCache属性可以控制当前的查询是否要使用二级缓存.</p>
+</blockquote>
+<p>在statement中设置useCache=false可以禁用当前select语句的二级缓存，即每次查询都会发出sql去查询，默认情况是true，即该sql使用二级缓存。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 控制useCache属性 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"findOrderListResultMap"</span> <span class="attr">resultMap</span>=<span class="string">"ordersUserMap"</span> <span class="attr">useCache</span>=<span class="string">"false"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果要针对每次查询都需要最新的数据sql，要设置成useCache=false，禁用二级缓存即可.</p>
+<h3 id="二级缓存供应商ehCache"><a href="#二级缓存供应商ehCache" class="headerlink" title="二级缓存供应商ehCache"></a>二级缓存供应商ehCache</h3><blockquote>
+<p>ehcache是一个支持分布式的缓存框架</p>
+</blockquote>
+<p><img src="/2017/12/05/mybatis-4/assets/ecache.png" alt="alt text"></p>
+<blockquote>
+<p>不使用分布缓存，缓存的数据在各各服务单独存储，不方便系统开发。所以要使用分布式缓存对缓存数据进行集中管理。<br>mybatis无法实现分布式缓存，需要和其它分布式缓存框架进行整合。</p>
+</blockquote>
+<h4 id="mybatis整合ehcache"><a href="#mybatis整合ehcache" class="headerlink" title="mybatis整合ehcache"></a>mybatis整合ehcache</h4><blockquote>
+<p>mybatis提供了一个cache接口，如果要实现自己的缓存逻辑，实现cache接口开发即可。</p>
+</blockquote>
+<ol>
+<li>加入mybatis-ehcache 依赖</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.caches<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-ehcache<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>配置mapper中cache中的type为ehcache对cache接口的实现类型。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 开启本mpper的namespace下的二级缓存</span></span><br><span class="line"><span class="comment">     type:指定cache接口的实现类的类型,mybatis默认使用PerpetualCache</span></span><br><span class="line"><span class="comment">	     要和ehcache整合,需要设置type我ehcache实现cache接口的实现类.</span></span><br><span class="line"><span class="comment"> --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cache</span> <span class="attr">type</span>=<span class="string">"org.mybatis.caches.ehcache.EhcacheCache"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>加入ehcache的配置文件ehcache.xml</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">defaultCache</span></span></span><br><span class="line"><span class="tag">    <span class="attr">maxElementsInMemory</span>=<span class="string">"1"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">eternal</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">timeToIdleSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">timeToLiveSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>有关这个文件中的属性的详细配置，可以参考<a href="http://www.ehcache.org/" target="_blank" rel="noopener">ehcache</a>的官方文档.</p>
+<blockquote>
+<p>小结：<br>二级缓存是在namespace上进行隔离的，而我们在做mapper.xml时，每个文件的命名空间都是不一样的，同时，同样的实体类，有可能出现在多个不同的命名空间上，这样一来，就有可能造成两个命名空间上的缓存数据不一致，这是很致命的。<br>所以，大多数时候，我个人不建议使用mybatis的二级缓存。</p>
+</blockquote>
+<h2 id="mybatis核心API讲解"><a href="#mybatis核心API讲解" class="headerlink" title="mybatis核心API讲解"></a>mybatis核心API讲解</h2><blockquote>
+<p>为了更好地理解mybatis框架，我们再此对几个核心类的关系和内部细节做一下分析。</p>
+</blockquote>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p>首先来看一下核心类的类图<br><img src="/2017/12/05/mybatis-4/assets/mybatis-Api.png" alt="mybatis核心类图"></p>
+<h3 id="详细API分析"><a href="#详细API分析" class="headerlink" title="详细API分析"></a>详细API分析</h3><p>从上面可以看出，整个mybatis框架的核心API并不多，主要有以下几个类和接口</p>
+<ul>
+<li><p>SqlSessionFactoryBuilder<br>  此类是mybatis框架构建SqlSessionFactory的入口，它的主要任务就是处理配置文件和映射文件的解析[调用其它的API]，并全部通过Configuration类存储整个信息，最后返回Configuration对象做为内置build方法的参数<br>  下面是代码片断：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">build</span><span class="params">(InputStream inputStream, String environment, Properties properties)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      XMLConfigBuilder parser = <span class="keyword">new</span> XMLConfigBuilder(inputStream, environment, properties);</span><br><span class="line">      <span class="comment">//parser.parse() 方法返回的就是 Configuration 实例</span></span><br><span class="line">      <span class="keyword">return</span> build(parser.parse());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> ExceptionFactory.wrapException(<span class="string">"Error building SqlSession."</span>, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      ErrorContext.instance().reset();</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        inputStream.close();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="comment">// Intentionally ignore. Prefer previous error.</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//以configuration为参数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">build</span><span class="params">(Configuration config)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> DefaultSqlSessionFactory(config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Configuration<br>  此类本质上是配置信息的”内存版”，因为我们从上面得知，我们所写的mybatis-config.xml和mapper.xml文件，经过解析后，全部都会由Configuration实例存储，所以，我们同样可以通过hardcode的方式来得到Configuration对象，同它的类名一样，它就是代表 <code>配置</code></p>
+</li>
+<li>SqlSessionFactory<br>  此接口是mybatis框架中的重要接口，一般而言，一个应用程序只应该创建一个此类实例，因为创建它的代码是巨大的，应该给所有调用者共享，所以，我们的代码中，要保证此类的实例是唯一的，一般采用单例模式来实例化它<br>  上面的代码断片中也可以看出，此接口的实现者是：DefaultSqlSessionFactory</li>
+<li><p>TransactionIsolationLevel<br>  此枚举是一个事务隔离级别的枚举，它本质上就是JDBC中Connection定义的5个常量的全新封装，因为在Connection定义的隔离级别是整数常量，是类型不安全的，mybatis把它封装成枚举的做法是值是肯定的，避免了类型不安全，下面给出此枚举的源代码：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> TransactionIsolationLevel &#123;</span><br><span class="line">  NONE(Connection.TRANSACTION_NONE),</span><br><span class="line">  READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),</span><br><span class="line">  READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),</span><br><span class="line">  REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ),</span><br><span class="line">  SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> level;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">TransactionIsolationLevel</span><span class="params">(<span class="keyword">int</span> level)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.level = level;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getLevel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> level;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SqlSession<br>  此接口是我们操作的入口，所有的CRUD操作都是由此接口负责完成，当然，此接口也可以用来获取Dao或Mapper接口实例，当然，拿到的是接口的动态代码实现，因为我们并没有开发Mapper或Dao接口的实现类，不是吗？<br>  它的方法在类图中都已列出，此处不再罗列。</p>
+<p>  从源码中得知，此接口的实现类：DefaultSqlSession</p>
+<p>  <code>DefaultSqlSessionFactory.java</code>中</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> SqlSession <span class="title">openSession</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> openSessionFromDataSource(configuration.getDefaultExecutorType(), <span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> SqlSession <span class="title">openSession</span><span class="params">(<span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> openSessionFromDataSource(configuration.getDefaultExecutorType(), <span class="keyword">null</span>, autoCommit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> SqlSession <span class="title">openSession</span><span class="params">(ExecutorType execType)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> openSessionFromDataSource(execType, <span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> SqlSession <span class="title">openSessionFromDataSource</span><span class="params">(ExecutorType execType, </span></span></span><br><span class="line"><span class="function"><span class="params">			TransactionIsolationLevel level, <span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">    Transaction tx = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">final</span> Environment environment = configuration.getEnvironment();</span><br><span class="line">      <span class="keyword">final</span> TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);</span><br><span class="line">      tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);</span><br><span class="line">      <span class="keyword">final</span> Executor executor = configuration.newExecutor(tx, execType);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> DefaultSqlSession(configuration, executor, autoCommit);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      closeTransaction(tx); <span class="comment">// may have fetched a connection so lets call close()</span></span><br><span class="line">      <span class="keyword">throw</span> ExceptionFactory.wrapException(<span class="string">"Error opening session.  Cause: "</span> + e, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      ErrorContext.instance().reset();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <code>DefaultSqlSession.java</code>中</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultSqlSession</span> <span class="keyword">implements</span> <span class="title">SqlSession</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Configuration configuration;</span><br><span class="line">  <span class="keyword">private</span> Executor executor;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> autoCommit;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> dirty;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">DefaultSqlSession</span><span class="params">(Configuration configuration, Executor executor, <span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.configuration = configuration;</span><br><span class="line">    <span class="keyword">this</span>.executor = executor;</span><br><span class="line">    <span class="keyword">this</span>.dirty = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">this</span>.autoCommit = autoCommit;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">DefaultSqlSession</span><span class="params">(Configuration configuration, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(configuration, executor, <span class="keyword">false</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">selectOne</span><span class="params">(String statement)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.&lt;T&gt;selectOne(statement, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="编码流程"><a href="#编码流程" class="headerlink" title="编码流程"></a>编码流程</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一步：把配置文件mybatis-config.xml转换成输入流</span></span><br><span class="line">Reader reader = Resources.getResourceAsReader(<span class="string">"mybatis-config.xml"</span>);</span><br><span class="line"><span class="comment">//第二步：创建SqlSessionFactoryBuilder</span></span><br><span class="line">SqlSessionFactoryBuilder factoryBuilder = <span class="keyword">new</span> SqlSessionFactoryBuilder();</span><br><span class="line"><span class="comment">//第三步：调用build方法，创建SqlSessionFactory, 以reader为参数</span></span><br><span class="line">SqlSessionFactory factory = factoryBuilder.build(reader);</span><br><span class="line"><span class="comment">//第四步：再通过 SqlSessionFactory来获取SqlSession</span></span><br><span class="line">SqlSession session = factory.openSession();</span><br></pre></td></tr></table></figure>
+<p>注：需要注意的是，前3步最后在整个应用中只执行1次， 以保证不重复创建SqlSessionFactory实例， 下面给出一个单例版的工具类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">package</span> com.mybatis.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.Reader;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.ExecutorType;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> yejf</span></span><br><span class="line"><span class="comment"> * 封装mybatis框架中 sessionFactory的创建以及SqlSession的获取,</span></span><br><span class="line"><span class="comment"> * 为保证每个应用中只有一个 SqlSessionFactory实例，本类采用单例 模式</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SqlSessionFactoryUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> SqlSessionFactory factory;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** 做线程同步的锁机制 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String _CONFIG = <span class="string">"mybatis-config.xml"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">SqlSessionFactoryUtil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/************</span></span><br><span class="line"><span class="comment">	 * 初始化 SqlSessionFactory实例</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">initSqlSessionFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="keyword">if</span>(factory == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="comment">//获取配置</span></span><br><span class="line">			<span class="keyword">try</span>(Reader reader = Resources.getResourceAsReader(_CONFIG);) &#123;</span><br><span class="line">				<span class="comment">//加锁</span></span><br><span class="line">				lock.lock();</span><br><span class="line">				<span class="keyword">if</span>(factory == <span class="keyword">null</span>) &#123; <span class="comment">//再次判断，以保证单例</span></span><br><span class="line">					<span class="comment">//保证只有单线程进入</span></span><br><span class="line">					factory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(reader);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//</span></span><br><span class="line">			&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">				<span class="comment">//解锁</span></span><br><span class="line">				lock.unlock();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSession</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="keyword">if</span>(factory == <span class="keyword">null</span>) &#123;</span><br><span class="line">			initSqlSessionFactory();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="keyword">return</span> factory.openSession();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSession</span><span class="params">(ExecutorType type)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="keyword">if</span>(factory == <span class="keyword">null</span>) &#123;</span><br><span class="line">			initSqlSessionFactory();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="keyword">return</span> factory.openSession();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSessionFactory <span class="title">getSqlSessionFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(factory == <span class="keyword">null</span>) &#123;</span><br><span class="line">			initSqlSessionFactory();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="keyword">return</span> factory;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>谢谢！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/持久层/" rel="tag"># 持久层</a>
+          
+            <a href="/tags/mybatis/" rel="tag"># mybatis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/04/mybatis-3/" rel="next" title="MyBatis框架学习(三)">
+                <i class="fa fa-chevron-left"></i> MyBatis框架学习(三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/08/mybatis-5/" rel="prev" title="MyBatis框架学习(五)">
+                MyBatis框架学习(五) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis-Framework"><span class="nav-number">1.</span> <span class="nav-text">MyBatis Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis缓存机制"><span class="nav-number">1.1.</span> <span class="nav-text">mybatis缓存机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一级缓存"><span class="nav-number">1.1.1.</span> <span class="nav-text">一级缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一级缓存测试"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">一级缓存测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一级缓存应用"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">一级缓存应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二级缓存"><span class="nav-number">1.1.2.</span> <span class="nav-text">二级缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开启二级缓存"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">开启二级缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pojo类实现序列化接口"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">pojo类实现序列化接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二级缓存测试代码"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">二级缓存测试代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#useCache属性配置"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">useCache属性配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二级缓存供应商ehCache"><span class="nav-number">1.1.3.</span> <span class="nav-text">二级缓存供应商ehCache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mybatis整合ehcache"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">mybatis整合ehcache</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis核心API讲解"><span class="nav-number">1.2.</span> <span class="nav-text">mybatis核心API讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类图"><span class="nav-number">1.2.1.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细API分析"><span class="nav-number">1.2.2.</span> <span class="nav-text">详细API分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码流程"><span class="nav-number">1.2.3.</span> <span class="nav-text">编码流程</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

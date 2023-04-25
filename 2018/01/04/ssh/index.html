@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ssh,github" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="理解ssh协议，它是如何做到通信安全的，什么是公钥，私钥，github如何配置ssh的，通过阅读这篇文章，希望你能有所收获.">
+<meta name="keywords" content="ssh,github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSH学习和github的SSH配置">
+<meta property="og:url" content="http://www.teacherye.com/2018/01/04/ssh/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="理解ssh协议，它是如何做到通信安全的，什么是公钥，私钥，github如何配置ssh的，通过阅读这篇文章，希望你能有所收获.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2018/01/04/ssh/assets/ssh-command.png">
+<meta property="og:image" content="http://www.teacherye.com/2018/01/04/ssh/assets/user-setting.png">
+<meta property="og:image" content="http://www.teacherye.com/2018/01/04/ssh/assets/ssh-add.png">
+<meta property="og:image" content="http://www.teacherye.com/2018/01/04/ssh/assets/SSH-FILE.png">
+<meta property="og:updated_time" content="2018-04-19T04:10:17.382Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSH学习和github的SSH配置">
+<meta name="twitter:description" content="理解ssh协议，它是如何做到通信安全的，什么是公钥，私钥，github如何配置ssh的，通过阅读这篇文章，希望你能有所收获.">
+<meta name="twitter:image" content="http://www.teacherye.com/2018/01/04/ssh/assets/ssh-command.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2018/01/04/ssh/"/>
+
+
+
+
+
+  <title>SSH学习和github的SSH配置 | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2018/01/04/ssh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SSH学习和github的SSH配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-04T09:08:35+08:00">
+                2018-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/协议/" itemprop="url" rel="index">
+                    <span itemprop="name">协议</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/协议/ssh/" itemprop="url" rel="index">
+                    <span itemprop="name">ssh</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/01/04/ssh/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/01/04/ssh/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2018/01/04/ssh/" class="leancloud_visitors" data-flag-title="SSH学习和github的SSH配置">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  理解ssh协议，它是如何做到通信安全的，什么是公钥，私钥，github如何配置ssh的，通过阅读这篇文章，希望你能有所收获.
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h1><p>简单来说，SSH是一种网络协议，用于计算机之间的加密登录。<br>如果一个用户从本地计算机，使用SSH协议登录另一台远程计算机，我们就可以认为，这种登录是安全的，即使被中途截获，密码也不会泄露。<br>最早的时候，互联网通信都是明文通信，一旦被截获，内容就暴露无疑。1995年，芬兰学者Tatu Ylonen设计了SSH协议，将登录信息全部加密，成为互联网安全的一个基本解决方案，迅速在全世界获得推广，目前已经成为Linux系统的标准配置。</p>
+<p>需要指出的是，SSH只是一种协议，存在多种实现，既有商业实现，也有开源实现。比如OpenSSH，它是自由软件，应用非常广泛，如果你安装了git的客户端，默认情况下也就安装了ssh软件，所以，如果你电脑上可以打开git bash的话，则就可以使用ssh了。</p>
+<p>在git bash界面中，输入 ssh，会有如下提示：<br><img src="/2018/01/04/ssh/assets/ssh-command.png" alt="图示"><br>说明，你的电脑上已有ssh软件，如果你本身是Linux系统的话，则一般自带ssh软件的，那就无需独立安装了。</p>
+<h2 id="SSH介绍"><a href="#SSH介绍" class="headerlink" title="SSH介绍"></a>SSH介绍</h2><p>我们知道，ssh只是一种网络通信协议，遵守这个协议的软件叫ssh软件，它有服务端和客户端，它默认采用22端口通信，大多数Linux服务器都有ssh的服务，所以，我们想要通过ssh协议登录到有ssh服务的主机中，只需要有ssh客户端就行.<br>在Windows下，有像Putty、Xmanager 这样的软件，支持SSH协议去远程登录到Linux主机，那ssh是怎么做到安全的呢？</p>
+<p>每台使用ssh协议的主机都可以生成一对密钥，可以采用不同的算法来生成，比如有：RSA, DSS等不同算法来生成密钥，这一对密钥又分为公有密码[public key]和私有密钥[secret key], 这对密钥的特点是，公钥加密的数据可用私钥来解密，反过来，使用私钥加密的数据可用公钥来解密， 所以，我们就有两个选择，是采用公钥加密还是采用私钥加密， 下面我分开来讲述一下：</p>
+<p><strong>一般来说，采用私钥加密都比公钥加密快，所以，大数据量的加密一般都会使用私钥加密，而公钥加密会作为身份验证和交换私钥的一个手段。</strong><br>现在我们来看一下这个通信过程，假设以github为ssh的服务端，服务端有它的公钥和密钥，你的电脑为ssh客户端，你有你的公钥和密钥。<br>当然，事先我得在github上添加我的公钥，以便我用私钥加密的数据，github能用我给他的公钥去解。</p>
+<p>第一步，你发出一个请求到github上，为防止中间人攻击，第一次github上会把它的公钥采用哈希算法转换成一串字符串，询问你是否确定是连接到这个主机，确认后，就表示你同意，那github上的公钥就会写入到你的电脑中，存储在一个叫 known_hosts的文件中</p>
+<p>第二步，现在你的电脑和github服务之间，各自拿到了对方的公钥，你们之间传递数据时，都用各自的私钥加密数据进行传输，这个过程即使被拦截也没有关系，由于你们各自的私钥都是非公开的，这就保证了传递的数据的安全性【没有私钥，解不了密】。</p>
+<h2 id="SSH在本地的配置"><a href="#SSH在本地的配置" class="headerlink" title="SSH在本地的配置"></a>SSH在本地的配置</h2><p>有了上面的知识，我们大致了解了ssh的工作过程，那么，我如何生成一对密钥呢？</p>
+<p>很简单，在<code>git bash</code>窗口中，执行如下命令：  </p>
+<ul>
+<li>Step1:<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t  rsa -C <span class="string">"登录帐号"</span>   //一般为邮箱[也就是你要登录到远程主机或服务的帐号]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>接下来会有三次提示，如果不想改的话，直接回车即可。<br>成功创建后，在当前用户的主目录下会生成一个叫<code>.ssh</code>的文件夹，它里面有如下文件:<br>id_rsa 和 id_rsa.pub 两个文件，其中 id_rsa 存储私钥， id_rsa.pub 存储公钥</p>
+<ul>
+<li>Step2:  执行 eval <code>ssh-agent -s</code> 返回代理的 pid<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">eval</span> `ssh-agent -s`</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>成功后，会返回 pid</p>
+<ul>
+<li>Step3: 把私钥添加到ssh中<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add  ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>完成后，你本地的ssh的一对密钥就算完成了，接下来，我们要把生成的公钥添加到 github 平台上你的帐号中去。 </p>
+<h2 id="利用公钥登录github的配置"><a href="#利用公钥登录github的配置" class="headerlink" title="利用公钥登录github的配置"></a>利用公钥登录github的配置</h2><blockquote>
+<p>打开浏览器，输入<code>https://github.com</code>后，登录你的github帐号。<br>点击用户头像边上的下拉按钮，选择 <strong>Setting</strong>, 如下：<br><img src="/2018/01/04/ssh/assets/user-setting.png" alt="图示"><br>然后，再选择<strong>SSH and GPG keys</strong>, 进入如下界面<br><img src="/2018/01/04/ssh/assets/ssh-add.png" alt="图示"><br>到了这个界面上，标题可以任意写，而内容就是要你事先生成的SSH的公钥.</p>
+</blockquote>
+<p><strong>到此，github拿到你的公钥，将来我们通过ssh与github交互时，就可以免用户名和密码了。</strong></p>
+<h2 id="SSH中如何配置多个github帐号"><a href="#SSH中如何配置多个github帐号" class="headerlink" title="SSH中如何配置多个github帐号"></a>SSH中如何配置多个github帐号</h2><p>一个人有时可能会有多个 github帐号，我们如何使用 ssh 在多个github帐号之间智能切换？</p>
+<p>如果采用默认的ssh配置，则肯定只能配置一个帐号，因为默认情况下公钥和私钥 保存在一个叫 id_rsa的文件中，这个文件只能保存一个帐号。<br>那是否有解决方案？</p>
+<p>答案当然是有的，如下：</p>
+<ol>
+<li>在 ~/.ssh 目录下，新建一个 config 文件，内容如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># Work GitHub</span><br><span class="line">    Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_work</span><br><span class="line"></span><br><span class="line"># Personal GitHub</span><br><span class="line">    Host personal.github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_personal</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>其中，# 打头的为注释，注意这里准备了两个不同的id_rsa文件，一个是工作的，一个是个人的。将来，我们通过ssh与目标主机通信时，需要指定不同的主机，如：</p>
+<p>使用work 帐号与主机通信，则直接写：git@github.com<br>使用personal帐号与主机通信，则要写：git@personal.github.com</p>
+<p>这里就是使用 host的名字不同，来告诉ssh，到底读取哪个 identifFile， 以获取此次通信的 id_rsa 公钥和私钥</p>
+<ol>
+<li>其它的操作与单个配置一样，没有什么区别，也是如下命令：</li>
+</ol>
+<ul>
+<li>Step1:<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">"邮箱"</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>需要注意的是，第一次的提示让你输入存储私钥的文件名，默认是：id_rsa, 你需要改为： id_rsa_personal, 以同 config 文件中的配置保持一致。这样一来，就会生成：id_rsa_personal和 id_rsa_personal.pub 两个文件。</p>
+<ul>
+<li><p>Step2:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">eval</span> `ssh-agent -s<span class="string">'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Step3:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa_personal   </span><br><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这里两个都要加入，成功后，通过<code>ssh-add -l</code> 命令可以看到有2个私钥添加到ssh列表中</p>
+<blockquote>
+<p>然后，你要在github上的两个帐号都可各自设置 SSH KEY, 把各自的 id<em>rsa</em>[personal].pub 中的内容COPY到各自的设置中</p>
+</blockquote>
+<p>最后，可以通过如下命令来测试：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com   <span class="comment"># 这个就是 work的， 因为在config文件中，work对应的 Host就是 github.com</span></span><br><span class="line">ssh -T git@personal.github.com   <span class="comment">#这个就是 personal 的，因为在 config文件中， personal对应的Host 就是 personal.github.com</span></span><br></pre></td></tr></table></figure></p>
+<p>生成以上的两个不同github帐号的ssh密钥后，有如下文件：<br><img src="/2018/01/04/ssh/assets/SSH-FILE.png" alt="图示"><br>上面显示的_bella类似于_personal<br>上面的所有操作都是基于Windows平台上的，并基于git自带的ssh软件</p>
+<p><strong>到此，我们就可以在同一台电脑上，配置对个github帐号的ssh，通过不同的主机映射访问不同的帐号，而且都不需要密码。</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
+          
+            <a href="/tags/github/" rel="tag"># github</a>
+          
+            <a href="/tags/安全通道/" rel="tag"># 安全通道</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/29/git-3/" rel="next" title="git学习之(三)--标签管理、github操作">
+                <i class="fa fa-chevron-left"></i> git学习之(三)--标签管理、github操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/09/spring-1/" rel="prev" title="Spring框架体系及基本配置介绍-DI的使用(一)">
+                Spring框架体系及基本配置介绍-DI的使用(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH"><span class="nav-number">1.</span> <span class="nav-text">SSH</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH介绍"><span class="nav-number">1.1.</span> <span class="nav-text">SSH介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH在本地的配置"><span class="nav-number">1.2.</span> <span class="nav-text">SSH在本地的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用公钥登录github的配置"><span class="nav-number">1.3.</span> <span class="nav-text">利用公钥登录github的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH中如何配置多个github帐号"><span class="nav-number">1.4.</span> <span class="nav-text">SSH中如何配置多个github帐号</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

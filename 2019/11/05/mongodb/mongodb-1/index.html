@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Mongodb, 文档型数据库, 查询," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="MongoDB的基本操作">
+<meta name="keywords" content="Mongodb, 文档型数据库, 查询,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB数据库操作">
+<meta property="og:url" content="http://www.teacherye.com/2019/11/05/mongodb/mongodb-1/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="MongoDB的基本操作">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2019/11/05/mongodb/mongodb-1/assets/mongdb-pipe.png">
+<meta property="og:updated_time" content="2019-11-15T07:05:28.625Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB数据库操作">
+<meta name="twitter:description" content="MongoDB的基本操作">
+<meta name="twitter:image" content="http://www.teacherye.com/2019/11/05/mongodb/mongodb-1/assets/mongdb-pipe.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2019/11/05/mongodb/mongodb-1/"/>
+
+
+
+
+
+  <title>MongoDB数据库操作 | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2019/11/05/mongodb/mongodb-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MongoDB数据库操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-05T12:41:47+08:00">
+                2019-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/Nosql/" itemprop="url" rel="index">
+                    <span itemprop="name">Nosql</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/Nosql/MongoDB/" itemprop="url" rel="index">
+                    <span itemprop="name">MongoDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2019/11/05/mongodb/mongodb-1/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/11/05/mongodb/mongodb-1/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2019/11/05/mongodb/mongodb-1/" class="leancloud_visitors" data-flag-title="MongoDB数据库操作">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  MongoDB的基本操作
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h1><blockquote>
+<p>MongoDB 是由C++语言编写的，是一个基于分布式文件存储的开源数据库系统。</p>
+<p>在高负载的情况下，添加更多的节点，可以保证服务器性能。</p>
+<p>MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。</p>
+<p>MongoDB 将数据存储为一个文档，数据结构由键值(key=&gt;value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。</p>
+</blockquote>
+<h2 id="主要特点"><a href="#主要特点" class="headerlink" title="主要特点"></a>主要特点</h2><ul>
+<li>MongoDB 是一个面向文档存储的数据库，操作起来比较简单和容易。</li>
+<li>你可以在MongoDB记录中设置任何属性的索引 (如：FirstName=”Sameer”,Address=”8 Gandhi Road”)来实现更快的排序。</li>
+<li>你可以通过本地或者网络创建数据镜像，这使得MongoDB有更强的扩展性。</li>
+<li>如果负载的增加（需要更多的存储空间和更强的处理能力） ，它可以分布在计算机网络中的其他节点上这就是所谓的分片。</li>
+<li>Mongo支持丰富的查询表达式。查询指令使用JSON形式的标记，可轻易查询文档中内嵌的对象及数组。 </li>
+<li>MongoDb 使用update()命令可以实现替换完成的文档（数据）或者一些指定的数据字段 。</li>
+<li>Mongodb中的Map/reduce主要是用来对数据进行批量处理和聚合操作。</li>
+<li>Map和Reduce。Map函数调用emit(key,value)遍历集合中所有的记录，将key与value传给Reduce函数进行处理。</li>
+<li>Map函数和Reduce函数是使用Javascript编写的，并可以通过db.runCommand或mapreduce命令来执行MapReduce操作。</li>
+<li>GridFS是MongoDB中的一个内置功能，可以用于存放大量小文件。</li>
+<li>MongoDB允许在服务端执行脚本，可以用Javascript编写某个函数，直接在服务端执行，也可以把函数的定义存储在服务端，下次直接调用即可。</li>
+<li>MongoDB支持各种编程语言:RUBY，PYTHON，JAVA，C++，PHP，C#等多种语言。</li>
+<li>MongoDB安装简单。</li>
+</ul>
+<h2 id="Windows下安装MongoDB"><a href="#Windows下安装MongoDB" class="headerlink" title="Windows下安装MongoDB"></a>Windows下安装MongoDB</h2><ol>
+<li>官网下载安装文件   www.mongodb.com</li>
+<li>双击安装</li>
+</ol>
+<h3 id="配置-MongoDB"><a href="#配置-MongoDB" class="headerlink" title="配置 MongoDB"></a>配置 MongoDB</h3><blockquote>
+<p>在MongoDB的安装目录下，有 一个 mongod.cfg 的配置文件， 这个配置文件采用 YAML 语法格式。如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&gt; # Where and how to store data.</span></span><br><span class="line"><span class="string">&gt; storage:</span></span><br><span class="line"><span class="string">&gt;   dbPath: D:\database\MongoDB\Server\4.2\data</span></span><br><span class="line"><span class="string">&gt;   journal:</span></span><br><span class="line"><span class="string">&gt;     enabled: true</span></span><br><span class="line"><span class="string">&gt; #  engine:</span></span><br><span class="line"><span class="string">&gt; #  mmapv1:</span></span><br><span class="line"><span class="string">&gt; #  wiredTiger:</span></span><br><span class="line"><span class="string">&gt; </span></span><br><span class="line"><span class="string">&gt; # where to write logging data.</span></span><br><span class="line"><span class="string">&gt; systemLog:</span></span><br><span class="line"><span class="string">&gt;   destination: file</span></span><br><span class="line"><span class="string">&gt;   logAppend: true</span></span><br><span class="line"><span class="string">&gt;   path:  D:\database\MongoDB\Server\4.2\log\mongod.log</span></span><br><span class="line"><span class="string">&gt; </span></span><br><span class="line"><span class="string">&gt; # network interfaces</span></span><br><span class="line"><span class="string">&gt; net:</span></span><br><span class="line"><span class="string">&gt;   port: 27017</span></span><br><span class="line"><span class="string">&gt;   bindIp: 127.0.0.1</span></span><br><span class="line"><span class="string">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>其中，我们在启动 mongodb服务之前，需要自己指定 dbpath 和 systemlog 的值，一般是自己创建一个新的数据目录和日志目录【不建议直接使用系统自带的】</p>
+<ol>
+<li>新建一个 data 文件夹，用来做为 storage的 dbpath</li>
+<li>在这个data文件夹下面新建  db 和  log 子文件夹<ol>
+<li>db 文件夹, 存放数据</li>
+<li>log 文件夹 ，存放系统日志</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<h3 id="启动MongoDB服务"><a href="#启动MongoDB服务" class="headerlink" title="启动MongoDB服务"></a>启动MongoDB服务</h3><blockquote>
+<p>打开命令行，执行：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; mongod.exe --config "D:\database\MongoDB\Server\<span class="number">4</span>.<span class="number">2</span>\bin\mongod.cfg"</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+</blockquote>
+<h3 id="MongoDB以WINDOWS服务方式启动"><a href="#MongoDB以WINDOWS服务方式启动" class="headerlink" title="MongoDB以WINDOWS服务方式启动"></a>MongoDB以WINDOWS服务方式启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-- 安装服务</span><br><span class="line">mongod.exe --config &quot;xxx\xx\xx\mongod.cfg&quot; --install</span><br><span class="line"></span><br><span class="line">-- 移除服务</span><br><span class="line">mongod.exe --remove</span><br><span class="line"></span><br><span class="line">-- 多个不同的配置，安装多个MongoDB服务</span><br><span class="line">mongod.exe --config &quot;xx\xx\xx\mongod.cfg&quot; --serviceName MongoDB2 --serviceDisplayName MongoDB2Service</span><br><span class="line"></span><br><span class="line">-- 命令行启动、停止服务</span><br><span class="line">net stop MongoDB</span><br><span class="line">net start MongoDB</span><br></pre></td></tr></table></figure>
+<h2 id="使用MongoDB-shell客户端"><a href="#使用MongoDB-shell客户端" class="headerlink" title="使用MongoDB shell客户端"></a>使用MongoDB shell客户端</h2><h2 id="连接到MongoDB"><a href="#连接到MongoDB" class="headerlink" title="连接到MongoDB"></a>连接到MongoDB</h2><blockquote>
+<p>语法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; mongodb:<span class="comment">//[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="MongoDB-和-mysql-中的数据库相关概念对比"><a href="#MongoDB-和-mysql-中的数据库相关概念对比" class="headerlink" title="MongoDB 和 mysql 中的数据库相关概念对比"></a>MongoDB 和 mysql 中的数据库相关概念对比</h3><table>
+<thead>
+<tr>
+<th>MongoDB</th>
+<th>MYSQL</th>
+<th>区别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>database</td>
+<td>database</td>
+<td>一样</td>
+</tr>
+<tr>
+<td>集合 collection</td>
+<td>表 table</td>
+<td>都是数据集</td>
+</tr>
+<tr>
+<td>文档 document</td>
+<td>行 row</td>
+<td>文档是bson格式，行 是逻辑概念</td>
+</tr>
+<tr>
+<td>属性 field或者 键 key</td>
+<td>列 column</td>
+</tr>
+</tbody>
+</table>
+<h2 id="MongoDB的基本操作"><a href="#MongoDB的基本操作" class="headerlink" title="MongoDB的基本操作"></a>MongoDB的基本操作</h2><h3 id="创建、删除、查看、使用数据库"><a href="#创建、删除、查看、使用数据库" class="headerlink" title="创建、删除、查看、使用数据库"></a>创建、删除、查看、使用数据库</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">databases</span> 或  <span class="keyword">show</span> dbs</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建库并使用</span></span><br><span class="line"><span class="keyword">use</span> databaseName</span><br><span class="line"><span class="comment">-- 注：没有文档的数据库是不会创建的，只有当真正插入文档[docuement]之后，库才会真正被创建</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除当前库 [要先使用 这个库]</span></span><br><span class="line">db.dropDatabase()</span><br></pre></td></tr></table></figure>
+<h3 id="创建、删除、查看集合【集合相当于-表】"><a href="#创建、删除、查看集合【集合相当于-表】" class="headerlink" title="创建、删除、查看集合【集合相当于 表】"></a>创建、删除、查看集合【集合相当于 表】</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看集合</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">tables</span> 或  <span class="keyword">show</span> collections</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建集合</span></span><br><span class="line">db.collectionName.insert(&#123;&#125;)   </span><br><span class="line"><span class="comment">-- 注：这种情况会自动创建 collectionName</span></span><br><span class="line">db.createCollection(<span class="keyword">name</span>, &#123;options&#125;)</span><br><span class="line"><span class="comment">-- 其中， options 有如下选项</span></span><br><span class="line">	｛</span><br><span class="line">		capped: <span class="literal">true</span> | fase,</span><br><span class="line">		autoIndexId: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">		<span class="keyword">size</span>: 大小，单位是 kb,</span><br><span class="line">		<span class="keyword">max</span>: 文档记录数</span><br><span class="line">	｝</span><br><span class="line">	</span><br><span class="line"><span class="comment">-- 删除集合</span></span><br><span class="line">db.collectionName.drop()</span><br></pre></td></tr></table></figure>
+<h3 id="插入文档【文档相当于行记录】"><a href="#插入文档【文档相当于行记录】" class="headerlink" title="插入文档【文档相当于行记录】"></a>插入文档【文档相当于行记录】</h3><blockquote>
+<p>使用 db.collection_name.insert(doc)  或  db.collection_name.save(doc) </p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">db.emp.insert(&#123;</span><br><span class="line">              name:"张三丰",</span><br><span class="line">              start_date: "2016-03-19",</span><br><span class="line">              salary: 18000,</span><br><span class="line">              age: 31,</span><br><span class="line">              title: "Java开发工程师",</span><br><span class="line">              tag: ["活泼","外向","有亲和力"]</span><br><span class="line">              &#125;)</span><br><span class="line">注：如果当前数据库中没有 emp 这个集合，则会自动创建 emp 集合</span><br><span class="line"></span><br><span class="line">或者通过一个变量来保存 文档</span><br><span class="line">doc = (&#123;</span><br><span class="line">       name:"李四",</span><br><span class="line">       start_date: "2018-09-11",</span><br><span class="line">       salary: 6785.5,</span><br><span class="line">       age: 23,</span><br><span class="line">       title: "助理工程师",</span><br><span class="line">       tag: ["沉稳","内向"]</span><br><span class="line">      &#125;);</span><br><span class="line">再通过：</span><br><span class="line">db.emp.insert(doc) </span><br><span class="line">插入</span><br></pre></td></tr></table></figure>
+<h3 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h3><blockquote>
+<p>使用 db.collection_name.update(<query>, <update>, options)</update></query></p>
+<p>其中，query 表示更新的条件</p>
+<p>update 表示更新的列值</p>
+<p>options 主要有：</p>
+<ul>
+<li><p><strong> upsert</strong>  : 可选，这个参数的意思是，如果不存在update的记录，是否插入objNew,true为插入，默认是false，不插入。</p>
+</li>
+<li><p><strong>multi</strong>  : 可选，mongodb 默认是false,只更新找到的第一条记录，如果这个参数为true,就把按条件查出来多条记录全部更新。</p>
+</li>
+<li><p><strong>writeConcern</strong>  :可选，抛出异常的级别。</p>
+</li>
+</ul>
+</blockquote>
+<p>更新指定列： 前面加上 $set:</p>
+<h3 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h3><blockquote>
+<p>使用 db.collection_name.remove(<query>, options)</query></p>
+<p>其中，</p>
+<p>query 表示删除的条件，满足此条件的记录删除</p>
+<p>options 主要有：</p>
+<ul>
+<li><strong>justOne</strong>: true|false   如果设置成true或1，表示只删除1行，不设置的话，则删除所有匹配的行</li>
+<li><strong>writeConcern</strong> :可选，抛出异常的级别。</li>
+</ul>
+</blockquote>
+<h3 id="查询文档"><a href="#查询文档" class="headerlink" title="查询文档"></a>查询文档</h3><blockquote>
+<p>语法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.collection_name.find(&#123;query&#125;,&#123;projection&#125;)</span><br><span class="line">&gt; 其中，</span><br><span class="line">&gt; &#123;query&#125; 是指查询的条件，语法如下：</span><br><span class="line">&gt; &#123;&lt;field1&gt;: &#123;expression1&#125;, &lt;field2&gt;: &#123;expression2&#125;, ... , &lt;fieldN&gt;: &#123;expressionN&#125;&#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt; 在expression中，可以使用各种运算符，语法: 运算符: value,  如：$gt 表示大于</span><br><span class="line">&gt; </span><br><span class="line">&gt; &#123;projection&#125; 是指投影查询的列，语法如下：</span><br><span class="line">&gt; &#123;field1:true|false, field2:true|flase, ... , fileldN:true|false&#125;</span><br><span class="line">&gt; 也可以使用整数，其中，0代表false, 非0代表true</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>指定查询条件的逻辑符号，主要有：</p>
+<p>$or</p>
+<p>$and   默认值</p>
+<p>$nor   异或</p>
+<p>$in</p>
+<p>$nin</p>
+<p>$not</p>
+<p>语法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt; find(&#123;</span><br><span class="line">&gt;     $or: [</span><br><span class="line">&gt; 		&#123;条件1&#125;,</span><br><span class="line">&gt;        	&#123;条件2&#125;</span><br><span class="line">&gt; 		]</span><br><span class="line">&gt; </span><br><span class="line">&gt; &#125;)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+</blockquote>
+<h3 id="type运算"><a href="#type运算" class="headerlink" title="$type运算"></a>$type运算</h3><blockquote>
+<p> 根据文档值的类型进行过滤，这个类型要查询官方的手册</p>
+</blockquote>
+<h3 id="limit-和skip-操作"><a href="#limit-和skip-操作" class="headerlink" title="limit()和skip() 操作"></a>limit()和skip() 操作</h3><blockquote>
+<p>limit(n) 表示限定多少行</p>
+<p>skip(n) 表示跳过多行少</p>
+</blockquote>
+<h3 id="练习："><a href="#练习：" class="headerlink" title="练习："></a>练习：</h3><ol>
+<li><p>查询出工资范围在 10000 至 15000之间的员工</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL:</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">where</span> salary &gt; <span class="number">10000</span> <span class="keyword">and</span> salary &lt; <span class="number">15000</span>;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.find(&#123;salary: &#123;$gt: 10000, $lt: 15000&#125;&#125;,&#123;_id:0,tag:0&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>查询出职位含有 ‘java’ 的员工</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL:</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">where</span> title <span class="keyword">like</span> <span class="string">'%java%'</span>;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.find(&#123;title: /java/i&#125;)</span><br></pre></td></tr></table></figure>
+<p>注： 以 i 结尾表示 忽略大小写</p>
+</li>
+</ol>
+<ol>
+<li><p>查询出名字中以’袁’开头或者工资大于15000或者年龄大于 28岁的员工</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">db.emp.find(</span><br><span class="line">    	<span class="comment">-- 条件 condition</span></span><br><span class="line">    	&#123;</span><br><span class="line">            $or: </span><br><span class="line">            	[</span><br><span class="line">                    &#123;name: /^袁/&#125;,</span><br><span class="line">                    &#123;salary: &#123;$gt: 15000&#125;&#125;,</span><br><span class="line">                    &#123;age: &#123;$gt: 28&#125;&#125;</span><br><span class="line">                ]</span><br><span class="line">         &#125;,</span><br><span class="line">    	<span class="comment">-- 投影 projection</span></span><br><span class="line">         &#123;</span><br><span class="line">    		_id:0,</span><br><span class="line">    		tag:0</span><br><span class="line">   		 &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>查询出总记录数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SQL:</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="string">"total"</span> <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.aggregate([&#123;$group: &#123;_id: null, total: &#123;$sum: 1&#125;&#125;&#125;])</span><br><span class="line"><span class="comment">-- 或者</span></span><br><span class="line">db.emp.find().count(true);</span><br></pre></td></tr></table></figure>
+<p>以上的语句相当于执行了： select count(*) from emp; </p>
+</li>
+</ol>
+<ol>
+<li><p>查询出各职称的工资总和。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL:</span><br><span class="line"><span class="keyword">select</span> title, <span class="keyword">sum</span>(salary) <span class="string">"totalSalary"</span> <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> title;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.aggregate([&#123;$group: &#123;_id: '$title', totalSalary: &#123;$sum: '$salary'&#125;&#125;&#125;])</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="基本查询汇总"><a href="#基本查询汇总" class="headerlink" title="基本查询汇总"></a>基本查询汇总</h3><blockquote>
+<p>语法：</p>
+<p>db.collection_name.find(</p>
+<p>​    {where},     – 指定查询的条件</p>
+<p>​    {projection}    – 指定查询的列</p>
+<p>).sort({属性名: 1|-1})</p>
+<p>排重的语法：</p>
+<p>db.collection_name.distinct(“属性名”,{where})</p>
+</blockquote>
+<h4 id="1-行记录过滤"><a href="#1-行记录过滤" class="headerlink" title="1.行记录过滤"></a>1.行记录过滤</h4><p>支持的条件指令</p>
+<ul>
+<li>$gt, $lt, $gte, $lte, $ne</li>
+<li>$in(list)</li>
+<li>…</li>
+</ul>
+<p>– 年龄在22至28岁之间员工</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.emp.find(&#123;age: &#123;$gte: 22, $lte: 28&#125;&#125;,&#123;_id: 0, tag: 0&#125;)</span><br></pre></td></tr></table></figure>
+<p>…</p>
+<h4 id="2-模糊匹配"><a href="#2-模糊匹配" class="headerlink" title="2.模糊匹配"></a>2.模糊匹配</h4><blockquote>
+<p>采用正则表达式的方式进行匹配。</p>
+<p>…</p>
+</blockquote>
+<h4 id="3-排重"><a href="#3-排重" class="headerlink" title="3.排重"></a>3.排重</h4><blockquote>
+<p>排重的语法：</p>
+<p>db.collection_name.distinct(“属性名”,{where})</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询出所有员工的入职时间 </span></span><br><span class="line"><span class="comment">-- sql</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> start_date <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.distinct("start_date")</span><br></pre></td></tr></table></figure>
+<h4 id="4-投影查询"><a href="#4-投影查询" class="headerlink" title="4.投影查询"></a>4.投影查询</h4><blockquote>
+<p>可以从两个角度来定义</p>
+<ol>
+<li><p>不想显示哪些域</p>
+<blockquote>
+<p>{属性名: 0} 或 {属性名: false}</p>
+</blockquote>
+</li>
+<li><p>只想显示哪些域</p>
+<blockquote>
+<p>{属性名: 1} 或 {属性名:  true}</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p>如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- SQL</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,age <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.find(&#123;&#125;, &#123;name: 1, age: 1, _id: 0&#125;)</span><br><span class="line">或</span><br><span class="line">db.emp.find(&#123;&#125;, &#123;name: true, age: true, _id: false&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="5-多个逻辑条件"><a href="#5-多个逻辑条件" class="headerlink" title="5.多个逻辑条件"></a>5.多个逻辑条件</h4><blockquote>
+<p>当有多个条件时，要么是 $and, 要么是 $or, 它们的值都是 数组类型。</p>
+<p>语法：</p>
+<p>db.collection_name.find(</p>
+<p>​    {$or|$and: [</p>
+<p>​        {条件1},</p>
+<p>​        {条件2},</p>
+<p>​        ….</p>
+<p>​        {条件N}</p>
+<p>​    ]},</p>
+<p>​    {属性名: 0} 或 {属性名: false}</p>
+<p>)</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 工资大于20000并且年龄大于30岁 或者 职位中以是Java开头的 员工</span></span><br><span class="line"><span class="comment">-- SQL:</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">where</span> (salary &gt; <span class="number">20000</span> <span class="keyword">AND</span> age &gt; <span class="number">30</span>) <span class="keyword">OR</span> title <span class="keyword">like</span> <span class="string">'Java%'</span>;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.find(</span><br><span class="line">	&#123;</span><br><span class="line">    	$or: [</span><br><span class="line">            &#123;title: /^Java/&#125;,</span><br><span class="line">            &#123;</span><br><span class="line">            $and: [</span><br><span class="line">                	&#123;salary: &#123;$gt: 20000&#125;&#125;,</span><br><span class="line">                	&#123;age: &#123;$gt: 30&#125;&#125;</span><br><span class="line">            	]</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;_id:0,name:1, salary:1, age:1, title:1&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h4 id="6-排序"><a href="#6-排序" class="headerlink" title="6.排序"></a>6.排序</h4><blockquote>
+<p>在查询的方法后面，再调用 sort 方法即可，语法：</p>
+<p>sort({属性名: 1 | -1, 属性名: 1|-1, […]})</p>
+<p>1代表 升序， -1 代表降序。</p>
+</blockquote>
+<p>如：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 按年龄排序显示所有的员工名、职位、工资、年龄</span></span><br><span class="line"><span class="comment">-- sql:</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,title,salary, age <span class="keyword">from</span> emp <span class="keyword">order</span> <span class="keyword">by</span> age <span class="keyword">asc</span>, salary <span class="keyword">desc</span>;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.find(&#123;&#125;,&#123;name:1,salary:1,age:1,title:1,_id:0&#125;).sort(&#123;age: 1, salary: -1&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="7-分页"><a href="#7-分页" class="headerlink" title="7.分页"></a>7.分页</h4><blockquote>
+<p>limit(n) , 只查询出指定的条目数【行数】</p>
+<p>skip(n)， 跳过指定的条目数【行数】</p>
+<p>所以，分页的查询是基于以上两个函数，其中， limit的参数代表 每页多少行[pageSize], skip的参数应该是 (当前页 - 1) * pageSize.</p>
+</blockquote>
+<p>如：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.emp.find(&#123;&#125;,&#123;name:1,salary:1, age:1, title:1, _id:0&#125;).limit(5).skip(5)</span><br></pre></td></tr></table></figure>
+<h4 id="8-统计行数"><a href="#8-统计行数" class="headerlink" title="8.统计行数"></a>8.统计行数</h4><blockquote>
+<p>调用 count() 方法</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询有多少员工的工资大于15000元</span></span><br><span class="line"><span class="comment">-- sql:</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> emp <span class="keyword">where</span> salary &gt; <span class="number">15000</span>;</span><br><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.emp.find(&#123;salary: &#123;$gt: 15000&#125;&#125;,&#123;_id:0&#125;).count()</span><br></pre></td></tr></table></figure>
+<h3 id="聚合操作"><a href="#聚合操作" class="headerlink" title="聚合操作"></a>聚合操作</h3><blockquote>
+<p>db.collection_name.aggregate([管道操作])</p>
+<p>常用的管道操作符：</p>
+<ul>
+<li>$project：修改输入文档的结构。可以用来重命名、增加或删除域，也可以用于创建计算结果以及嵌套文档。</li>
+<li>$match：用于过滤数据，只输出符合条件的文档。$match使用MongoDB的标准查询操作。</li>
+<li>$limit：用来限制MongoDB聚合管道返回的文档数。</li>
+<li>$skip：在聚合管道中跳过指定数量的文档，并返回余下的文档。</li>
+<li>$unwind：将文档中的某一个数组类型字段拆分成多条，每条包含数组中的一个值。</li>
+<li>$group：将集合中的文档分组，可用于统计结果。</li>
+<li>$sort：将输入文档排序后输出。</li>
+</ul>
+</blockquote>
+<p>语法规则：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">db.collection_name.aggregate([</span><br><span class="line">    <span class="comment">-- 每一个都是一个管道</span></span><br><span class="line">    &#123;$match: &#123;salary: &#123;$gt: 15000, $lt: 20000&#125;&#125;&#125;,</span><br><span class="line">    &#123;$group: &#123;_id: null, totalSalary: &#123;$sum: '$salary'&#125;&#125;&#125;,</span><br><span class="line">    &#123;$sort: &#123;name: 1&#125;&#125;,</span><br><span class="line">    ...,</span><br><span class="line">    &#123;$unwind: '$tag'&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<p>其中，_id 后面指定分组的列，可以有多列</p>
+<p>$group 之前的 $match 表示 where 子句</p>
+<p>$group 之后的 $match 表示 having 子句</p>
+<p>$sort 表示排序</p>
+<p>$unwind 表示将文档中的某一个数组类型字段拆分成多条，每条包含数组中的一个值</p>
+<p>如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询出员工总记录数</span></span><br><span class="line"><span class="comment">-- sql:</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="string">"total"</span> <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">-- MongoDB 1:</span></span><br><span class="line">db.emp.find().count()</span><br><span class="line"><span class="comment">-- MongoDB 2:</span></span><br><span class="line">db.emp.aggregate(</span><br><span class="line">    [</span><br><span class="line">        &#123;</span><br><span class="line">        	$group: &#123;</span><br><span class="line">        			_id: null, </span><br><span class="line">        			total: &#123;$sum: 1&#125;</span><br><span class="line">        	&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>注：</p>
+<blockquote>
+<p>aggregate 函数的执行过程也叫上管道操作，前面的执行结果做为后面的执行输入。</p>
+</blockquote>
+<h4 id="管道操作的图示"><a href="#管道操作的图示" class="headerlink" title="管道操作的图示"></a>管道操作的图示</h4><p><img src="/2019/11/05/mongodb/mongodb-1/assets/mongdb-pipe.png" alt="mongdb-管道"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MongoDB:</span></span><br><span class="line">db.orders.aggregate([</span><br><span class="line">    &#123;$match: &#123;status: 'Normal'&#125;&#125;,</span><br><span class="line">    &#123;$group: &#123;_id: '$cust_id', totalAmount: &#123;$sum: '$amount'&#125;&#125;&#125;,</span><br><span class="line">    &#123;$match: &#123;totalAmount: &#123;$gt: 500&#125;&#125;&#125;,</span><br><span class="line">    &#123;$sort: &#123;totalAmount: -1&#125;&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h2 id="索引操作"><a href="#索引操作" class="headerlink" title="索引操作"></a>索引操作</h2><blockquote>
+<p>作用：</p>
+<ol>
+<li>提高文档的检索效率</li>
+<li>索引是存储在内存之中的，索引的效率非常高。</li>
+</ol>
+</blockquote>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><blockquote>
+<p>db.collection_name.createIndex({field: 1 | 0,  fileld: 1|0, … }, options)</p>
+<p>或</p>
+<p>db.getCollection(“collection_name”).createIndex({field: 1 | 0,  fileld: 1|0, … }, options)</p>
+<p>其中，1代表 升序索引， 0 代表降序索引</p>
+</blockquote>
+<h3 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h3><blockquote>
+<p>db.collection_name.getIndexes()  </p>
+<p>– 查看索引大小</p>
+<p>db.collection_name.totalIndexSize()</p>
+</blockquote>
+<h3 id="删除集合所有索引"><a href="#删除集合所有索引" class="headerlink" title="删除集合所有索引"></a>删除集合所有索引</h3><blockquote>
+<p>db.collection_name.dropIndexes()</p>
+<p>或</p>
+<p>db.collection_name.dropIndex(index_name)</p>
+</blockquote>
+<h3 id="MongoDB-客户端"><a href="#MongoDB-客户端" class="headerlink" title="MongoDB 客户端"></a>MongoDB 客户端</h3><blockquote>
+<p>可以使用 ROBO Studio 3T, 下载地址： <a href="https://studio3t.com/" target="_blank" rel="noopener">https://studio3t.com/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mongodb/" rel="tag"># mongodb</a>
+          
+            <a href="/tags/文档型数据库/" rel="tag"># 文档型数据库</a>
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/04/mysql/msyql-1/" rel="next" title="Mysql数据库基本操作">
+                <i class="fa fa-chevron-left"></i> Mysql数据库基本操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/06/algorithms/snowflake/" rel="prev" title="雪花算法">
+                雪花算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MongoDB"><span class="nav-number">1.</span> <span class="nav-text">MongoDB</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要特点"><span class="nav-number">1.1.</span> <span class="nav-text">主要特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows下安装MongoDB"><span class="nav-number">1.2.</span> <span class="nav-text">Windows下安装MongoDB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-MongoDB"><span class="nav-number">1.2.1.</span> <span class="nav-text">配置 MongoDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动MongoDB服务"><span class="nav-number">1.2.2.</span> <span class="nav-text">启动MongoDB服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MongoDB以WINDOWS服务方式启动"><span class="nav-number">1.2.3.</span> <span class="nav-text">MongoDB以WINDOWS服务方式启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用MongoDB-shell客户端"><span class="nav-number">1.3.</span> <span class="nav-text">使用MongoDB shell客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接到MongoDB"><span class="nav-number">1.4.</span> <span class="nav-text">连接到MongoDB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MongoDB-和-mysql-中的数据库相关概念对比"><span class="nav-number">1.4.1.</span> <span class="nav-text">MongoDB 和 mysql 中的数据库相关概念对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB的基本操作"><span class="nav-number">1.5.</span> <span class="nav-text">MongoDB的基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建、删除、查看、使用数据库"><span class="nav-number">1.5.1.</span> <span class="nav-text">创建、删除、查看、使用数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建、删除、查看集合【集合相当于-表】"><span class="nav-number">1.5.2.</span> <span class="nav-text">创建、删除、查看集合【集合相当于 表】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入文档【文档相当于行记录】"><span class="nav-number">1.5.3.</span> <span class="nav-text">插入文档【文档相当于行记录】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新文档"><span class="nav-number">1.5.4.</span> <span class="nav-text">更新文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文档"><span class="nav-number">1.5.5.</span> <span class="nav-text">删除文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询文档"><span class="nav-number">1.5.6.</span> <span class="nav-text">查询文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type运算"><span class="nav-number">1.5.7.</span> <span class="nav-text">$type运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#limit-和skip-操作"><span class="nav-number">1.5.8.</span> <span class="nav-text">limit()和skip() 操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习："><span class="nav-number">1.5.9.</span> <span class="nav-text">练习：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本查询汇总"><span class="nav-number">1.5.10.</span> <span class="nav-text">基本查询汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-行记录过滤"><span class="nav-number">1.5.10.1.</span> <span class="nav-text">1.行记录过滤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-模糊匹配"><span class="nav-number">1.5.10.2.</span> <span class="nav-text">2.模糊匹配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-排重"><span class="nav-number">1.5.10.3.</span> <span class="nav-text">3.排重</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-投影查询"><span class="nav-number">1.5.10.4.</span> <span class="nav-text">4.投影查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-多个逻辑条件"><span class="nav-number">1.5.10.5.</span> <span class="nav-text">5.多个逻辑条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-排序"><span class="nav-number">1.5.10.6.</span> <span class="nav-text">6.排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-分页"><span class="nav-number">1.5.10.7.</span> <span class="nav-text">7.分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-统计行数"><span class="nav-number">1.5.10.8.</span> <span class="nav-text">8.统计行数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合操作"><span class="nav-number">1.5.11.</span> <span class="nav-text">聚合操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#管道操作的图示"><span class="nav-number">1.5.11.1.</span> <span class="nav-text">管道操作的图示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引操作"><span class="nav-number">1.6.</span> <span class="nav-text">索引操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建索引"><span class="nav-number">1.6.1.</span> <span class="nav-text">创建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看索引"><span class="nav-number">1.6.2.</span> <span class="nav-text">查看索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除集合所有索引"><span class="nav-number">1.6.3.</span> <span class="nav-text">删除集合所有索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MongoDB-客户端"><span class="nav-number">1.6.4.</span> <span class="nav-text">MongoDB 客户端</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

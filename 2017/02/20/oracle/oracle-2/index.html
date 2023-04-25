@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle, rdbms, sql, plsql" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta name="keywords" content="oracle, rdbms, sql, plsql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle数据库学习笔记(二)">
+<meta property="og:url" content="http://www.teacherye.com/2017/02/20/oracle/oracle-2/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T07:43:23.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle数据库学习笔记(二)">
+<meta name="twitter:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/02/20/oracle/oracle-2/"/>
+
+
+
+
+
+  <title>Oracle数据库学习笔记(二) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/02/20/oracle/oracle-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle数据库学习笔记(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-20T11:01:47+08:00">
+                2017-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/" itemprop="url" rel="index">
+                    <span itemprop="name">关系型</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/oracle/" itemprop="url" rel="index">
+                    <span itemprop="name">oracle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/02/20/oracle/oracle-2/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/02/20/oracle/oracle-2/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/02/20/oracle/oracle-2/" class="leancloud_visitors" data-flag-title="Oracle数据库学习笔记(二)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Oracle-数据库"><a href="#Oracle-数据库" class="headerlink" title="Oracle 数据库"></a>Oracle 数据库</h1><blockquote>
+<p>Oracle是一个强大的关系型数据库产品，功能丰富，产品安全性有保障，是Oracle公司的主打产品</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li>DB, <code>DataBase</code>, 数据库</li>
+<li>DBMS,<code>DataBase Management System</code>, 数据库管理系统</li>
+<li>RDBMS,<code>Relationship DataBase Management System</code>,  关系型数据库管理系统</li>
+<li>SQL, <code>Standard Query Language</code>, 标准化查询语言</li>
+</ul>
+<p>本系列学习笔记包含如下的课程内容：</p>
+<ul>
+<li>数据库的基本概念</li>
+<li>DDL 命令<ul>
+<li>Create</li>
+<li>ALTER</li>
+<li>DROP</li>
+</ul>
+</li>
+<li>DML 命令<ul>
+<li>insert</li>
+<li>update</li>
+<li>delete</li>
+</ul>
+</li>
+<li>DQL 命令<ul>
+<li>select 命令</li>
+<li>关联查询</li>
+<li>分组查询</li>
+<li>子查询</li>
+</ul>
+</li>
+<li>DCL 命令</li>
+<li>DTL 命令<ul>
+<li>commit</li>
+<li>rollback</li>
+<li>savepoint</li>
+</ul>
+</li>
+<li>数据字典</li>
+<li>数据库对象<ul>
+<li>序列</li>
+<li>索引</li>
+<li>视图</li>
+<li>同义词</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="单行函数"><a href="#单行函数" class="headerlink" title="单行函数"></a>单行函数</h2><ul>
+<li>SQL语言是一种描述型的语言，也叫第4代语言。<br>而oracle中提供了大量的内置函数，当你要进行一些算法运算的时候<br>你只需要调用即可。<br>比如： sysdate, 该函数返回系统的当前时间</li>
+<li>dual是一张虚拟表格，没有任何意义，只是为了充担构建完整的select语句<br>如：select sysdate from dual;<br>##数字相关函数</li>
+<li><p>round(列|值|表达式, 有效位数);　　四舍五入(默认的小数点有效位数为0)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select round(4.212, 2) from dual;    // 4.21</span><br><span class="line">select round(4.216, 2) from dual;    // 4.22</span><br><span class="line">select round(4.213) from dual;    // 4</span><br><span class="line">select round(4.613) from dual;    // 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>trunc(列|值|表达式, 有效位数)　　直接截取</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select trunc(4.212, 2) from dual;    // 4.21</span><br><span class="line">select trunc(4.216, 2) from dual;    // 4.21</span><br><span class="line">select trunc(4.213) from dual;    // 4</span><br><span class="line">select trunc(4.613) from dual;    // 4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>mod(列|值,列|值);　　求余，相当于java的’%’符号</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select mod(5, 2) from dual;       // 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>abs(列|值);　　求绝对值</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select abs(-12) from dual;    // 12</span><br><span class="line">select abs(10) from dual;    // 10</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ceil（列|值|表达式）　　向上取整</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select ceil(4.212) from dual;    // 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>floor（列|值|表达式）　　向下取整</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select floor(4.212) from dual;    // 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p style="color:#0000FF">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 预测下面两条SQL查询语句的结果值</span><br><span class="line">select round(3.14159,0),round(3.14159,3), round(3.1415,-1) from dual;</span><br><span class="line">select trunc(3.14159,0),trunc(3.14159,3), trunc(3.1415,-1) from dual;</span><br><span class="line">-- 查询出订单表中的总金额（取整）</span><br><span class="line">select floor(total) from s_ord;</span><br><span class="line">select trunc(total) from s_ord;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="字符相关函数"><a href="#字符相关函数" class="headerlink" title="字符相关函数"></a>字符相关函数</h2><ul>
+<li><p>length(列名|表达式|字面值)　　返回字符的长度</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 获取员工表中每个员工的姓氏以及长度</span><br><span class="line">select last_name, length(last_name) 姓氏长度 from s_emp;</span><br><span class="line">-- 查看&apos;HelloWorld&apos;字符串的长度</span><br><span class="line">select length(&apos;HelloWorld&apos;) from dual;    // 10</span><br><span class="line">select length(&apos;Hello World&apos;) from dual;    // 11</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lower/upper(列名|表达式|字面值);　　全部小写/大写</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select lower(&apos;TOM&apos;) from dual;    // tom</span><br><span class="line">select upper(&apos;Tom&apos;) from dual;    // TOM</span><br><span class="line">-- 查询出员工表中名字是&apos;tom&apos;的员工（忽略大小写）</span><br><span class="line">select first_name from s_emp where lower(first_name) = &apos;tom&apos;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>initcap(列名|表达式|字面值);　　首字母大写</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select initcap(&apos;tom&apos;) from dual;    // Tom</span><br><span class="line">select initcap(&apos;hello world&apos;) from dual;    // Hello World</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lpad/rpad(列|值, 宽度, 填充字符);　　从左边/右边填充指定的字符到指定的字节宽度</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select lpad(&apos;aa&apos;, 10, &apos;*&apos;) from dual;    // ********aa</span><br><span class="line">select rpad(&apos;aa&apos;, 10, &apos;*&apos;) from dual;    // aa********</span><br><span class="line">select lpad(&apos;张三&apos;, 5, &apos;*&apos;) from dual;   //*张三</span><br><span class="line">select lpad(&apos;张三&apos;, 3, &apos;*&apos;) from dual;   //张</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ltrim/rtrim(列|值, 截取字符);　　从左边/右边截取字符  </p>
+<p style="color:red;">注意:’截取字符’不需要按照截取字符顺序，可以是它的子集或者等效集合</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select rtrim(&apos;abcdedededede&apos;, &apos;de&apos;) from dual;    //abc</span><br><span class="line">select rtrim(&apos;abcededededeee&apos;, &apos;de&apos;) from dual;    //abc</span><br><span class="line">select rtrim(&apos;abcdedeadedede&apos;, &apos;de&apos;) from dual;    //abcdedea</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>replace(列|值,被置换的字符,置换的字符)　　置换指定字符  </p>
+<p style="color:red;">注意:被置换的字符必须和’列|值’中的值进行严格的顺序匹配</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select replace(&apos;hello world!&apos;, &apos;o&apos;, &apos;*&apos;) from dual;    // hell* w*rld!</span><br><span class="line">select replace(&apos;hello world!&apos;, &apos;oe&apos;, &apos;*&apos;) from dual;    // hello world!</span><br><span class="line">select replace(&apos;hello world!&apos;, &apos;lo&apos;, &apos;*&apos;) from dual;    // hel* world!</span><br><span class="line">select replace(&apos;hello world!&apos;, &apos;o&apos;, &apos;&apos;) from dual;    // hell wrld!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>translate(参数一, 参数二, 参数三)　　转换指定字符<br>参数一:要处理的内容，列|值<br>参数二:要检索的内容<br>参数三:检索内容一一对应的替换内容</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select translate(&apos;I l6o9ve y8o7u!&apos;, </span><br><span class="line">&apos;abcdefghijklmnopqrstuvwxyz0123456789&apos;,</span><br><span class="line">&apos;abcdefghijklmnopqrstuvwxyz&apos;) from dual;    // I love you!</span><br><span class="line">　　</span><br><span class="line">select translate(&apos;I l6o9ve y8o7u!&apos;, </span><br><span class="line">&apos;abcdefghijklImnopqrstuvwxyz&apos;,</span><br><span class="line">&apos;abcdefghijkl*mnopqrstu*wxyz0123456789&apos;) from dual;    // * l6o9*e y8o7u!</span><br><span class="line">　</span><br><span class="line">-- 被检索的字符重复出现多次，以第一次出现的替换规则为准</span><br><span class="line">select translate(&apos;I love you&apos;, &apos;oo&apos;, &apos;i1&apos;) from dual;　// I live yiu</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>instr(str,target[,start][,step])　　求目标串在原串的中位置<br>start表示从第几个位置开始，默认1<br>step表示找第几个出现的目标</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select instr(&apos;go,go,quickly!&apos;, &apos;go&apos;) from dual;    // 1</span><br><span class="line">select instr(&apos;go,go,quickly!&apos;, &apos;go&apos; , 1, 2) from dual;    // 4</span><br><span class="line">select instr(&apos;go,go,quickly!&apos;, &apos;go&apos;, 2) from dual;    // 4</span><br><span class="line">select instr(&apos;go,go,quickly!&apos;, &apos;go&apos;, -1) from dual;    // 4</span><br><span class="line">select instr(&apos;go,go,quickly!&apos;, &apos;go&apos;,-1 ,2) from dual;    // 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>substr(str,start[,length])　　求子串</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select substr(&apos;hello world!&apos;, 3) from dual;    // llo world!</span><br><span class="line">select substr(&apos;hello world!&apos;, 3, 4) from dual;    // llo </span><br><span class="line">select length(substr(&apos;hello world!&apos;, 3, 4)) from dual;    // 4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>decode()函数<br><strong>用法1</strong>： decode(字段或字段的运算，值1，值2，值3)　　类似一个三目运算符<br>当 <strong>字段或字段的运算</strong> 的结果等于 <strong>值1</strong> 时，<br>返回 <strong>值2</strong>，<br>否则返回 <strong>值3</strong> </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select decode(&apos;A&apos;,&apos;A&apos;,&apos;B&apos;,&apos;C&apos;) from dual;   // B</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>用法2</strong>：decode(条件或值,值1,返回值1,值2,返回值2,…值n,返回值n,[缺省值])<br>如 decode(a,b,c,d,e,f,g,i)<br>相当于如下的Java伪代码片段</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if (a == b) &#123;</span><br><span class="line">    return c</span><br><span class="line">&#125; else if (a == d) &#123;</span><br><span class="line">    return e</span><br><span class="line">&#125; else if (a == f) &#123;</span><br><span class="line">    return g</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    return i</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p style="color:red;">注意：如果未定义缺省值，则返回空值</p><br>- case when then end转换函数　　类似于Java中的Switch函数<br><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select name &quot;部门名&quot;,</span><br><span class="line">case region_id</span><br><span class="line">   when 1 then &apos;北美&apos;</span><br><span class="line">   when 2 then &apos;南美&apos;</span><br><span class="line">   when 3 then &apos;中东/非洲&apos;</span><br><span class="line">   when 4 then &apos;亚洲&apos;</span><br><span class="line">   when 5 then &apos;欧洲&apos;</span><br><span class="line">   else &apos;未知区域&apos;</span><br><span class="line">end &quot;区域名&quot;</span><br><span class="line">from s_dept;</span><br></pre></td></tr></table></figure><br><br>可以使用decode函数进行改写<br><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select name 部门名, region_id, </span><br><span class="line">decode(region_id, 1, &apos;北美&apos;, 2, &apos;南美&apos;, </span><br><span class="line">3, &apos;中东/非洲&apos;, 4, &apos;亚洲&apos;, 5, &apos;欧洲&apos;, </span><br><span class="line">&apos;未知区域&apos;) 区域名 from s_dept;</span><br></pre></td></tr></table></figure><br><br>- <p style="color:red;">练习：</p>
+
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">-- 查询图片表中文件名的后缀</span><br><span class="line">第一步. 查找最后那个&apos;.&apos;字符的下标位置</span><br><span class="line">instr(filename, &apos;.&apos;, -1)</span><br><span class="line">第二步. 从&apos;.&apos;所在下标开始截取后面的所有字符</span><br><span class="line">substr(filename, &apos;.&apos;所在的下标)</span><br><span class="line">第三步. 排重 distinct写出最终的SQL语句</span><br><span class="line">select distinct substr(filename, instr(filename, &apos;.&apos;, -1) + 1) 后缀名 from s_image;</span><br><span class="line">　</span><br><span class="line">--- 模拟银行中只显示姓名(s_emp)的第一个字符串(张三 -&gt; 张*)</span><br><span class="line">第一步. 截取首字母</span><br><span class="line">substr(first_name, 1, 1)</span><br><span class="line">第二步. 计算需要进行填充的宽度</span><br><span class="line">length(first_name)</span><br><span class="line">第三步. 使用rpad函数从右往左填充&apos;*&apos;</span><br><span class="line">-- 方法一</span><br><span class="line">select first_name, rpad(substr(first_name, 1, 1), </span><br><span class="line">length(first_name), &apos;*&apos;) 显示名字 from s_emp;</span><br><span class="line">-- 方法二，推荐</span><br><span class="line">select first_name, </span><br><span class="line">replace(first_name, </span><br><span class="line">substr(first_name, 2), </span><br><span class="line">rpad(&apos;*&apos;, length(first_name) -1 , &apos;*&apos;)) 显示名字 </span><br><span class="line">from s_emp;</span><br><span class="line">-- 方法三，可能有时候会错误</span><br><span class="line">select first_name, translate(first_name, </span><br><span class="line">first_name, </span><br><span class="line">substr(first_name, 1, 1) || rpad(&apos;*&apos;, length(first_name) -1, &apos;*&apos;)) 显示名字 </span><br><span class="line">from s_emp;</span><br><span class="line">　</span><br><span class="line">-- 找出名字长度超过5的员工</span><br><span class="line">select * from s_emp where length(first_name) &gt; 5;</span><br><span class="line">　</span><br><span class="line">-- 找出职称是stock clerk的员工</span><br><span class="line">select * from s_emp where lower(title) = &apos;stock clerk&apos;;</span><br><span class="line">　</span><br><span class="line">-- 查询出客户表中的phone列中的最后一个&apos;-&apos;符号后面的串</span><br><span class="line">select phone, substr(phone, instr(phone, &apos;-&apos;, -1) + 1 ) from s_customer;</span><br><span class="line">　</span><br><span class="line">--- 请把员工的工资分为3等，超过2000元的为高等，在1500-2000之间的为中等， 低于1500的为低等</span><br><span class="line">select first_name &quot;员工名&quot;,</span><br><span class="line">case salary</span><br><span class="line">   when salary &gt; 2000 then &apos;高等&apos;</span><br><span class="line">   when salary between 1500 and 2000 then &apos;中等&apos;</span><br><span class="line">   when salary &lt; 1500 then &apos;低等&apos;</span><br><span class="line">   else &apos;未知等级&apos;</span><br><span class="line">end &quot;工资等级&quot;</span><br><span class="line">from s_emp;  // 错误写法</span><br><span class="line">　</span><br><span class="line">select first_name &quot;员工名&quot;,</span><br><span class="line">case</span><br><span class="line">   when salary &gt; 2000 then &apos;高等&apos;</span><br><span class="line">   when salary between 1500 and 2000 then &apos;中等&apos;</span><br><span class="line">   when salary &lt; 1500 then &apos;低等&apos;</span><br><span class="line">   else &apos;未知等级&apos;</span><br><span class="line">end &quot;工资等级&quot;</span><br><span class="line">from s_emp;   // 正确写法</span><br><span class="line">　</span><br><span class="line">注: 如果when中已经出现了列名变量且是一个条件,则case后面不能加列名;</span><br><span class="line">反之, 如果when是一些常量用于和case后面的列名做等值比较,case后面需要添加对应列名</span><br><span class="line">　</span><br><span class="line">--- 输出每个订单编号及支付方式，支付方式要么为现金，要么是信用卡，否则就未知</span><br><span class="line">-- decode写法</span><br><span class="line">select payment_type, decode(payment_type, </span><br><span class="line">&apos;CREDIT&apos;, &apos;信用卡支付&apos;, &apos;CASH&apos;, </span><br><span class="line">&apos;现金支付&apos;, &apos;未知&apos;) 支付方式 from s_ord;</span><br><span class="line">　</span><br><span class="line">-- case when写法</span><br><span class="line">select payment_type, </span><br><span class="line">case payment_type </span><br><span class="line">when &apos;CREDIT&apos; then &apos;信用卡支付&apos;</span><br><span class="line">when &apos;CASH&apos; then &apos;现金支付&apos;</span><br><span class="line">else &apos;未知&apos;</span><br><span class="line">end 支付方式 from s_ord;</span><br><span class="line">　</span><br><span class="line">-- 输出区域表中每个地区对应的中文</span><br><span class="line">select name, </span><br><span class="line">case name </span><br><span class="line">when &apos;North America&apos; then &apos;北美&apos;</span><br><span class="line">when &apos;South America&apos; then &apos;南美&apos;</span><br><span class="line">when &apos;Africa / Middle East&apos; then &apos;非洲/中东&apos;</span><br><span class="line">when &apos;Asia&apos; then &apos;亚洲&apos;</span><br><span class="line">when &apos;Europe&apos; then &apos;欧洲&apos;</span><br><span class="line">else &apos;未知&apos;</span><br><span class="line">end 区域名 from s_region;</span><br><span class="line">　</span><br><span class="line">select name, </span><br><span class="line">case id </span><br><span class="line">when 1 then &apos;北美&apos;</span><br><span class="line">when 2 then &apos;南美&apos;</span><br><span class="line">when 3 then &apos;非洲/中东&apos;</span><br><span class="line">when 4 then &apos;亚洲&apos;</span><br><span class="line">when 5 then &apos;欧洲&apos;</span><br><span class="line">else &apos;未知&apos;</span><br><span class="line">end 区域名 from s_region;</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="日期相关函数"><a href="#日期相关函数" class="headerlink" title="日期相关函数"></a>日期相关函数</h2><ul>
+<li><p></p><p style="color:red;">注意：Oracle中日期类型的数值在显示时，将做为特殊字符来显示</p>  <p></p>
+<blockquote>
+<p>Oracle中，默认的日期格式是：DD-MON-RR<br>在Oracle中，日期格式的字符有：<br>yy/yyyy       表示2位/4位的数字年份，如：14或2014<br>rr/rrrr       同上?<br>mm            两位的数字月<br>mon/month     可拼读的月份，如：11月，NOV<br>dd            两位的数字日， 如：05,18<br>dy/day        表示星期几, 如： Wed/Wednesday<br>hh            小时<br>mi            分钟(因为SQL不区分大小写，不能使用MM和mm进行区分，所以使用mi)<br>ss            秒<br>fm            表示去掉前面的0，如fm06,以后值6, 如fmmm<br>…</p>
+</blockquote>
+</li>
+<li><p>如果使用rr进行年份转换,如果当前年份的后两位在0-49之间,<br>传入的参数在0-49中,返回本世纪的年份;<br>传入参数在50-99中,返回上个世纪的年份<br>如果当前年份后两位在50-99之间,<br>传入参数在0-49中,返回下个世纪的年份,<br>传入参数是在50-99中,返回本世纪的年份  </p>
+<p>  对于日期来说，可以获取它的任何一个部份，比如：获取年份：<br>  <code>select to_char(sysdate,&#39;rrrr&#39;) from dual;</code></p>
+<p>  Oracle中默认的日期格式：DD-MON-RR<br>  当然，我们可以改变某个会话[session]的日期格式：<br>  <code>SQL&gt;alter session set nls_date_format=&#39;rrrr-mm-dd hh24:mi:ss&#39;;</code><br>  同样的道理，我们还可以改变当前会话的语言环境：<br>  <code>SQL&gt;alter session set nls_language=&#39;american&#39;;</code><br>  <code>SQL&gt;alter session set nls_language=&#39;simplified chinese&#39;;</code><br>  　<br>  常用的日期函数</p>
+<p>  函数名称|作用<br>  -|-<br>  sysdate|返回当前日期<br>  last_day(d)|返回给定日期所在月的最后一天的日期<br>  months_between(d1,d2)|返回d1与d2之间相差多少个月，是一个近似的浮点数<br>  add_months(d, m)|返回在日期d的基础上，加上m个月的日期[m可为负数]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select last_day(sysdate) from dual;</span><br><span class="line">select round(months_between(sysdate, start_date), 2) from s_emp;</span><br><span class="line">select round(months_between(sysdate, start_date)/12, 2) from s_emp;</span><br></pre></td></tr></table></figure>
+  <p style="color:red;">注意:Oracle中日期类型是可以进行加减运算的，结果是两个日期的天数</p>
+
+<blockquote>
+<p>利用这些函数，我们可以构建一个任意的日期：<br>  1天后    =&gt;  sysdate+1<br>  1小时后  =&gt;  sysdate+1/24<br>  1分钟后  =&gt;  sysdate+1/24/60<br>  …<br>  1个月后  =&gt;  add_months(sysdate,1)<br>  1年后    =&gt;  add_months(sysdate,12)<br>  …</p>
+</blockquote>
+</li>
+<li><p>next_day(d,week)　　返回在日期d的基础上，下个week的日期<br>此处的参数week是指星期几(<br><strong>中文要写中文，英文要写英文</strong>)<br>如：  <code>SQL&gt;select next_day(sysdate,&#39;星期三&#39;) from dual;</code><br>##转换函数 </p>
+</li>
+<li>to_number(c)　　把字符转换成数字<br>如：<code>SQL&gt;select to_number(&#39;123&#39;) from dual;</code><br>一般配合to_char使用</li>
+<li>to_date(c, pattern)　　<br>把字符c按照pattern模式解析成日期，如果不传pattern，则采用默认格式解析[DD-MON-RR]</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-- 把字符&apos;2008/08/08&apos;转换成时间</span><br><span class="line">select to_date(&apos;2008/08/08&apos;, &apos;yyyy/mm/dd&apos;) from dual;</span><br><span class="line">-- 把字符&apos;星期四 2014年,6号11月份&apos;转换成时间</span><br><span class="line">select to_date(&apos;星期四 2014年,6号11月份&apos;, &apos;day yyyy&quot;年,&quot;dd&quot;号&quot;mm&quot;月份&quot;&apos;) from dual;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>to_char(d, pattern)　　格式化日期<br>情况1：to_char(date, pattern);　　格式化日期<br>情况2：to_char(number, pattern);　　格式化数字</p>
+</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-- 把当前日期按照形如&apos;2016/12/05 14:04:16&apos;格式转成字符格式</span><br><span class="line">select to_char(sysdate, &apos;yyyy/mm/dd hh24:mi:ss&apos;) from dual;</span><br><span class="line">-- 把当前日期按照形如&apos;2016年12月5日&apos;的格式转换成字符格式</span><br><span class="line">select to_char(sysdate, &apos;yyyy&quot;年&quot;mm&quot;月&quot;dd&quot;日&quot;&apos;) from dual;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>to_char(n,pattern)　　格式化数字<br>pattern是指用来格式化数字的一些特殊字符，如：</p>
+<blockquote>
+<p>9     代表任意数字<br>0     代表0<br>.     代表小数点<br>,     代表千分位<br>L     代表本地化货币符号<br>$     代表$<br>…</p>
+</blockquote>
+</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 格式化数字1234.5678保留小数点后一位的字符</span><br><span class="line">select to_char(&apos;1234.5678&apos;, 9999.9) from dual;</span><br><span class="line">-- 说出下列SQL语句的作用</span><br><span class="line">select to_char(1234.5678,&apos;L9,999,999.9&apos;) from dual;</span><br><span class="line">-- 输出员工的姓名及工资，工资 需要按照&apos;$1,500.00&apos;格式化</span><br><span class="line">select first_name, to_char(salary, &apos;$9,999.99&apos;) from s_emp;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">-- 查询2014年11月1日和2015年12月9日之间的间隔月数</span><br><span class="line">select months_between(to_date(&apos;2015年12月9日&apos;,&apos;yyyy&quot;年&quot;mm&quot;月&quot;dd&quot;日&quot;&apos;),to_date(&apos;2014年11月1日&apos;, &apos;yyyy&quot;年&quot;mm&quot;月&quot;dd&quot;日&quot;&apos;)) from dual;</span><br><span class="line">-- 查询当前日期下一个星期四是几号</span><br><span class="line">select next_day(sysdate, &apos;Thursday&apos;) from dual;</span><br><span class="line">-- 查询半年后的日期</span><br><span class="line">select add_months(sysdate, 6) from dual;</span><br><span class="line">-- 查询半年前的日期</span><br><span class="line">select add_months(sysdate, -6) from dual;</span><br><span class="line">-- 查询员工的工作月数</span><br><span class="line">select months_between(sysdate, start_date) from s_emp;</span><br><span class="line">-- 查询员工的工作天数</span><br><span class="line">select sysdate - start_date from s_emp;</span><br><span class="line">-- 计算一年前，当前，一年后的时间</span><br><span class="line">select add_months(sysdate, -12), sysdate, add_months(sysdate, 12) from dual;</span><br><span class="line">-- 当前日期前6个月的最后一天</span><br><span class="line">select last_day(add_months(sysdate, -6)) from dual;</span><br><span class="line">-- 当前日期前6个月的第一天</span><br><span class="line">select last_day(add_months(sysdate, -7)) + 1 from dual;</span><br><span class="line">select trunc(add_months(sysdate, -6), &apos;mm&apos;) from dual;</span><br><span class="line">-- 显示下个星期5是什么日期</span><br><span class="line">select next_day(sysdate, &apos;Friday&apos;) from dual;</span><br><span class="line">-- 找出 5月份入职的员工</span><br><span class="line">select * from s_emp where to_char(start_date, &apos;fmmm&apos;) = &apos;5&apos;;</span><br><span class="line">-- 找出90年下半年入职的员工</span><br><span class="line">select * from s_emp where to_char(start_date, &apos;yy&apos;) = &apos;90&apos; and to_number(to_char(start_date, &apos;fmmm&apos;)) &gt; 6;</span><br><span class="line">--- 查询出员工的姓名，入职日期，并按日的升序排序</span><br><span class="line">select first_name, start_date from s_emp order by </span><br><span class="line">to_number(to_char(start_date, &apos;fmdd&apos;));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>#数据库的设计</p>
+<ul>
+<li>立项 -&gt; 需求分析 -&gt; 概要设计 -&gt; 详细设计 -&gt; 编码<br>(项目经理/高级程序员/中级程序员/初级程序员) -&gt; 测试<br>-&gt; 交付 -&gt; 维护<br>##对象到表格的转换</li>
+<li><p>表是用来存储数据的，由行与列组成。它是数据库对象的一种。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">表是怎么来的？</span><br><span class="line">    人的想法[idea]</span><br><span class="line">          \-  利用工具来实现 [草图 -&gt; 图如何画？]</span><br><span class="line">                    \-   E-R图[Entity - Relationship Diagram]</span><br><span class="line">面向对象的思想</span><br><span class="line">    \- 找对象 [拥有什么，能干什么]</span><br><span class="line">                      属性   -&gt;  对应到的，它就是 列</span><br><span class="line">        把一系列的对象按OO的思想抽象成 “类” -&gt; 归类的过程</span><br><span class="line">                    \- 类    -&gt; 对应到的， 它就是 表</span><br><span class="line">在JVM中，根据类可以实例化出对象  -&gt;  它就是 记录</span><br><span class="line">那类之间的关系双如何表达呢？ -&gt; 它就是 外键[foreign key]</span><br><span class="line">[不管JAVA类是什么关系，在表中都将通过外键表达]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>所以，做数据库设计的基本过程：<br>找对象  [根据业务的上下文]把对象映射[mapping]成 表关系, 按如下规则：<br>a). 类名 映射到 表名<br>b). 属性 映射到 列名<br>c). 对象标识 映射成 主键[primary key,唯一且非空的]<br>d). 对象关系 映射成 外键[foreign key]<br>有了上面的思想，再结束相关的工具软件，就可以把对象与表关系给“描绘”出来，这个就是E-R图：<br>常用的工具有： PowerDesigner、ERWin、Jude、StarUML…<br>以上这些工具，不仅仅是做E-R图，主要功能是做UML,<br>不同的软件所绘制的E-R图的样子可能会有所不同。</p>
+<ul>
+<li><p>比如：经过抽象后，我归得一个 学生类</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Student&#123;</span><br><span class="line">    private Integer id;</span><br><span class="line">    private String name;</span><br><span class="line">    private Date birth;</span><br><span class="line">    private int age;</span><br><span class="line">    private char gender;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何根据上面的思念映射成 表关系呢？</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">表名：tbl_student</span><br><span class="line">列名：</span><br><span class="line">id number</span><br><span class="line">fname varchar2(128)</span><br><span class="line">lname varchar2(128)</span><br><span class="line">birth date</span><br><span class="line">gender char(1)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##范式 </p>
+<ul>
+<li>作用：用来规范数据库的设计，遵守它可以使得这个设计更有扩展性，减少冗余。
+　  </li>
+<li><p>第一范式 [1NF]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">所有的列都不可再分，也就是每一列都是原子的。</span><br><span class="line">如：</span><br><span class="line">R(id,name,age)  如果此处的name可以分为 前名与后名，则建议：</span><br><span class="line">R(id,fname,lname,age)  这样就更加合理。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二范式[2NF]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">在满足1NF的基础上，所有的非关键列必需要完全依赖于关键列，</span><br><span class="line">也就是不能存在非关键列部份依赖于关键列。</span><br><span class="line">如：</span><br><span class="line">R(sid,sname,cid,cname,grade)</span><br><span class="line">这个关系如果有(sid,cid)为关键列的话，则grade是完全依赖的，</span><br><span class="line">但 sname与cname都是部份依赖的。所以，它违反了2NF,应该改为：</span><br><span class="line">R1(sid,sname)  sid为主键</span><br><span class="line">R2(cid,cname)  cid为主键</span><br><span class="line">R3(sid,cid, grade)   sid与cid 为联合主键</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第三范式[3NF]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">在满足2NF的基础上，所有的非关键列必需直接依赖于关键列，</span><br><span class="line">也就是不能存在非关键列传递依赖于关键列。</span><br><span class="line">假如：A -&gt; B,而 B -&gt; C, 则我们说 A 传递依赖于C。</span><br><span class="line">　</span><br><span class="line">如：</span><br><span class="line">R(sid,sname,phone,college,address)</span><br><span class="line">这个关系中以sid为关键列，则sname,phone,college直接依赖于它,</span><br><span class="line">但是,address 是依赖collage,所以，address 传递依赖于 sid, 违返了3NF.</span><br><span class="line">改为：</span><br><span class="line">R1(sid,sname, phone, college_id)  sid为主键，college_id为外键</span><br><span class="line">R2(id,college,address)   id为主键</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>#DDL之建表、改表、删表</p>
+<ul>
+<li><p><strong><em>建表语法：</em></strong></p>
+<blockquote>
+<p>CREATE TABLE 表名(<br> 列名 数据类型 [DEFAULT value] [CONSTRAINT 约束名] [约束类型]<br> ,列名 数据类型 [DEFAULT value] [CONSTRAINT 约束名] [约束类型]<br> ,…<br> 列名 数据类型 [DEFAULT value] [CONSTRAINT 约束名] [约束类型]<br>) [as subquery]</p>
+</blockquote>
+</li>
+<li><p>表名的命名规则<br>字母开头，长度在1~30之间,允许使用A-Z，a-z，0-9，_，$，#，同一用户下不能出现同名的表且不能使用oracle关键字</p>
+</li>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create table tbl_test(</span><br><span class="line">id number,</span><br><span class="line">name varchar2(48)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##约束 [constraint]<br>约束是一种数据库的对象，它依附于表的列，它的作用是用来限制列的内容。<br>　　<br>Oracle中提供了5种约束：</p>
+<pre><code>约束名称|关键字|缩写|作用
+-|-|-|-
+主键约束|PRIMARY KEY|pk|列值非空且唯一，每张表中最多只能添加1个主键约束
+唯一约束|UNIQUE|uk|列中非空值必须唯一
+非空约束|NOT NULL|nn|列值不能为空
+外键约束|[REFERENCES] FOREIGN KEY|fk|列值必须为引用表的某一列的值
+自定义约束|CHECK|ck|自定义约束条件
+</code></pre><ul>
+<li><p>那么把如何把约束添加到表格的各列中呢？<br>  <strong>1.列级语法是在列定义结束前添加约束，这种语法不能跨列使用。</strong>语法：</p>
+<blockquote>
+<p>…<br>列名 类型 [CONSTRAINT 约束名] [约束类型]<br>….</p>
+</blockquote>
+</li>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create table tbl_test(</span><br><span class="line">id number CONSTRAINT tbl_test_id_pk primary key,</span><br><span class="line">name varchar2(48) constraint tbl_test_name_nn NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p></p><p style="color:blue;">练习：</p><br>使用列级语法创建一张角色表以及一张用户表，要求<br>角色表中包含id、rname两列其中id为主键，rname非空<br>用户表包含4个字段，分别为id、name、password、age、role_id<br>其中id为主键、name非空、password有默认值’test、age大于0小于150、<br>role_id为外键指向角色表中的主键<p></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 列级语法创建两张表</span><br><span class="line">-- 创建角色表</span><br><span class="line">create table tbl_role(</span><br><span class="line">id number(15) constraint tbl_role_id_pk primary key,</span><br><span class="line">rname varchar2(30) constraint tbl_role_rname not null</span><br><span class="line">);</span><br><span class="line">-- 创建用户表</span><br><span class="line">create table tbl_user(</span><br><span class="line">id number(15) constraint tbl_user_id_pk primary key,</span><br><span class="line">name varchar2(30) constraint tbl_user_name_nn not null,</span><br><span class="line">password varchar2(20) default &apos;test&apos;,</span><br><span class="line">age number(3) constraint tbl_user_age_ck check(age between 20 and 160),</span><br><span class="line">role_id number(15) constraint tbl_user_rid_fk references tbl_role(id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>**2.表级语法是指在列定义结束之后再添加约束。它不能用来添加 NOT NULL约束。**语法：
+</code></pre><blockquote>
+<p>…<br>列名 类型,<br>列名 类型,<br>…<br>,[CONSTRAINT 约束名] 约束类型(列名[,列名])<br>….</p>
+</blockquote>
+<ul>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">create table tbl_test(</span><br><span class="line">id number,</span><br><span class="line">name varchar2(48) constraint tbl_test_name_nn NOT NULL,</span><br><span class="line">constraint tbl_test_id_pk PRIMARY KEY(id)</span><br><span class="line">);</span><br><span class="line">　</span><br><span class="line">create table s_item(</span><br><span class="line">item_id number,</span><br><span class="line">ord_id number,</span><br><span class="line">customer_id number  references S_CUSTOMER(id),</span><br><span class="line">quantity number,</span><br><span class="line">PRIMARY KEY(item_id,ord_id),</span><br><span class="line">FOREIGN KEY(customer_id) references S_CUSTOMER(id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+  <p style="color:red;">注意：如果不指定约束名，则系统会自动生成约束名。<br>当然，如果你自定约束名，最好按如下规则：<br>表名<em>列名</em>约束类型简称</p>
+</li>
+<li><p style="color:blue;">练习：</p>  
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">使用表级语法创建用户表和角色表</span><br><span class="line">-- 表级语法创建两张表</span><br><span class="line">-- 创建角色表</span><br><span class="line">create table tbl_role(</span><br><span class="line">id number(15),</span><br><span class="line">rname varchar2(30),</span><br><span class="line">constraint tbl_role_id_pk primary key(id),</span><br><span class="line">constraint tbl_role_rname_nn check(rname is not null)</span><br><span class="line">);</span><br><span class="line">-- 创建用户表</span><br><span class="line">create table tbl_user(</span><br><span class="line">id number(15),</span><br><span class="line">name varchar2(30),</span><br><span class="line">password varchar2(20) default &apos;123456&apos;,</span><br><span class="line">age number(3),</span><br><span class="line">role_id number(15),</span><br><span class="line">constraint tbl_user_id_pk primary key(id),</span><br><span class="line">constraint tbl_user_name_nn check(name is not null),</span><br><span class="line">constraint tbl_user_age_ck check(age between 20 and 160),</span><br><span class="line">constraint tbl_user_rid_fk foreign key(role_id) </span><br><span class="line">references tbl_role(id)</span><br><span class="line">);</span><br><span class="line">　</span><br><span class="line">创建一张员工表表名为jsd_emp包含列</span><br><span class="line">　</span><br><span class="line">id 类型为字符型   要求该列为主键</span><br><span class="line">name 类型为字符型  要求该列非空</span><br><span class="line">age 类型为数字型  要求年龄大于0且小于150</span><br><span class="line">gender 类型为字符型 要求性别必须为&apos;男&apos;或者&apos;女&apos;</span><br><span class="line">dept_id  类型为字符型 要求该列作为外键 引用部门表中的主键</span><br><span class="line">　</span><br><span class="line">create table jsd_emp(</span><br><span class="line">id varchar2(30),</span><br><span class="line">name varchar2(25),</span><br><span class="line">age number(3),</span><br><span class="line">gender varchar2(6),</span><br><span class="line">dept_id varchar2(30),</span><br><span class="line">constraint jsd_emp_id_pk primary key(id),</span><br><span class="line">constraint jsd_emp_name_nn check(name is not null),</span><br><span class="line">constraint jsd_emp_age_ck check(age &gt; 0 and age &lt; 150),</span><br><span class="line">constraint jsd_emp_gender_ck check(gender in (&apos;男&apos;, &apos;女&apos;)),</span><br><span class="line">constraint jsd_emp_did_fk foreign key(dept_id) </span><br><span class="line">references jsd_dept(id)</span><br><span class="line">);</span><br><span class="line">　</span><br><span class="line">创建一张部门表 表名为jsd_dept</span><br><span class="line">包含部门ID(id)  类型为字符型  该列为主键</span><br><span class="line">部门名称(name)      类型为字符型   部门名字唯一</span><br><span class="line">部门等级(state)      类型为数字型   且必须分为1 2 3 4 5 五个等级</span><br><span class="line">　</span><br><span class="line">create table jsd_dept(</span><br><span class="line">id varchar2(30),</span><br><span class="line">name varchar2(25),</span><br><span class="line">state number(2),</span><br><span class="line">constraint jsd_dept_id_pk primary key(id),</span><br><span class="line">constraint jsd_dept_name_uk unique(name),</span><br><span class="line">constraint jsd_dept_state_ck check(state in (1,2,3,4,5))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##删除表</p>
+<ul>
+<li><p><strong><em>删表语法：</em></strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE 表名 [cascade constraints]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p></p><p style="color:red;">注意：[cascade constraints]表示级联解除有关键的外键约束.</p><br><strong>如果删除表时,表之间存在外键关联,<br>如果是多对一的情况,先删除从表(即属于多的那一张表)<br>创建表的时候也要注意先要创建属于1的那张表</strong><p></p>
+<p>##修改表</p>
+<ul>
+<li><p><strong><em>改表语法：</em></strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE 表名 [子命令]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>子命令主要分以下几类：</p>
+<blockquote>
+<p>1.列相关的</p>
+<blockquote>
+<p>a. 添加新列<br>ALTER TABLE 表名<br>ADD 列名 数据类型 [default 值] [constraint 约束名] [约束类型]<br>alter table jsd_dept add dept_no varchar2(20) default ‘test01’ not null;<br>注意：若添加的列为一个外键列可以省略数据类型的定义.<br>b.删除列<br>ALTER TABLE 表名 drop column 列名;<br>alter table jsd_dept drop column dept_no;<br>c. 修改列 【此处不是改列名，而是改列的类型或添加约束】<br>ALTER TABLE 表名<br>MODIFY 原列名 数据类型 [default 值] [constraint 约束名] [约束类型]<br>alter table jsd_dept modify name char(30) not null;<br>d. 修改列名 [oracle 9才有]<br>ALTER TABLE 表名 rename COLUMLN 原列名 to 新列名;<br>alter table jsd_dept rename column name to dep_name;</p>
+</blockquote>
+<p>2.约束相关的</p>
+<blockquote>
+<p>a. 添加约束<br>  ALTER TABLE 表名  </p>
+<pre><code>ADD [CONSTRAINT 约束名] 约束类型(列名[,列名][,...]);  
+</code></pre><p>　<br>  create table jsd_dept(<br>  id varchar2(20),<br>  name varchar2(20),<br>  state char(3)<br>  );<br>　<br>  alter table jsd_dept add constraint con_jsd_dept_id_pk primary key(id);<br>  alter table jsd_dept add constraint con_jsd_dept_name_uk unique(name);<br>  alter table jsd_dept add constraint con_jsd_dept_state_ck check(state in (1,2,3,4,5));<br>　<br>  注：此命令不能加 NOT NULL约束，必须采用 check(列名 is not null)  这样的表级语法<br>　<br>b. 删除约束<br>  ALTER TABLE 表名 DROP CONSTRAINT 约束名;<br>  alter table jsd_dept drop constraint con_jsd_dept_name_uk;<br>　<br>c. 关闭约束[使约束失效]<br>   ALTER TABLE 表名 DISABLE CONSTRAINT 约束名;<br>  alter table jsd_test2 disable constraint jsd_jsd_test2_id_pk;<br>　　<br>d. 打开约束[启用约束]<br>  ALTER TABLE 表名 ENABLE CONSTRAINT 约束名;<br>  alter table jsd_test2 ENABLE constraint jsd_jsd_test2_id_pk;  </p>
+</blockquote>
+</blockquote>
+</li>
+<li><p>补充:<br>  1.修改表名， <strong><em>语法</em></strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter table 原表名 rename to 新表名;</span><br><span class="line">rename 原表名 to 新表名;</span><br></pre></td></tr></table></figure>
+<p>  2.复制原表中的结构和数据并创建一张新表， <strong><em>语法</em></strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table 新表名 as  select 列,列........ from 原表;</span><br></pre></td></tr></table></figure>
+<p>  3.只复制表结构不复制数据并创建一张新表， <strong><em>语法</em></strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table 新表名 as  select 列,列........ from 原表 where 恒假条件;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p></p><p style="color:red;">注意：以上第2和第3点建标语句相当于创建一张结构和被复制表相同的表,<br>它是一张新表,没有任何约束</p><p></p>
+<p>#DML语句[INSERT,DELETE,UPDATE]</p>
+<p>##插入表数据<br><strong><em>语法：</em></strong></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO 表名[(列名[,列名][,列名][,...])] VALUES(值1[,值2][,...]);</span><br></pre></td></tr></table></figure>
+</code></pre><p></p><p style="color:red;">注意：如果表名后的列省略，表示要插入所有列值。[默认值无效]</p>  <p></p>
+<ul>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">insert into tbl_class(id,name,capacity) values(1,&apos;A教室&apos;,48);</span><br><span class="line">insert into tbl_class values(1,&apos;A教室&apos;,48);</span><br><span class="line">insert into tbl_class(name,id) values(&apos;A教室&apos;, 1);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##更新表数据<br><strong><em>语法：</em></strong></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UPDATE 表名 SET 列1=值[,列1=值][,...] WHERE 条件;</span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-- 把所有教室的容量改为 38</span><br><span class="line">update tbl_class set capacity=38;</span><br><span class="line">-- 把id为1教室的容量改为 48</span><br><span class="line">update tbl_class set capacity=48 where id = 1;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##删除表数据<br><strong><em>语法：</em></strong></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE [FROM] 表名 WHERE 条件</span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-- 删除教室表中的所有记录</span><br><span class="line">delete from tbl_class;</span><br><span class="line">-- 删除教室表中id为2的记录</span><br><span class="line">delete from tbl_class where id = 2;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+            <a href="/tags/rdbms/" rel="tag"># rdbms</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/19/oracle/oracle-1/" rel="next" title="Oracle数据库学习笔记(一)">
+                <i class="fa fa-chevron-left"></i> Oracle数据库学习笔记(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/21/oracle/oracle-3/" rel="prev" title="Oracle数据库学习笔记(三)">
+                Oracle数据库学习笔记(三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle-数据库"><span class="nav-number">1.</span> <span class="nav-text">Oracle 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单行函数"><span class="nav-number">1.1.</span> <span class="nav-text">单行函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符相关函数"><span class="nav-number">1.2.</span> <span class="nav-text">字符相关函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期相关函数"><span class="nav-number">1.3.</span> <span class="nav-text">日期相关函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

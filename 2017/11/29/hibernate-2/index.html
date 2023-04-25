@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hibernate, hbm, orm, log, java, cache" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作">
+<meta name="keywords" content="hibernate, hbm, orm, log, java, cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架学习(二)">
+<meta property="og:url" content="http://www.teacherye.com/2017/11/29/hibernate-2/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/hibernate_logo_whitebkg_200px.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/first-cache-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/first-cache-r.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/first-cache-cud.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/object-state.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/second-cache-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/second-cache-demo.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/query-cache.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/query-flow.png">
+<meta property="og:updated_time" content="2018-04-19T04:09:25.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate框架学习(二)">
+<meta name="twitter:description" content="学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/11/29/hibernate-2/assets/hibernate_logo_whitebkg_200px.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/11/29/hibernate-2/"/>
+
+
+
+
+
+  <title>Hibernate框架学习(二) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/11/29/hibernate-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hibernate框架学习(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-29T14:26:23+08:00">
+                2017-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/Hibernate/" itemprop="url" rel="index">
+                    <span itemprop="name">Hibernate</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/11/29/hibernate-2/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/11/29/hibernate-2/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/11/29/hibernate-2/" class="leancloud_visitors" data-flag-title="Hibernate框架学习(二)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习 Hibernate框架缓存机制,通过本教程,理解Hibernate框架的一级缓存和二级缓存，掌握对象的三种状态，一、二级缓存的操作
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Hibernate-Framework"><a href="#Hibernate-Framework" class="headerlink" title="Hibernate Framework"></a>Hibernate Framework</h1><blockquote>
+<p><strong>简介：</strong><br><a href="http://www.hibernate.org/orm" target="_blank" rel="noopener">Hibernate</a>框架是一个全自动的ORM框架，它拥有强大的映射功能，提供了缓存机制、事务管理、拦截器机制、查询语句的多方面支持</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li><p>Framework, 框架，某一类问题的总体解决方案</p>
+</li>
+<li><p>ORM, <code>Object Relationship Mapping</code>, 对象关系映射</p>
+</li>
+<li><p>DATABASE, 数据库，存储数据的一种方式</p>
+</li>
+<li><p>HQL, <code>Hibernate Query Language</code>, Hibernate查询语句</p>
+</li>
+<li><p>Transaction, 事务，一组相关的操作</p>
+</li>
+<li><p>Session, 会话</p>
+</li>
+</ul>
+<p>本系列笔记包含如下的课程内容：</p>
+<ul>
+<li>Hibernate框架原理和开发流程</li>
+<li>框架缓存机制</li>
+<li>对象关系映射</li>
+<li>框架提供的查询机制<ul>
+<li>基于底层的<code>SQL</code>查询机制</li>
+<li>基于<code>HQL</code>查询机制</li>
+<li>基于<code>Criteria</code>查询机制</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="Hibernate-缓存机制"><a href="#Hibernate-缓存机制" class="headerlink" title="Hibernate 缓存机制"></a>Hibernate 缓存机制</h2><p><img src="/2017/11/29/hibernate-2/assets/hibernate_logo_whitebkg_200px.png" alt="logo"></p>
+<blockquote>
+<p><em>此章节重点讲解 Hibernate框架的缓存机制，含一级缓存、二级缓存、查询缓存</em></p>
+</blockquote>
+<p><strong>章节重点：</strong></p>
+<ul>
+<li>一级缓存</li>
+<li>对象状态管理 </li>
+<li>二级缓存配置和使用</li>
+<li>查询缓存配置和使用</li>
+</ul>
+<p><strong>章节难点：</strong></p>
+<ul>
+<li>一级缓存管理</li>
+<li>二级缓存配置</li>
+</ul>
+<h3 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h3><blockquote>
+<p>定义：<br>Hibernate的缓存，是介于物理数据源与应用程序之间，在内存中开辟的一块空间，将数据库中的数据，复制一份临时放在内存中，将来直接从内存读取。</p>
+</blockquote>
+<ul>
+<li><p>作用：</p>
+<blockquote>
+<p>减少应用程序对物理数据源访问的次数，从而提高了应用程序的运行性能。</p>
+</blockquote>
+</li>
+<li><p>机制：  </p>
+<blockquote>
+<p>读取数据时，先在缓存中查询。如果在缓存中没有找到需要的数据，则再通过执行SQL语句查询数据库；如果在缓存中找到需要的数据，则就将缓存数据作为结果。</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/2017/11/29/hibernate-2/assets/first-cache-1.png" alt="图示"></p>
+<blockquote>
+<p>在Hibernate框架中，一级缓存是由Session定义的，同时由Hibernate框架内置实现，它总是开启的。<br>  相比于JDBC，Hibernate的Session相当于JDBC的连接 + Cache，而这个Cache就是一级缓存，它在一般情况下无需开发者进行干预。</p>
+</blockquote>
+<p>如：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">Session ses = factory.openSession(); <span class="comment">//创建Session,一级缓存产生</span></span><br><span class="line">Transaction tx = ses.beginTransaction(); <span class="comment">//开启事务</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	ses.save(book);</span><br><span class="line">	tx.commit(); </span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">	tx.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">	<span class="keyword">if</span>(ses != <span class="keyword">null</span>) ses.close();  <span class="comment">//Session关闭，一级缓存销毁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对一级缓存的操作，主要有两类，一类是查询，一类是增、删、改 操作</p>
+<ul>
+<li><p>R流程<br><img src="/2017/11/29/hibernate-2/assets/first-cache-r.png" alt="图示"></p>
+</li>
+<li><p>CUD流程<br><img src="/2017/11/29/hibernate-2/assets/first-cache-cud.png" alt="图示"></p>
+</li>
+</ul>
+<blockquote>
+<p>缓存刷新模式(FlushMode)<br>Session缓存了处于持久态的对象，一旦对象发生改变，这种改变会体现在数据库中，但写入数据库的操作往往会被延后。目的是使用底层JDBC的批量更新来提高性能。</p>
+</blockquote>
+<p>Hibernate更新数据库的时机，是由Session的FlushMode属性决定的,它有如下值：</p>
+<ul>
+<li>FlushMode.AUTO (默认值)<ul>
+<li>在调用Transaction.commit()方法时，更新数据库;或Session持久态属性的改变可能影响即将执行的查询结果之前，更新数据库</li>
+</ul>
+</li>
+<li>FlushMode.ALWAYS<ul>
+<li>在每一次查询之前，都更新数据库</li>
+</ul>
+</li>
+<li>FlushMode.COMMIT<ul>
+<li>在调用Transaction的commit()方法时，更新数据库</li>
+</ul>
+</li>
+<li>FlushMode.MANUAL<ul>
+<li>只有在手动调用session.flush()方法时，才更新数据库</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>一级缓存示例:<br>同一个session中，对同样对象类型同样id的对象，仅在第一次查询时，需要执行sql查询语句，之后就直接从缓存中返回，无需产生sql语句.</p>
+</blockquote>
+<p>代码片断：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Session ses = getSession(); <span class="comment">//此方法是本类中的获取Session的方法</span></span><br><span class="line">	<span class="keyword">int</span> id = <span class="number">1</span>;</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	Book b1 = (Book)ses.get(Book.class, id);</span><br><span class="line">	System.out.println(book.getAuthor()); <span class="comment">//打印book实例的author属性值</span></span><br><span class="line">	System.out.println(<span class="string">"====分割线===="</span>);</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	Book b2 = (Book)ses.get(Book.class, id); <span class="comment">//注：此处不会再生成sql命令</span></span><br><span class="line">	System.out.println(book.getName(); <span class="comment">//打印book实例的name属性值</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	ses.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以看出，在同一个session中，查询拥有相同类型和id值的对象时，只会执行1次sql，并把第1次查询出来的实例缓存起来，后面再次查询时，首先在一级缓存中查询同类同id值的对象，如果找到，则直接返回.</p>
+</blockquote>
+<p>一级缓存注意事项：  </p>
+<ul>
+<li>一级缓存是Hibernate默认使用的，无需配置即可使用</li>
+<li>一级缓存是在session上实现的，所以，不能跨session对象来使用</li>
+<li>session的load/get方法支持一级缓存</li>
+<li>如需要大量的CUD操作，及应时刷新和清空一级缓存，可以调用 flush()和clear()方法</li>
+</ul>
+<blockquote>
+<p>注： get方法和load方法的区别</p>
+</blockquote>
+<ul>
+<li>get方法当查询的对象id不存在时，会返回null值，而 load方法抛出异常</li>
+<li>get方法在实例本身上面不采用延迟加载策略，在关联多的一边会采用延迟加载。而load方法在实例本身上面就采用延迟加载策略。</li>
+</ul>
+<h3 id="对象状态管理"><a href="#对象状态管理" class="headerlink" title="对象状态管理"></a>对象状态管理</h3><p>Hibernate框架在一级缓存操作中，把对象分成三种状态，如下：  </p>
+<ol>
+<li>瞬态(Transient), 对象未被持久化，并不在缓存的管理中<ul>
+<li>使用new运算符创建出来，并没有给定与DB表中对应的ID值，处在 瞬态</li>
+</ul>
+</li>
+<li>持久态(Persistence), 对象已被持久化，并且也在缓存的管理中<ul>
+<li>内存中有，并且在DB的表中也有与之对应的记录</li>
+<li>同时，也处在session的管理之中</li>
+<li>对该对象的改动，在事务提交时都会同步到DB的表中</li>
+</ul>
+</li>
+<li>脱管态(Detached)，对象已被持久化，但不处在缓存的管理之中<ul>
+<li>内存中有，并且在DB的表中也有与之对应的记录</li>
+<li>但不处在session的管理之中</li>
+<li>对该对象的改动，在事务提交时不会同步到DB中</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>理解和掌握三种状态的对象，可以帮助我们在Hibernate程序中快速理解异常和解决问题</p>
+</blockquote>
+<p>三种状态是可以进行转换的，如下：<br><img src="/2017/11/29/hibernate-2/assets/object-state.png" alt="图示"></p>
+<p>如何区别这三种状态，可以从如下的图标来看：  </p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th style="text-align:center">内存</th>
+<th style="text-align:right">缓存</th>
+<th style="text-align:right">数据库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>瞬态(Transient)</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:right">NO</td>
+<td style="text-align:right">NO</td>
+</tr>
+<tr>
+<td>持久态(Persistence)</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:right">YES</td>
+<td style="text-align:right">YES</td>
+</tr>
+<tr>
+<td>游离态(Detached)</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:right">NO</td>
+<td style="text-align:right">NO</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>来看一段代码</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	Session ses = getSession();</span><br><span class="line">	<span class="keyword">int</span> id = <span class="number">1</span>;</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	Book b = (Book)ses.get(Book.class, id);</span><br><span class="line">	<span class="comment">//如果此处能加载成功，则对象 b则处在 持久态</span></span><br><span class="line">	<span class="keyword">if</span>(b != <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="comment">//此时，对象b必定处在持久态</span></span><br><span class="line">		ses.evict(b); <span class="comment">//把对象b从一级缓存中移动</span></span><br><span class="line">		<span class="comment">//此时，对象b并没有从DB中移除，只是脱离了一级缓存，所以，处在脱管态</span></span><br><span class="line">		....</span><br><span class="line">		<span class="comment">//如果需要重新回到持久态，则需要重新关联进session</span></span><br><span class="line">		ses.merge(b); <span class="comment">//重新关联上session,又回到了 持久态</span></span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h3><blockquote>
+<p>由于多线程下，每个请求都是一个线程，而每个线程都会创建session。当请求并发时，可能存在的多个session缓存同一个对象的情况，造成内存浪费。为了解决这个问题，Hibernate设计一个比session“更大的总缓存”，即二级缓存。<br>二级缓存可以被所有的session共享，二级缓存的生命周期和SessionFactory的生命周期一致。  </p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-2/assets/second-cache-1.png" alt="图示"></p>
+<blockquote>
+<p>在默认情况下，Hibernate框架并没有开启二级缓存，如若需要，请按如下步骤操作</p>
+</blockquote>
+<ul>
+<li>步骤一, 在 hibernate.cfg.xml 文件中启用二级缓存，如下：  </li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 二级缓存默认是关闭的,需要手动进行开启 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cache.use_second_level_cache"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 指定二级缓存供应商 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hibernate.cache.region.factory_class"</span>&gt;</span></span><br><span class="line">	org.hibernate.cache.ehcache.EhCacheRegionFactory</span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>步骤二, 在src根目录下配置ehcache.xml文件【从hibernate压缩包/project/etc/文件夹下COPY即可】,此文件内容如下：  </li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ehcache</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 如果设置了overflowToDisk=true的话</span></span><br><span class="line"><span class="comment">                     当缓存不够用的时候,到达上限的时候,允许</span></span><br><span class="line"><span class="comment">                     对象缓存到磁盘中</span></span><br><span class="line"><span class="comment">     --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">diskStore</span> <span class="attr">path</span>=<span class="string">"D:\\ehcache"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">        maxInMemory       - 内存中允许存放的最大对象数量</span></span><br><span class="line"><span class="comment">        eternal           - 对象在二级缓存中是否永久保存</span></span><br><span class="line"><span class="comment">        timeToIdleSeconds - 对象空闲时间(秒).当前时间-&gt;对象最后一次访问时间</span></span><br><span class="line"><span class="comment">        timeToLiveSeconds - 对象存活时间(秒).当前时间-创建对象的时间</span></span><br><span class="line"><span class="comment">        overflowToDisk    - 是否允许把溢出的部分对象写入到磁盘中.</span></span><br><span class="line"><span class="comment">        --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 二级缓存的默认的策略 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">defaultCache</span></span></span><br><span class="line"><span class="tag">        <span class="attr">maxElementsInMemory</span>=<span class="string">"10000"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">eternal</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">timeToIdleSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">timeToLiveSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        /&gt;</span></span><br><span class="line">  	<span class="comment">&lt;!-- 自定义的二级缓存的缓存策略 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">cache</span> <span class="attr">name</span>=<span class="string">"myCache"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">maxElementsInMemory</span>=<span class="string">"10000"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">eternal</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">timeToIdleSeconds</span>=<span class="string">"300"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">timeToLiveSeconds</span>=<span class="string">"600"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ehcache</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>步骤三,在实体类中使用注解，指定哪些实体类的实例需要被放入到二级缓存中。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"tbl_book"</span>)</span><br><span class="line"><span class="meta">@Cacheable</span></span><br><span class="line"><span class="meta">@Cache</span>(usage=CacheConcurrencyStrategy.READ_ONLY) <span class="comment">//此处配置的是只读策略</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>示例：</strong> 两个session都可以共享一级缓存中的对象实例<br><img src="/2017/11/29/hibernate-2/assets/second-cache-demo.png" alt="图示"></p>
+<blockquote>
+<p>二级缓存注意事项  </p>
+</blockquote>
+<ul>
+<li>二级缓存需要配置才可使用</li>
+<li>二级缓存是SessionFactory级的缓存，可以被多个 session 共享</li>
+<li>二级缓存中适合放入的数据： 经常被使用，但不太更新，数据量较少 情况</li>
+</ul>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><blockquote>
+<p>查询缓存，也叫三级缓存，由于一级缓存和二级缓存都是以对象为key进行缓存，而查询缓存则是以查询和参数为条件进行缓存的，这为HQL和QBC查询提供了缓存的能力，但是，默认情况下，查询缓存也是关闭的。</p>
+</blockquote>
+<p>出于以下原因，查询缓存默认是禁用的：</p>
+<blockquote>
+<p>一旦查询缓存已保存某些实体类的实例，Hibernate就需保持追踪这些实体类，查看是否会在未来的某个时间点，由于其他事务对这些数据进行了更新，而造成缓存中数据的无效。</p>
+</blockquote>
+<p>要开启查询缓存，需满足以下的条件：</p>
+<ul>
+<li>二级缓存已经开启</li>
+<li>程序中存在一些频繁运行的查询语句</li>
+<li>查询条件不太变化</li>
+</ul>
+<p>代码步骤：</p>
+<ul>
+<li>步骤一：开启二级缓存，配置请查看之前的配置</li>
+<li>步骤二：在hibernate.cfg.xml 中开启查询缓存</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置查询缓存 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cache.use_query_cache"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>步骤三：在代码中调用 setCacheable(true)方法，将需要缓存的查询结果加入查询缓存</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码片断</span></span><br><span class="line">...</span><br><span class="line">String hql = <span class="string">"from Book as b where b.name = :name"</span>;</span><br><span class="line">Query query = session.createQuery(hql)</span><br><span class="line">			.setParameter(<span class="string">"name"</span>, name)</span><br><span class="line">			.setCacheable(<span class="keyword">true</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><strong>案例</strong>, 同一条查询语句同样的条件，查询多次，只输出1条sql语句。<br><img src="/2017/11/29/hibernate-2/assets/query-cache.png" alt="图示"></p>
+<blockquote>
+<p>查询缓存的流程<br><img src="/2017/11/29/hibernate-2/assets/query-flow.png" alt="图示"></p>
+</blockquote>
+<h3 id="本章小结"><a href="#本章小结" class="headerlink" title="本章小结"></a>本章小结</h3><ul>
+<li>需要熟悉Hibernate框架的三种缓存的区别</li>
+<li>掌握Hibernate框架缓存对象的三个状态的特征</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/hibernate/" rel="tag"># hibernate</a>
+          
+            <a href="/tags/持久层/" rel="tag"># 持久层</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/29/hibernate-1/" rel="next" title="Hibernate框架学习(一)">
+                <i class="fa fa-chevron-left"></i> Hibernate框架学习(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/29/hibernate-3/" rel="prev" title="Hibernate框架学习(三)">
+                Hibernate框架学习(三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hibernate-Framework"><span class="nav-number">1.</span> <span class="nav-text">Hibernate Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate-缓存机制"><span class="nav-number">1.1.</span> <span class="nav-text">Hibernate 缓存机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一级缓存"><span class="nav-number">1.1.1.</span> <span class="nav-text">一级缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象状态管理"><span class="nav-number">1.1.2.</span> <span class="nav-text">对象状态管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二级缓存"><span class="nav-number">1.1.3.</span> <span class="nav-text">二级缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">1.1.4.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本章小结"><span class="nav-number">1.1.5.</span> <span class="nav-text">本章小结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

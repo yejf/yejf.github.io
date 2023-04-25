@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hibernate, hbm, orm, log, java, mapping, 一对一，一对多，多对多" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习 Hibernate对象关系映射,通过本教程,理解Hibernate框架是如何做关联映射的，掌握 一对一，一对多，多对多关联映射的方法，理解级联操作和加载策略">
+<meta name="keywords" content="hibernate, hbm, orm, log, java, mapping, 一对一，一对多，多对多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架学习(三)">
+<meta property="og:url" content="http://www.teacherye.com/2017/11/29/hibernate-3/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习 Hibernate对象关系映射,通过本教程,理解Hibernate框架是如何做关联映射的，掌握 一对一，一对多，多对多关联映射的方法，理解级联操作和加载策略">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/hibernate_logo_whitebkg_200px.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/1-to-n.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/dept-emp.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/undirectional-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/bidirectional-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/1-to-n-tu.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/un-vs-bi.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/1-to-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/11-bi.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/n-to-n.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/nton-table.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/nn-bi-un.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/cascade.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/question-mapping-1.png">
+<meta property="og:updated_time" content="2018-04-19T04:09:28.541Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate框架学习(三)">
+<meta name="twitter:description" content="学习 Hibernate对象关系映射,通过本教程,理解Hibernate框架是如何做关联映射的，掌握 一对一，一对多，多对多关联映射的方法，理解级联操作和加载策略">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/11/29/hibernate-3/assets/hibernate_logo_whitebkg_200px.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/11/29/hibernate-3/"/>
+
+
+
+
+
+  <title>Hibernate框架学习(三) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/11/29/hibernate-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hibernate框架学习(三)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-29T14:29:20+08:00">
+                2017-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/ORM/Hibernate/" itemprop="url" rel="index">
+                    <span itemprop="name">Hibernate</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/11/29/hibernate-3/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/11/29/hibernate-3/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/11/29/hibernate-3/" class="leancloud_visitors" data-flag-title="Hibernate框架学习(三)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习 Hibernate对象关系映射,通过本教程,理解Hibernate框架是如何做关联映射的，掌握 一对一，一对多，多对多关联映射的方法，理解级联操作和加载策略
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Hibernate-Framework"><a href="#Hibernate-Framework" class="headerlink" title="Hibernate Framework"></a>Hibernate Framework</h1><blockquote>
+<p><strong>简介：</strong><br><a href="http://www.hibernate.org/orm" target="_blank" rel="noopener">Hibernate</a>框架是一个全自动的ORM框架，它拥有强大的映射功能，提供了缓存机制、事务管理、拦截器机制、查询语句的多方面支持</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li><p>Framework, 框架，某一类问题的总体解决方案</p>
+</li>
+<li><p>ORM, <code>Object Relationship Mapping</code>, 对象关系映射</p>
+</li>
+<li><p>DATABASE, 数据库，存储数据的一种方式</p>
+</li>
+<li><p>HQL, <code>Hibernate Query Language</code>, Hibernate查询语句</p>
+</li>
+<li><p>Transaction, 事务，一组相关的操作</p>
+</li>
+<li><p>Session, 会话</p>
+</li>
+</ul>
+<p>本系列笔记包含如下的课程内容：</p>
+<ul>
+<li>Hibernate框架原理和开发流程</li>
+<li>框架缓存机制</li>
+<li>对象关系映射</li>
+<li>框架提供的查询机制<ul>
+<li>基于底层的<code>SQL</code>查询机制</li>
+<li>基于<code>HQL</code>查询机制</li>
+<li>基于<code>Criteria</code>查询机制</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h2 id="Hibernate-关联映射"><a href="#Hibernate-关联映射" class="headerlink" title="Hibernate 关联映射"></a>Hibernate 关联映射</h2><p><a href="http://hibernate.org/orm" target="_blank" rel="noopener"><img src="/2017/11/29/hibernate-3/assets/hibernate_logo_whitebkg_200px.png" alt="logo"></a></p>
+<blockquote>
+<p><em>此章节重点讲解Hibernate框架的关联映射</em></p>
+</blockquote>
+<p><strong>章节重点：</strong></p>
+<ul>
+<li>实体关系</li>
+<li>一对多、多对多、一对一关联 </li>
+<li>加载策略</li>
+<li>级联操作</li>
+</ul>
+<p><strong>章节难点：</strong></p>
+<ul>
+<li>多对多关联映射</li>
+<li>延迟加载策略</li>
+</ul>
+<h3 id="实体关系"><a href="#实体关系" class="headerlink" title="实体关系"></a>实体关系</h3><blockquote>
+<p>实体关系(Entity Relationship)是用来描述问题领域中实体之间关系的一种表述。在面向对象分析 (OOA)阶段，通常用E-R图来表达实体类之间的关系；然后再在面向对象设计(OOD)阶段，将E-R使用具体语言比如Java、C#等加以实现。</p>
+</blockquote>
+<p>实体之间的关系有：</p>
+<ul>
+<li>关联关系 [横向关系]<ul>
+<li>一对多关联</li>
+<li>一对一关联</li>
+<li>多对多关联</li>
+</ul>
+</li>
+<li>依赖关系 [横向关系]</li>
+<li>继承关系 [纵向关系]</li>
+<li>实现关系 [纵向关系]</li>
+</ul>
+<p><strong>注：所有的关联关系都有 单向关联和双向关联 两种</strong></p>
+<p>注：在Hibernate中，支持关联关系映射和继承关系映射，而依赖可以改写为关联，实现本质上就是继承。</p>
+<blockquote>
+<p>本章节重点讲解关联关系映射，在附录部份我们讲解一下继承关系映射</p>
+</blockquote>
+<h3 id="一对多关联"><a href="#一对多关联" class="headerlink" title="一对多关联"></a>一对多关联</h3><blockquote>
+<p>一对多关联关系是最常见的一种关系，描述为：<br>类型A的一个对象可以持有类型B的多个对象的引用，同时类型B的任何一个对象最多只能持有A的一个对象</p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-3/assets/1-to-n.png" alt="图示"></p>
+<blockquote>
+<p>典型的一对多例子：<br><strong>客户:订单</strong>，一个客户可以有多个订单，每个订单只对应一个客户；<br><strong>部门:员工</strong>，一个部门可以有多个员工，每个员工只从属一个部门；<br><strong>省份:城市</strong>，一个省份有多个城市，每个城市只属于一个省份。  </p>
+</blockquote>
+<p>在关系型数据库中，通常的做法是：  </p>
+<blockquote>
+<p><em>Many的一方设置FK外键,引用One的主键,作为外键约束;</em></p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-3/assets/dept-emp.png" alt="图示"></p>
+<blockquote>
+<p>如果只是一方持有另一方的引用，叫做 <code>单向关联(unidirectional)</code>  </p>
+</blockquote>
+<p><strong>单向关联图示</strong></p>
+<p><img src="/2017/11/29/hibernate-3/assets/undirectional-1.png" alt="图示"></p>
+<blockquote>
+<p>如果双方同时持有对方的引用，叫做 <code>双向关联(Bidirectional)</code>  </p>
+</blockquote>
+<p><strong>双向关联图示</strong></p>
+<p><img src="/2017/11/29/hibernate-3/assets/bidirectional-1.png" alt="图示"></p>
+<p><strong>代码示例</strong> 使用Annotation来描述实体关联映射</p>
+<p><strong>部门类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"TBL_DEPT"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Department</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Integer id; <span class="comment">//主键</span></span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//部门名</span></span><br><span class="line">	<span class="keyword">private</span> Set&lt;Emp&gt; empSet; <span class="comment">//与员工的关联，持有多个员工</span></span><br><span class="line"></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.id; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</span><br><span class="line">	<span class="meta">@OneToMany</span>(mappedBy=<span class="string">"dept"</span>) <span class="comment">//使用 @OneToMany来描述一对多关系</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Set&lt;Emp&gt; <span class="title">getEmpSet</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.empSet; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// set方法省略....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>员工类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"TBL_EMP"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Emp</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Integer id; <span class="comment">//主键 </span></span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//员工名</span></span><br><span class="line">	<span class="keyword">private</span> Date start_date; <span class="comment">//入职日期</span></span><br><span class="line">	<span class="keyword">private</span> String job; <span class="comment">//职位</span></span><br><span class="line">	<span class="keyword">private</span> Department dept; <span class="comment">//与部门的关联，持有单个部门</span></span><br><span class="line"></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.id; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="meta">@Temporal</span>(TemporalType.DATE)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Date <span class="title">getStart_date</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.start_date; &#125;</span><br><span class="line">	<span class="meta">@ManyToOne</span> <span class="comment">// 使用 @ManyToOne来描述多对一</span></span><br><span class="line">	<span class="meta">@JoinColumn</span>(name = <span class="string">"DEPT_ID"</span>) <span class="comment">//指定外键列</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Department <span class="title">getDept</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.dept; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//set方法省略 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的代码描述的是双向的一对多关联, 需要注意的是：在面向关系的描述中,不管是双向或是单向，在映射到关系型数据库中都是同一种结果，如下图   </p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-3/assets/1-to-n-tu.png" alt="图示"></p>
+<blockquote>
+<p>注： @Column和@JoinColumn 的区别<br>前者定义实体类的属性，映射到数据库中某一张表的具体字段类型(数字，字符串，日期等),后者定义连接(Join)两个实体类之间的关系，映射到数据库中，就是两张表之间的FK外键。<br><strong>注意，@JoinColumn 写在哪个实体类中，不代表FK就在这个类映射的表中。</strong>  可以查看[API]看案例</p>
+</blockquote>
+<p><strong>思考？</strong><br><strong>单向关联 or 双向关联?</strong><br><strong>答：没有固定的配置方式，一切可以按自己的需求进行。</strong></p>
+<blockquote>
+<p><strong>可以通过下图的对比来进行选择</strong><br><img src="/2017/11/29/hibernate-3/assets/un-vs-bi.png" alt="图示"></p>
+</blockquote>
+<h3 id="一对一关联"><a href="#一对一关联" class="headerlink" title="一对一关联"></a>一对一关联</h3><blockquote>
+<p>类型A到类型B的一对一关系描述为：<br>类型A的任何一个对象最多持有类型B的一个对象的引用，<br>类型B的任何一个对象最多持有类型A的一个对象的引用。</p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-3/assets/1-to-1.png" alt="图示"></p>
+<blockquote>
+<p>典型的一对一例子：<br><strong>丈夫: 妻子</strong>，一个丈夫对应一个妻子；<br><strong>班级:班长</strong>，一个班级有一个班长；<br><strong>用户:身份证号</strong>，一个客户持有一个身份证号。  </p>
+</blockquote>
+<p><strong>注：一对一关系，在关系型数据库中,可以视作一对多关系的一种特例。</strong></p>
+<p>表A和表B是一对一关系，实现方式：</p>
+<ul>
+<li>A表和B表，各自有独立的主键，B表设置 FK 外键字段，引用A表的主键，并增加unique唯一约束。</li>
+<li>A表有独立主键，B表无独立主键，B表的主键是引用A表的外键。[<code>主外键合一</code>]</li>
+</ul>
+<p>一对一的单向关联和双向关联，都只有一种配置方法, 如下图：  </p>
+<p><img src="/2017/11/29/hibernate-3/assets/11-bi.png" alt="图示"></p>
+<p><strong>代码示例</strong> 使用Annotation来描述实体关联映射</p>
+<p><strong>Husband类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"TBL_Husband"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Husband</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Integer id; <span class="comment">//主键</span></span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//姓名</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age; <span class="comment">//年龄</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> Wife wife; <span class="comment">//妻子</span></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.id; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.age; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/******</span></span><br><span class="line"><span class="comment">	 * 当前类和Wife属性是一对一关系，Husband类是主表，维护表间关系，Wife是从表，持有Husband的外键</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@OneToOne</span>(mappedBy=<span class="string">"husband"</span>) </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Wife <span class="title">getWife</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.wife; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//setter方法省略</span></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Wife类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"TBL_Husband"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wife</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Integer id; <span class="comment">//主键</span></span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//姓名</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Husband husband; <span class="comment">//老公</span></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.id; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@OneToOne</span>  <span class="comment">//与Husband的映射</span></span><br><span class="line">	<span class="comment">//给生成的外键，自定义属性(字段名、唯一性)</span></span><br><span class="line">	<span class="meta">@JoinColumn</span>(name=<span class="string">"husband_id"</span>, unique=<span class="keyword">true</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Husband <span class="title">getHusband</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.huband; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//setter方法省略 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以看出，一对一的关联就是一种特殊的一对多，因为在表结构看来，就是在外键的基础上再多一个唯一性约束</p>
+</blockquote>
+<h3 id="多对多关联"><a href="#多对多关联" class="headerlink" title="多对多关联"></a>多对多关联</h3><blockquote>
+<p>类型A到类型B的多对多关系描述为：<br>类型A的任何一个对象可以持有类型B的多个对象的引用，<br>类型B的任何一个对象可以持有类型A的多个对象的引用。</p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-3/assets/n-to-n.png" alt="图示"></p>
+<blockquote>
+<p>典型的一对一例子：<br><strong>学生:课程</strong>，一个学生修多门课，一门课有多个学生修；<br><strong>演员:角色</strong>，一个演员可以演多个角色，一个角色可由不同演员演绎；<br><strong>用户:角色</strong>，一个用户可以分配多个角色，一个角色可以分配给多个用户。  </p>
+</blockquote>
+<hr>
+<blockquote>
+<p>注：<br>在关系型数据库中,体现多对多关系,必须要配置 <strong>中间表</strong>该表只具有2个FK字段,分别引用到两个表中的ID主键. 如下图  </p>
+</blockquote>
+<p><img src="/2017/11/29/hibernate-3/assets/nton-table.png" alt="图示"></p>
+<p><strong>多对多的单向关联和双向关联，都只有一种配置方法，如下图：</strong>  </p>
+<p><img src="/2017/11/29/hibernate-3/assets/nn-bi-un.png" alt="图示"></p>
+<p><strong>多对多代码示例</strong> 使用Annotation来描述实体关联映射</p>
+<p><strong>Role类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"TBL_Role"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Role</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Integer id; <span class="comment">//主键</span></span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//角色名</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> Set&lt;User&gt; users; <span class="comment">//用户集合</span></span><br><span class="line"></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.id; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</span><br><span class="line">	<span class="comment">/*****</span></span><br><span class="line"><span class="comment">	 * 此处 Role是主表，User是子表，所以，在Role类中，只需要写ManyToMany即可,另一边描述关系</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@ManyToMany</span>(mappedBy=<span class="string">"roles"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Set&lt;User&gt; <span class="title">getUsers</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.users; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//setter方法省略 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>User类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"TBL_User"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Integer id; <span class="comment">//主键</span></span><br><span class="line">	<span class="keyword">private</span> String name; <span class="comment">//用户名</span></span><br><span class="line">	...  <span class="comment">//其它的属性</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> Set&lt;Role&gt; roles; <span class="comment">//角色集合</span></span><br><span class="line"></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.id; &#125;</span><br><span class="line">	<span class="meta">@Column</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</span><br><span class="line">	<span class="comment">/*****</span></span><br><span class="line"><span class="comment">	 * User是子表，这里通过<span class="doctag">@JoinTable</span>来定义中间表</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@ManyToMany</span></span><br><span class="line">	<span class="meta">@JoinTable</span>(name=<span class="string">"tbl_user_to_role"</span>, </span><br><span class="line">		joinColumns=&#123;<span class="meta">@JoinColumn</span>(name=<span class="string">"user_id"</span>)&#125;,  <span class="comment">//关系由谁维护，谁的外键写在此</span></span><br><span class="line">		inverseJoinColumns=&#123;<span class="meta">@JoinColumn</span>(name=<span class="string">"role_id"</span>)&#125;  <span class="comment">//关系的另一边写在此</span></span><br><span class="line">	)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Set&lt;User&gt; <span class="title">getUsers</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.users; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//setter方法省略 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注，多对多关系在映射时无论在哪边来描述关系都是可以的。</p>
+</blockquote>
+<h3 id="相关的注解"><a href="#相关的注解" class="headerlink" title="相关的注解"></a>相关的注解</h3><ul>
+<li>[@OneToMany]</li>
+<li>[@ManyToOne]</li>
+<li>[@OneToOne]</li>
+<li>[@ManyToMany]</li>
+<li>[@JoinColumn]</li>
+<li>[@JoinTable]</li>
+</ul>
+<h3 id="操作原则"><a href="#操作原则" class="headerlink" title="操作原则"></a>操作原则</h3><blockquote>
+<p>我们通过代码操作关联关系时，应该遵守如下三个原则：  </p>
+</blockquote>
+<ol>
+<li><strong>原则一</strong><ul>
+<li>在关系型数据库中，如需体现记录和记录之间的对应关系，则需在OO层面也体现对象和对象之间的对应关系。</li>
+</ul>
+</li>
+<li><strong>原则二</strong><ul>
+<li>如果是双向关联，类型A与类型B互相持有对象的引用，则使用子表对象set主表对象。</li>
+</ul>
+</li>
+<li><strong>原则三</strong><ul>
+<li>从无到有，先主后子；</li>
+<li>从有到无，先子后主。</li>
+</ul>
+</li>
+</ol>
+<h3 id="加载策略"><a href="#加载策略" class="headerlink" title="加载策略"></a>加载策略</h3><blockquote>
+<p>在Hibernate框架中，加载数据有两种策略，如下：</p>
+</blockquote>
+<ol>
+<li><strong>懒汉模式策略</strong>， 也叫 Lazy模式<ul>
+<li>不确定资源是否被程序调用，为了避免资源浪费,等需要使用时,再去初始化资源;</li>
+</ul>
+</li>
+<li><strong>饿汉模式策略</strong>, 也叫 Eager模式<ul>
+<li>为了让使用者不要等待,一开始就初始化资源。尽量保证被初始化的    资源会被使用到.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>Hibernate框架根据不同的情况，自动选择采用哪种策略加载数据，当然，也可以手动强制配置</p>
+</blockquote>
+<p><strong>Hibernate 中的懒加载机制:</strong>  </p>
+<blockquote>
+<p>对于实体类A的查询操作，如果A的属性中，存在实体类B的集合，默认对实体类B的集合使用延迟加载策略(懒汉模式)。可能发生懒加载的情况：一对多，多对多。<br>如果A的属性中，存在实体类C的单个对象，默认对实体类C的使用饿汉模式。</p>
+<p>注：<br>如果在使用多的一方的数据之前,session已被close,则会抛错:  </p>
+<blockquote>
+<p>org.hibernate.LazyInitializationException: failed to lazily initialize a collection of xxx</p>
+</blockquote>
+</blockquote>
+<p>以上是默认的情况，如果你在@OneToMany中，指定了 fetch=FetchType.EAGER, 则表示针对当前的实体对象加载时，会强制加载多的一边。</p>
+<p>反过来，如果你在 @ManyToOne中，指定了 fetch=FetchType.LAZY, 则表示针对当前的实体对象加载时，对于<br>关联的一的一边，也将采用延迟加载</p>
+<p>以上的两种做法，都是改变了默认的行为，除非你确定要这么做，否则，不建议修改默认行为。</p>
+<h3 id="级联操作"><a href="#级联操作" class="headerlink" title="级联操作"></a>级联操作</h3><blockquote>
+<p>所谓级联操作，定义对某个实体类对象进行某种操作(CRUD)时，是否对其关联的对象也做类似操作。<br>目的：简化存在关联关系的实体类操作的开发效率。</p>
+</blockquote>
+<ul>
+<li>级联操作是可选的，不是必须的。</li>
+<li>在主表对象和子表对象，在某个或全部操作(CUD)上，生命周期都一致时，才使用级联。</li>
+<li>级联操作，一般使用在OneToOne，OneToMany的操作上，ManyToMany通常不设置。</li>
+<li>以上情况之外，完全不需要设置级联。</li>
+</ul>
+<p>在@OneToOne,@OneToMany, @ManyToOne中，都可以通过属性cascade来指定级联操作类型。</p>
+<p>Hibernate框架中定义了很多的级联操作类型，如：</p>
+<p>假设存在如下的A类和B类关系：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">	... </span><br><span class="line">	<span class="keyword">private</span> B b;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">	....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>则，定义在A类发生什么变化的时候，B类做出级联操作(指新增、更新、删除)<br><img src="/2017/11/29/hibernate-3/assets/cascade.png" alt="图示"></p>
+<p><strong>级联操作代码示例</strong></p>
+<p><strong>Department类的代码片断</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">@OneToMany</span>(mappedBy=<span class="string">"dept"</span>, cascade=CascadeType.REMOVE)</span><br><span class="line"><span class="comment">/******</span></span><br><span class="line"><span class="comment"> * 当前类与Emp是1对多的关系</span></span><br><span class="line"><span class="comment"> * Department 是主表，Emp 是从表</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;Emp&gt; <span class="title">getEmps</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.emps; &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>没有指定级联删除的情况</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取部门</span></span><br><span class="line"><span class="keyword">int</span> id = <span class="number">1</span>;</span><br><span class="line">Department dept = (Department)session.get(Department.class,id);</span><br><span class="line"><span class="comment">//如果没有指定级联操作的话，则需要先迭代把此部门下的所有员工删除先</span></span><br><span class="line"><span class="keyword">for</span>(Emp e : dept.getEmps()) &#123;</span><br><span class="line">	session.delete(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//最后才去删除 dept本身，【因为存在子记录】</span></span><br><span class="line">session.delete(dept);</span><br></pre></td></tr></table></figure>
+<p><strong>指定了级联删除的情况</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//而如果指定了级联删除的话，则可以直接删除 dept, 如下</span></span><br><span class="line"><span class="keyword">int</span> id = <span class="number">1</span>;</span><br><span class="line">Department dept = (Department)session.get(Department.class,id);</span><br><span class="line"><span class="comment">//删除部门对象，级联删除子对象</span></span><br><span class="line">session.delete(dept);</span><br></pre></td></tr></table></figure>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ul>
+<li>常见问题1</li>
+</ul>
+<blockquote>
+<p>MappingException: Could not determine type for:<br>com.tz.hibernate.entity.Department, at table: emp, for columns: [org.hibernate.mapping.Column(dept)]</p>
+<blockquote>
+<p><strong>原因:</strong><br>属性类型是自定义实体类，不是基础数据类型，hibernate无法自动产生表的字段类型;<br><strong>解决方案:</strong><br>使用合适的Annotation,来表示当前类和该属性的类型, 之间的关联关系.<br><strong>步骤:</strong><br>先找到该实体类属性的get方法;加上合适的Annotation,比如： @ManyToOne, 如下图:<br><img src="/2017/11/29/hibernate-3/assets/question-mapping-1.png" alt="图示"></p>
+</blockquote>
+</blockquote>
+<ul>
+<li>常见问题2</li>
+</ul>
+<blockquote>
+<p>现象：<br>在配置双向关联的情况下，自动产生的表结构会发生异常(1:N,N:N 会冗余一张表,1:1紧耦合)。</p>
+<blockquote>
+<p><strong>问题原因：</strong><br>这种配置情况下, A和B是对等关系,hibernate无法得知哪个对象是主表对象。<br><strong>解决方案:</strong><br>通过配置,告知Hibernate,哪个对象是主表对象.<br><strong>步骤:</strong>  </p>
+<ul>
+<li>先确定哪个是主表对象?  <ul>
+<li>在一对多关系中,1的一方是主表,N的一方是子表.   </li>
+<li>在1:1,N:N关系中,由于是对等关系, 由开发者视情况而定.   </li>
+</ul>
+</li>
+<li>进入主表对象源代码,找到之前配置的那个@关联关系, 新增mappedBy属性;   值就写get方法返回类型中，看哪个属性类型是主表对象.  </li>
+<li>值写的是属性名, 不是类型.  </li>
+</ul>
+</blockquote>
+</blockquote>
+<ul>
+<li>常见问题3</li>
+</ul>
+<blockquote>
+<p>现象：<br>调用Session的save()方法，保存1:1, 1:N, N:N 的数据，能成功保存。但数据库中，FK外键没有值。</p>
+<blockquote>
+<p><strong>问题原因：</strong><br>没有遵守原则一:<br>要在关系型数据库中体现出记录之间的对应关系;<br>要在面向对象的层面,也体现出对象之间的对应关系.<br><strong>解决方案:</strong><br>保存对象之前，调用子表对象 set 主表对象，来指出对象之间的对应关系。</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>常见问题4</li>
+</ul>
+<blockquote>
+<p>问题：<br>在一对多，或多对多的查询操作时，报错:org.hibernate.LazyInitializationException: failed to lazily initialize a collection of xxx</p>
+<blockquote>
+<p><strong>原因：</strong><br>在使用延迟加载的数据之前,session已被close。<br><strong>解决方案：</strong>  </p>
+<pre><code>- 在session关闭之前，调用延迟加载的数据，完成加载；  
+- 使用Query/Criteria接口，在查询级别上使用关联查询，避免延迟加载。  
+</code></pre></blockquote>
+</blockquote>
+<h3 id="本章小节"><a href="#本章小节" class="headerlink" title="本章小节"></a>本章小节</h3><ul>
+<li>掌握OneToMany,OneToOne,ManyToMany的配置和常用CRUD操作</li>
+<li>了解延迟加载的原理和相关问题</li>
+<li>了解级联操作的目的和要点</li>
+</ul>
+<h3 id="参考API"><a href="#参考API" class="headerlink" title="参考API"></a>参考API</h3><p>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/JoinColumn.html" target="_blank" rel="noopener">@JoinColumn</a><br>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/OneToMany.html" target="_blank" rel="noopener">@OneToMany</a><br>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/ManyToOne.html" target="_blank" rel="noopener">@ManyToOne</a><br>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/OneToOne.html" target="_blank" rel="noopener">@OneToOne</a><br>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/ManyToMany.html" target="_blank" rel="noopener">@ManyToMany</a><br>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/JoinColumn.html" target="_blank" rel="noopener">@JoinColumn</a><br>   <a href="http://docs.oracle.com/javaee/6/api/javax/persistence/JoinTable.html" target="_blank" rel="noopener">@JoinTable</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/hibernate/" rel="tag"># hibernate</a>
+          
+            <a href="/tags/持久层/" rel="tag"># 持久层</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/29/hibernate-2/" rel="next" title="Hibernate框架学习(二)">
+                <i class="fa fa-chevron-left"></i> Hibernate框架学习(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/29/hibernate-4/" rel="prev" title="Hibernate框架学习(四)">
+                Hibernate框架学习(四) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hibernate-Framework"><span class="nav-number">1.</span> <span class="nav-text">Hibernate Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate-关联映射"><span class="nav-number">1.1.</span> <span class="nav-text">Hibernate 关联映射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实体关系"><span class="nav-number">1.1.1.</span> <span class="nav-text">实体关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一对多关联"><span class="nav-number">1.1.2.</span> <span class="nav-text">一对多关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一对一关联"><span class="nav-number">1.1.3.</span> <span class="nav-text">一对一关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多对多关联"><span class="nav-number">1.1.4.</span> <span class="nav-text">多对多关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关的注解"><span class="nav-number">1.1.5.</span> <span class="nav-text">相关的注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作原则"><span class="nav-number">1.1.6.</span> <span class="nav-text">操作原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载策略"><span class="nav-number">1.1.7.</span> <span class="nav-text">加载策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#级联操作"><span class="nav-number">1.1.8.</span> <span class="nav-text">级联操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">1.1.9.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本章小节"><span class="nav-number">1.1.10.</span> <span class="nav-text">本章小节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考API"><span class="nav-number">1.1.11.</span> <span class="nav-text">参考API</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

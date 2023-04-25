@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring, SpringData, Spring Data JPA" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Spring Data JPA">
+<meta name="keywords" content="Spring, SpringData, Spring Data JPA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringData JPA操作指南(二)">
+<meta property="og:url" content="http://www.teacherye.com/2019/11/02/springData/SpringDataJpa-2/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="Spring Data JPA">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2019/11/02/springData/SpringDataJpa-2/assets/springdatajpa-classdiagram.png">
+<meta property="og:updated_time" content="2019-11-15T06:39:45.776Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringData JPA操作指南(二)">
+<meta name="twitter:description" content="Spring Data JPA">
+<meta name="twitter:image" content="http://www.teacherye.com/2019/11/02/springData/SpringDataJpa-2/assets/springdatajpa-classdiagram.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2019/11/02/springData/SpringDataJpa-2/"/>
+
+
+
+
+
+  <title>SpringData JPA操作指南(二) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2019/11/02/springData/SpringDataJpa-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringData JPA操作指南(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-02T12:41:47+08:00">
+                2019-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/SpringData/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringData</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2019/11/02/springData/SpringDataJpa-2/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/11/02/springData/SpringDataJpa-2/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2019/11/02/springData/SpringDataJpa-2/" class="leancloud_visitors" data-flag-title="SpringData JPA操作指南(二)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Spring Data JPA
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Spring-Data-JPA-amp-Hibernate"><a href="#Spring-Data-JPA-amp-Hibernate" class="headerlink" title="Spring Data JPA &amp; Hibernate"></a>Spring Data JPA &amp; Hibernate</h1><h2 id="思考：Spring-框架中直接使用-Spring-Data-JPA"><a href="#思考：Spring-框架中直接使用-Spring-Data-JPA" class="headerlink" title="思考：Spring 框架中直接使用 Spring Data JPA ?"></a>思考：Spring 框架中直接使用 Spring Data JPA ?</h2><blockquote>
+<p>当然是可以使用的，但是，需要做一些额外的配置【相对于SpringBoot而言的】, 其中，最主要的就是： @EnableJpaRepositories 注解</p>
+<p>如果在 Web项目使用 DATA JPA，则还需要在WEB配置类中添加另一个注解： @EnableSpringDataWebSupport 注解</p>
+</blockquote>
+<p>配置如下：</p>
+<ol>
+<li><p>在 <strong>AppConfig.java</strong>配置类中，添加对 Spring DATA JPA的支持</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="comment">// repositoryImplementationPostfix默认就是Impl</span></span><br><span class="line"><span class="comment">// entityManagerFactoryRef默认就是entityManagerFactory</span></span><br><span class="line"><span class="comment">// transactionManagerRef默认就是transactionManager</span></span><br><span class="line"><span class="meta">@EnableJpaRepositories</span>(basePackages = &#123;<span class="string">"com.example.repository"</span>&#125;,</span><br><span class="line">        repositoryImplementationPostfix = <span class="string">"Impl"</span>,</span><br><span class="line">        entityManagerFactoryRef = <span class="string">"entityManagerFactory"</span>,</span><br><span class="line">        transactionManagerRef = <span class="string">"transactionManager"</span>)</span><br><span class="line"><span class="meta">@EnableTransactionManagement</span>    <span class="comment">// 启用事务管理器</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringDataJpaConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="comment">//....</span></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 配置jpa厂商适配器（参见spring实战p320）</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> JpaVendorAdapter <span class="title">jpaVendorAdapter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        HibernateJpaVendorAdapter jpaVendorAdapter = <span class="keyword">new</span> HibernateJpaVendorAdapter();</span><br><span class="line">        <span class="comment">// 设置数据库类型（可使用org.springframework.orm.jpa.vendor包下的Database枚举类）</span></span><br><span class="line">        jpaVendorAdapter.setDatabase(Database.MYSQL);</span><br><span class="line">        <span class="comment">// 设置打印sql语句</span></span><br><span class="line">        jpaVendorAdapter.setShowSql(<span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">// 设置不生成ddl语句</span></span><br><span class="line">        jpaVendorAdapter.setGenerateDdl(<span class="keyword">false</span>);</span><br><span class="line">        <span class="comment">// 设置hibernate方言</span></span><br><span class="line">        jpaVendorAdapter.setDatabasePlatform(<span class="string">"org.hibernate.dialect.MySQL5Dialect"</span>);</span><br><span class="line">        <span class="keyword">return</span> jpaVendorAdapter;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置实体管理器工厂</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LocalContainerEntityManagerFactoryBean <span class="title">entityManagerFactory</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            DataSource dataSource, JpaVendorAdapter jpaVendorAdapter)</span> </span>&#123;</span><br><span class="line">        LocalContainerEntityManagerFactoryBean emfb = <span class="keyword">new</span> LocalContainerEntityManagerFactoryBean();</span><br><span class="line">        <span class="comment">// 注入数据源</span></span><br><span class="line">        emfb.setDataSource(dataSource);</span><br><span class="line">        <span class="comment">// 注入jpa厂商适配器</span></span><br><span class="line">        emfb.setJpaVendorAdapter(jpaVendorAdapter);</span><br><span class="line">        <span class="comment">// 设置扫描基本包</span></span><br><span class="line">        emfb.setPackagesToScan(<span class="string">"com.example.entity"</span>);</span><br><span class="line">        <span class="keyword">return</span> emfb;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置jpa事务管理器</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> PlatformTransactionManager <span class="title">transactionManager</span><span class="params">(EntityManagerFactory emf)</span> </span>&#123;</span><br><span class="line">        JpaTransactionManager transactionManager = <span class="keyword">new</span> JpaTransactionManager();</span><br><span class="line">        <span class="comment">// 配置实体管理器工厂</span></span><br><span class="line">        transactionManager.setEntityManagerFactory(emf);</span><br><span class="line">        <span class="keyword">return</span> transactionManager;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>如果是WEB 项目，则在 <strong>WebMvcConfig.java</strong> 中，也需要启动一个注解来表示对 Spring DATA JPA的支持</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(basePackages = &#123;<span class="string">"cn.fulgens.controller"</span>&#125;)</span><br><span class="line"><span class="meta">@EnableWebMvc</span>   <span class="comment">// 启用spring mvc</span></span><br><span class="line"><span class="meta">@EnableSpringDataWebSupport</span>     <span class="comment">// 启用springmvc对spring data的支持</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebMvcConfig</span> <span class="keyword">extends</span> <span class="title">WebMvcConfigurerAdapter</span> </span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>可以看出，程序员需要做一些配置才能在 spring framework或 spring mvc中使用 spring data jpa，来做开发项目的持久层。</p>
+<p>如果是在 spring boot中，以上的配置都可以不需要。</p>
+</blockquote>
+<h2 id="在-Spring-Boot中-整合-Spring-Data-JPA"><a href="#在-Spring-Boot中-整合-Spring-Data-JPA" class="headerlink" title="在 Spring Boot中 整合 Spring Data JPA"></a>在 Spring Boot中 整合 Spring Data JPA</h2><blockquote>
+<ol>
+<li><p>只需要导入 相关的依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">&gt;        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">&gt;        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">&gt;    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<ol>
+<li><p>在 application.yml 中配置一下即可\</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&gt;    # jpa config</span></span><br><span class="line"><span class="string">&gt;    spring:</span></span><br><span class="line"><span class="string">&gt;      jpa:</span></span><br><span class="line"><span class="string">&gt;        generate-ddl: true</span></span><br><span class="line"><span class="string">&gt;        hibernate:</span></span><br><span class="line"><span class="string">&gt;          ddl-auto: update</span></span><br><span class="line"><span class="string">&gt;        show-sql: true</span></span><br><span class="line"><span class="string">&gt;        properties:</span></span><br><span class="line"><span class="string">&gt;          hibernate:</span></span><br><span class="line"><span class="string">&gt;            format_sql: true</span></span><br><span class="line"><span class="string">&gt;            dialect: org.hibernate.dialect.MySQL8Dialect</span></span><br><span class="line"><span class="string">&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<h2 id="Spring-Data-JPA-的核心API"><a href="#Spring-Data-JPA-的核心API" class="headerlink" title="Spring Data JPA 的核心API"></a>Spring Data JPA 的核心API</h2><p>​    Repository<t, id=""></t,></p>
+<p>​        \- CrudRepository<t, id=""></t,></p>
+<p>​            \-  PagingAndSortingRepository<t, id=""></t,></p>
+<p>​                    \- JpaRepository<t, id=""></t,></p>
+<p>​                            \-  程序员的开发的持久层接口</p>
+<p>​    如下图：</p>
+<p>​    <img src="/2019/11/02/springData/SpringDataJpa-2/assets/springdatajpa-classdiagram.png" alt="springdatajpa-classdiagram"></p>
+<h2 id="自定义查询方法"><a href="#自定义查询方法" class="headerlink" title="自定义查询方法"></a>自定义查询方法</h2><blockquote>
+<p>在SQL语句中，有很多运算符来组织查询的条件，如：</p>
+<p>比较运算符,  &gt;,  &lt;,  &gt;=,  &lt;=, ==, &lt;&gt;,  !=</p>
+<p>NULL判断，  is null, is not null</p>
+<p>in, not in</p>
+<p>between and</p>
+<p>or</p>
+<p>…</p>
+</blockquote>
+<p>SPRING DATA JPA SQL转换引擎在translate我们的方法名时，会根据关键字来翻译，常用的关键字有：</p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Sample</th>
+<th>JPQL snippet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>And</code></td>
+<td><code>findByLastnameAndFirstname</code></td>
+<td><code>… where x.lastname = ?1 and x.firstname = ?2</code></td>
+</tr>
+<tr>
+<td><code>Or</code></td>
+<td><code>findByLastnameOrFirstname</code></td>
+<td><code>… where x.lastname = ?1 or x.firstname = ?2</code></td>
+</tr>
+<tr>
+<td><code>Is,Equals</code></td>
+<td><code>findByFirstname</code>,<code>findByFirstnameIs</code>,<code>findByFirstnameEquals</code></td>
+<td><code>… where x.firstname = ?1</code></td>
+</tr>
+<tr>
+<td><code>Between</code></td>
+<td><code>findByStartDateBetween</code></td>
+<td><code>… where x.startDate between ?1 and ?2</code></td>
+</tr>
+<tr>
+<td><code>LessThan</code></td>
+<td><code>findByAgeLessThan</code></td>
+<td><code>… where x.age &lt; ?1</code></td>
+</tr>
+<tr>
+<td><code>LessThanEqual</code></td>
+<td><code>findByAgeLessThanEqual</code></td>
+<td><code>… where x.age &lt;= ?1</code></td>
+</tr>
+<tr>
+<td><code>GreaterThan</code></td>
+<td><code>findByAgeGreaterThan</code></td>
+<td><code>… where x.age &gt; ?1</code></td>
+</tr>
+<tr>
+<td><code>GreaterThanEqual</code></td>
+<td><code>findByAgeGreaterThanEqual</code></td>
+<td><code>… where x.age &gt;= ?1</code></td>
+</tr>
+<tr>
+<td><code>After</code></td>
+<td><code>findByStartDateAfter</code></td>
+<td><code>… where x.startDate &gt; ?1</code></td>
+</tr>
+<tr>
+<td><code>Before</code></td>
+<td><code>findByStartDateBefore</code></td>
+<td><code>… where x.startDate &lt; ?1</code></td>
+</tr>
+<tr>
+<td><code>IsNull</code></td>
+<td><code>findByAgeIsNull</code></td>
+<td><code>… where x.age is null</code></td>
+</tr>
+<tr>
+<td><code>IsNotNull,NotNull</code></td>
+<td><code>findByAge(Is)NotNull</code></td>
+<td><code>… where x.age not null</code></td>
+</tr>
+<tr>
+<td><code>Like</code></td>
+<td><code>findByFirstnameLike</code></td>
+<td><code>… where x.firstname like ?1</code></td>
+</tr>
+<tr>
+<td><code>NotLike</code></td>
+<td><code>findByFirstnameNotLike</code></td>
+<td><code>… where x.firstname not like ?1</code></td>
+</tr>
+<tr>
+<td><code>StartingWith</code></td>
+<td><code>findByFirstnameStartingWith</code></td>
+<td><code>… where x.firstname like ?1</code> (parameter bound with appended <code>%</code>)</td>
+</tr>
+<tr>
+<td><code>EndingWith</code></td>
+<td><code>findByFirstnameEndingWith</code></td>
+<td><code>… where x.firstname like ?1</code> (parameter bound with prepended <code>%</code>)</td>
+</tr>
+<tr>
+<td><code>Containing</code></td>
+<td><code>findByFirstnameContaining</code></td>
+<td><code>… where x.firstname like ?1</code> (parameter bound wrapped in <code>%</code>)</td>
+</tr>
+<tr>
+<td><code>OrderBy</code></td>
+<td><code>findByAgeOrderByLastnameDesc</code></td>
+<td><code>… where x.age = ?1 order by x.lastname desc</code></td>
+</tr>
+<tr>
+<td><code>Not</code></td>
+<td><code>findByLastnameNot</code></td>
+<td><code>… where x.lastname &lt;&gt; ?1</code></td>
+</tr>
+<tr>
+<td><code>In</code></td>
+<td><code>findByAgeIn(Collection&lt;Age&gt; ages)</code></td>
+<td><code>… where x.age in ?1</code></td>
+</tr>
+<tr>
+<td><code>NotIn</code></td>
+<td><code>findByAgeNotIn(Collection&lt;Age&gt; ages)</code></td>
+<td><code>… where x.age not in ?1</code></td>
+</tr>
+<tr>
+<td><code>True</code></td>
+<td><code>findByActiveTrue()</code></td>
+<td><code>… where x.active = true</code></td>
+</tr>
+<tr>
+<td><code>False</code></td>
+<td><code>findByActiveFalse()</code></td>
+<td><code>… where x.active = false</code></td>
+</tr>
+<tr>
+<td><code>IgnoreCase</code></td>
+<td><code>findByFirstnameIgnoreCase</code></td>
+<td><code>… where UPPER(x.firstame) = UPPER(?1)</code></td>
+</tr>
+</tbody>
+</table>
+<p>参考： <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.java-config" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="JPQL"><a href="#JPQL" class="headerlink" title="JPQL"></a>JPQL</h2><blockquote>
+<p>全称： Java Persistence Query Language,  Java持久化查询语言， 类似于 HQL[Hibernate Query Language]</p>
+<p>SQL语法：</p>
+<p>SELECT [表别名.] 列名 [列别名],列名[列别名] | *  FROM  表名 [表别名] </p>
+<p>WHERE 条件</p>
+<p>GROUP BY 分组</p>
+<p>HAVING 分组过滤</p>
+<p>ORDER BY 列名|表达式|列序号  [ASC | DESC]</p>
+<hr>
+<p>JPQL: 可以简单地理解为在 SQL的基础上，把所有写列名的位置改成 属性名，把表名的位置 改成 实体类名 即可。</p>
+</blockquote>
+<h2 id="如何去避免暴露不必要的父接口中的方法"><a href="#如何去避免暴露不必要的父接口中的方法" class="headerlink" title="如何去避免暴露不必要的父接口中的方法"></a>如何去避免暴露不必要的父接口中的方法</h2><blockquote>
+<p>我们开发的Repository接口是继承于 JpaRepository接口的，而这个父接口中有些方法我们是不需要的，如果不做处理，则会暴露给业务层，造成调用者不必要的“麻烦”</p>
+</blockquote>
+<p>处理式方式一：</p>
+<blockquote>
+<ol>
+<li>我们可以自定义一个接口，直接从 Repository<t, id=""> 接口处继承， 并打上 @NoRepositoryBean 注解。然后在此方法定义你想要暴露的方法出来。</t,></li>
+<li>我们开发的Repository接口从我们自定义的  <strong>@NoRepositoryBean</strong> 接口中派生出来，这样就可以达到目的。</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/SpringData/" rel="tag"># SpringData</a>
+          
+            <a href="/tags/JPA/" rel="tag"># JPA</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/01/springData/SpringDataJpa-1/" rel="next" title="SpringData JPA操作指南(一)">
+                <i class="fa fa-chevron-left"></i> SpringData JPA操作指南(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/03/springData/SpringDataJpa-3/" rel="prev" title="SpringData JPA操作指南(三)">
+                SpringData JPA操作指南(三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Data-JPA-amp-Hibernate"><span class="nav-number">1.</span> <span class="nav-text">Spring Data JPA & Hibernate</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思考：Spring-框架中直接使用-Spring-Data-JPA"><span class="nav-number">1.1.</span> <span class="nav-text">思考：Spring 框架中直接使用 Spring Data JPA ?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-Spring-Boot中-整合-Spring-Data-JPA"><span class="nav-number">1.2.</span> <span class="nav-text">在 Spring Boot中 整合 Spring Data JPA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Data-JPA-的核心API"><span class="nav-number">1.3.</span> <span class="nav-text">Spring Data JPA 的核心API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义查询方法"><span class="nav-number">1.4.</span> <span class="nav-text">自定义查询方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPQL"><span class="nav-number">1.5.</span> <span class="nav-text">JPQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何去避免暴露不必要的父接口中的方法"><span class="nav-number">1.6.</span> <span class="nav-text">如何去避免暴露不必要的父接口中的方法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

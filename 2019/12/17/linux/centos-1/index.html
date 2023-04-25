@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux, centos, lightdm, 中文字体" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="如何在vmware中安装和配置centos，在centos中如何安装和配置lightdm桌面，并解决中文字方块显示问题">
+<meta name="keywords" content="linux, centos, lightdm, 中文字体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装和配置centOS7[含桌面环境]">
+<meta property="og:url" content="http://www.teacherye.com/2019/12/17/linux/centos-1/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="如何在vmware中安装和配置centos，在centos中如何安装和配置lightdm桌面，并解决中文字方块显示问题">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-18T09:04:47.084Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安装和配置centOS7[含桌面环境]">
+<meta name="twitter:description" content="如何在vmware中安装和配置centos，在centos中如何安装和配置lightdm桌面，并解决中文字方块显示问题">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2019/12/17/linux/centos-1/"/>
+
+
+
+
+
+  <title>安装和配置centOS7[含桌面环境] | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2019/12/17/linux/centos-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安装和配置centOS7[含桌面环境]</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-17T17:01:47+08:00">
+                2019-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2019/12/17/linux/centos-1/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/12/17/linux/centos-1/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2019/12/17/linux/centos-1/" class="leancloud_visitors" data-flag-title="安装和配置centOS7[含桌面环境]">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  如何在vmware中安装和配置centos，在centos中如何安装和配置lightdm桌面，并解决中文字方块显示问题
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="在vmware中配置CentOS"><a href="#在vmware中配置CentOS" class="headerlink" title="在vmware中配置CentOS"></a>在vmware中配置CentOS</h1><blockquote>
+<p>本篇日志是我在VMWare中虚拟出CentOS7后，在使用的过程中所遇到的一些问题小结，并且还有些一些系统命令需要记忆下来，为防止以后忘记，所以写了这个日志</p>
+</blockquote>
+<p>至于如何安装 Vmware workstation软件，以及如何在 vmware中安装centos操作系统，请自行百度一下。</p>
+<h2 id="为什么要虚拟出CentOS"><a href="#为什么要虚拟出CentOS" class="headerlink" title="为什么要虚拟出CentOS?"></a>为什么要虚拟出CentOS?</h2><blockquote>
+<p>CentOS是 Redhat Linux衍生出来的，功能丰富、强大，完全支持rpm包以及使用yum命令进行安装，下载CentOS时，有多种版本可以选择，如下：</p>
+<ul>
+<li>DVD版本【我们选择这个】，功能丰富</li>
+<li>Minimal【极简化版】，只有核心功能，适合定制化的高级用户。</li>
+</ul>
+</blockquote>
+<p>官网地址：<code>https://www.centos.org/</code></p>
+<h2 id="理解rpm包和yum命令"><a href="#理解rpm包和yum命令" class="headerlink" title="理解rpm包和yum命令"></a>理解rpm包和yum命令</h2><blockquote>
+<p>rpm,全称<code>redhat package manager</code>，是一种linux下的软件包管理器，一般的扩展名为 .rpm, 如果是二进制发行包，则直接以 .rpm结尾，如果是源代码包发行，则一般是以 .src.rpm结尾，而源代码包将会由rpm自动编译、安装。</p>
+<p>yum，(全称为 Yellow dog Updater, Modified)是一个在Fedora和RedHat以及CentOS中的Shell前端软件包管理器。基于RPM包管理，能够从指定的服务器自动下载RPM包并且安装，可以自动处理依赖性关系，并且一次安装所有依赖的软件包，无须繁琐地一次次下载、安装[来自百度百科]</p>
+</blockquote>
+<p>从面的描述中可以看出，linux系统中，redhat,centos,fedora 都是基于rpm和yum做为软件包管理器的，而还有一类linux的分支，以是debian格式进行软件安装和管理的，主要是ubuntu系统，它所使用的前端软件包管理器是 apt-get, 有关yum和apt-get的区别，简单理解就是针对不同的linux系统，分别做了一套软件包管理器，它们的功能一样，如下：</p>
+<blockquote>
+<p>在 CentOS, Fedora, RedHat中，使用<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install &lt;package_name&gt;     	//安装软件包</span><br><span class="line">yum remove &lt;package_name&gt;		//卸载软件包</span><br><span class="line">yum update &lt;package_name&gt;		//更新软件包</span><br></pre></td></tr></table></figure></p>
+<p>在ubuntu中，使用<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install &lt;package_name&gt;     	//安装软件包</span><br><span class="line">apt-get remove &lt;package_name&gt;		//卸载软件包</span><br><span class="line">apt-get update &lt;package_name&gt;		//更新软件包</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>两种都是基于“云”端的模式进行软件包的管理。当然，命令的选项和一些细节还是不同的，详情需要查看各自的手册.</p>
+<p>当然，我们也可以下载 .rpm 格式的文件进行手动安装，<code>rpm</code> 命令常用的选项有：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-ivh：安装显示安装进度--install--verbose--hash</span><br><span class="line">-Uvh：升级软件包--Update；</span><br><span class="line">-qpl：列出RPM软件包内的文件信息[Query Package list]；</span><br><span class="line">-qpi：列出RPM软件包的描述信息[<span class="function">Query Package install <span class="title">package</span><span class="params">(s)</span>]；</span></span><br><span class="line"><span class="function">-qf：查找指定文件属于哪个RPM软件包[Query File]；</span></span><br><span class="line"><span class="function">-Va：校验所有的RPM软件包，查找丢失的文件[View Lost]；</span></span><br><span class="line"><span class="function">-e：删除包</span></span><br></pre></td></tr></table></figure></p>
+<p>另外需要注意的是，还有些软件包是以 .tar.gz或.tar或.gz 等压缩格式发行的，这种软件包就需要通过解压缩命令进行解压，比如：</p>
+<ul>
+<li>针对 .tar 格式，则可以通过 <code>tar xvf xxxx.tar</code> 进行解压</li>
+<li>针对 .gz 格式， 则可以通过 <code>gzip -d xxx.gz</code> 或 <code>gunzip xxxx.gz</code> 进行解压</li>
+<li>针对 .tar.gz 格式，则可以通过 ‘tar zxvf xxxx.tar.gz’ 进行解压</li>
+</ul>
+<h2 id="理解systemctl的作用"><a href="#理解systemctl的作用" class="headerlink" title="理解systemctl的作用"></a>理解systemctl的作用</h2><blockquote>
+<p><code>systemctl</code>命令是Linux的系统管理命令,systemd是Linux系统最新的初始化系统(init),作用是提高系统的启动速度，尽可能启动较少的进程，尽可能更多进程并发启动。systemd对应的进程管理命令是<code>systemctl</code>,systemctl命令兼容了service,即systemctl也会去/etc/init.d目录下查看，执行相关程序</p>
+</blockquote>
+<p>注：早期的linux系统，是通过 /etc/init.d 目录来管理自启动的服务的，现在通过 /etc/systemd 目录来管理，一般来说，通过<code>yum install &lt;package_name&gt;</code>安装的程序，会自动生成 xxx.service文件【在/etc/systemd】目录下。但如果是通过解压后的程序，需要我们手动创建 xxx.service文件， 比如我安装的redis,如果需要开机自启动的话，则需要如下配置<br><code>路径：/etc/systemd/system/redis.service</code><br>内容如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=redis-server</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/bin/redis-server /usr/local/bin/redis.conf</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></p>
+<p>注：ExecStart是指向redis-server的位置以及读取的配置文件位置。</p>
+<h2 id="配置lightdm桌面-安装图形化界面"><a href="#配置lightdm桌面-安装图形化界面" class="headerlink" title="配置lightdm桌面[安装图形化界面]"></a>配置lightdm桌面[安装图形化界面]</h2><ul>
+<li><p>第一步：安装桌面协议 “X Window System”</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall -y "X Window System"</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二步：安装额外包yum源（extra package for Enterprise Linux）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第三步：安装lightdm</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y lightdm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第四步：安装 xfce </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall -y xfce</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第五步：配置lightdm.conf 文件</p>
+<blockquote>
+<p>修改配置文件 <code>/etc/lightdm/lightdm.conf</code>，如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">[XDMCPServer]</span><br><span class="line">enabled=true</span><br><span class="line">port=177</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<p>原来enabled=false,打开注释后改为true<br>把port=177的注释打开</p>
+<ul>
+<li><p>第六步：把默认的gdm桌面关闭，并启动 lightdm 服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--先执行关闭gdm</span><br><span class="line">systemctl disable gdm</span><br><span class="line">--再执行启用 lightdm</span><br><span class="line">systemctl enable lightdm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第七步：启动lightdm</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start lightdm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第八步：修改开机启动模式</p>
+<blockquote>
+<p>编辑 <code>/etc/inittab</code> 文件，打开<code>graphical.target</code> 一行的注释，结果如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#</span><span class="bash"> multi-user.target: analogous to runlevel 3</span></span><br><span class="line">graphical.target: analogous to runlevel 5</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>第九步：设置启动模式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl set-default graphical.target</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>注：yum install 和 yum groupinstall 都是yum安装软件的方式，区别如下：</p>
+<ul>
+<li><code>yum install</code> 它安装单个软件，以及这个软件的依赖关系</li>
+<li><code>yum groupinstall</code> 它安装一个安装包，这个安装包包涵了很多单个软件，以及单个软件的依赖关系</li>
+</ul>
+</blockquote>
+<p>我们可以通过 <code>yum info &lt;package_name&gt;</code>和<code>yum groupinfo &lt;packages_name&gt;</code> 来查看软件和软件包的信息。</p>
+<h2 id="中文方块字解决"><a href="#中文方块字解决" class="headerlink" title="中文方块字解决"></a>中文方块字解决</h2><blockquote>
+<p>Centos7 中没有安装中文字体，安装好Xfce，直接进入会出现乱码。所以先安装中文字体，防止进入Xfce出现中文乱码</p>
+</blockquote>
+<ul>
+<li><p>首先，安装字体软件包【也可以安装单一的字体】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall fonts</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其次，进入到fonts安装的目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/share/fonts</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后，执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fc-cache -fv</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>此命令表示构建字体信息的缓存文件，-fv 是选项，详情可执行<code>man fc-cache</code></p>
+<p>At Last, 重启系统即可, 执行 <code>reboot</code></p>
+<blockquote>
+<p>查看当前系统的语言，可以通过命令<code>cat /etc/locale.conf</code> 来查看[确保是中文]</p>
+</blockquote>
+<h2 id="systemctl命令参考"><a href="#systemctl命令参考" class="headerlink" title="systemctl命令参考"></a>systemctl命令参考</h2><blockquote>
+<p>Systemctl是一个systemd工具，主要负责控制systemd系统和服务管理器。Systemd是一个系统管理守护进程、工具和库的集合，用于取代System V初始进程。Systemd的功能是用于集中管理和配置类UNIX系统。在Linux生态系统中，Systemd被部署到了大多数的标准Linux发行版中，只有为数不多的几个发行版尚未部署。</p>
+</blockquote>
+<h3 id="systemctl-命令集有"><a href="#systemctl-命令集有" class="headerlink" title="systemctl 命令集有"></a>systemctl 命令集有</h3><ul>
+<li>systemctl –verion   //查看systemd的版本</li>
+<li>systemctl start | restart | stop | reload | status <service> //启动|重新启动|停止|重新加载|查看状态</service></li>
+<li>systemctl disable | enable | is-active | is-enable <service>  //关闭 | 启动 | 判断是否激活 | 判断是否启用</service></li>
+<li>systemctl list-units   //列出所有运行单元</li>
+<li>systemctl list-unit-files  //列出所有可用的单元</li>
+<li>systemctl list-unit-files –type=service | socket | mount  //使用服务、套接字、挂载点 进行过滤可用的单元</li>
+<li>systemctl –failed   //列出所有失败的单元</li>
+<li>systemctl show <service>  //检查服务的所有配置详情</service></li>
+<li>systemctl list-dependencies <service>  //获取服务的依赖项列表</service></li>
+</ul>
+<h2 id="安装redis数据库"><a href="#安装redis数据库" class="headerlink" title="安装redis数据库"></a>安装redis数据库</h2><ul>
+<li><p>第一步：下载 redis的安装包<br><a href="https://redis.io/download" target="_blank" rel="noopener">下载redis</a><br>或者通过<code>wget download.redis.io/releases/redis-5.0.7.tar.gz</code> 下载</p>
+</li>
+<li><p>第二步：利用 tar 命令解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf redis-xxx.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第三步：执行 make</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第四步：执行 make install</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注：默认情况下，CentOS系统中没有安装 gcc 组件，在执行 make 之前，需要安装一下 gcc,如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc</span><br></pre></td></tr></table></figure></p>
+<p>提示输入字母时，输入 y 即可</p>
+<h3 id="启动-redis"><a href="#启动-redis" class="headerlink" title="启动 redis"></a>启动 redis</h3><ol>
+<li><p>可以在命令行中直接启动 redis-server, 这种方式不是以后台服务方式启动，要占用一个命令行窗口，使用不太方便。</p>
+</li>
+<li><p>把redis加入到开机自启动项中，操作如下</p>
+</li>
+</ol>
+<ul>
+<li>2.1 把redis解压目录下的<code>redis.conf</code>文件copy一份到redis-server安装目录，默认是<code>/usr/local/bin</code> [可以通过whereis redis-server 来查看]</li>
+<li>2.2 修改 <code>/usr/local/bin/redis.conf</code>文件，把 daemonize的值改为yes</li>
+<li><p>2.3 在<code>/etc/systemd/system/</code>目录下创建一个 redis.service 文件，内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=redis-server</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/bin/redis-server /usr/local/bin/redis.conf</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2.4 执行<code>systemctl enable redis.service</code> 来启用 redis 服务</p>
+</li>
+<li>2.5 执行<code>systemctl start redis.service</code> 来启动 redis 服务【以后开机不用再执行此行命令，会自启动】</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/centOS/" rel="tag"># centOS</a>
+          
+            <a href="/tags/lightdm配置/" rel="tag"># lightdm配置</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/06/algorithms/snowflake/" rel="next" title="雪花算法">
+                <i class="fa fa-chevron-left"></i> 雪花算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/18/redis/Redis-1-安装及配置/" rel="prev" title="Redis的安装和配置">
+                Redis的安装和配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在vmware中配置CentOS"><span class="nav-number">1.</span> <span class="nav-text">在vmware中配置CentOS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要虚拟出CentOS"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要虚拟出CentOS?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解rpm包和yum命令"><span class="nav-number">1.2.</span> <span class="nav-text">理解rpm包和yum命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解systemctl的作用"><span class="nav-number">1.3.</span> <span class="nav-text">理解systemctl的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置lightdm桌面-安装图形化界面"><span class="nav-number">1.4.</span> <span class="nav-text">配置lightdm桌面[安装图形化界面]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文方块字解决"><span class="nav-number">1.5.</span> <span class="nav-text">中文方块字解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#systemctl命令参考"><span class="nav-number">1.6.</span> <span class="nav-text">systemctl命令参考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#systemctl-命令集有"><span class="nav-number">1.6.1.</span> <span class="nav-text">systemctl 命令集有</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装redis数据库"><span class="nav-number">1.7.</span> <span class="nav-text">安装redis数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-redis"><span class="nav-number">1.7.1.</span> <span class="nav-text">启动 redis</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

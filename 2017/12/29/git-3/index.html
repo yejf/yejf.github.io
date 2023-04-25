@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="git, svn, 分布式开发, 版本控制, merge, conflict, repository, remote repository, push, pull, clone, tag, github" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="理解tag的概念、工作原理，如何创建、删除tag, 我们如何基于github平台共享项目，多人协作，如何创建和合并PR[Pull Request], 掌握在github上面创建和管理项目的基本操作.">
+<meta name="keywords" content="git, svn, 分布式开发, 版本控制, merge, conflict, repository, remote repository, push, pull, clone, tag, github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git学习之(三)--标签管理、github操作">
+<meta property="og:url" content="http://www.teacherye.com/2017/12/29/git-3/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="理解tag的概念、工作原理，如何创建、删除tag, 我们如何基于github平台共享项目，多人协作，如何创建和合并PR[Pull Request], 掌握在github上面创建和管理项目的基本操作.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/new-repository.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/create-repository.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/project-detail.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/clone-https.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/clone-ssh.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/issue-ui.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/issue-create.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/setting-collaborators.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/setting-delete.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/PR-1.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/user-setting.png">
+<meta property="og:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/ssh-add.png">
+<meta property="og:updated_time" content="2018-01-04T05:23:35.215Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git学习之(三)--标签管理、github操作">
+<meta name="twitter:description" content="理解tag的概念、工作原理，如何创建、删除tag, 我们如何基于github平台共享项目，多人协作，如何创建和合并PR[Pull Request], 掌握在github上面创建和管理项目的基本操作.">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/12/29/git-3/assets/new-repository.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/12/29/git-3/"/>
+
+
+
+
+
+  <title>git学习之(三)--标签管理、github操作 | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/12/29/git-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">git学习之(三)--标签管理、github操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-29T09:15:35+08:00">
+                2017-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/版本控制/" itemprop="url" rel="index">
+                    <span itemprop="name">版本控制</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/版本控制/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/12/29/git-3/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/12/29/git-3/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/12/29/git-3/" class="leancloud_visitors" data-flag-title="git学习之(三)--标签管理、github操作">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  理解tag的概念、工作原理，如何创建、删除tag, 我们如何基于github平台共享项目，多人协作，如何创建和合并PR[Pull Request], 掌握在github上面创建和管理项目的基本操作.
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="git-介绍"><a href="#git-介绍" class="headerlink" title="git 介绍"></a>git 介绍</h1><p>本教材旨在让你快速掌握git的使用，而不是一个系统学习的教材，通过本教案，你可以快速地运用git,使用git命令来达到你的版本控制的目的，但如果你想系统地学习git，可以参考如下站点<br><a href="https://www.liaoxuefeng.com" target="_blank" rel="noopener">廖雪峰的官方网站</a><br><a href="https://backlog.com/git-tutorial/cn" target="_blank" rel="noopener">猴子都能懂的GIT入门</a><br><a href="http://gitref.justjavac.com" target="_blank" rel="noopener">git参考手册</a><br><a href="https://rogerdudler.github.io/git-guide/index.zh.html" target="_blank" rel="noopener">git简易指南</a></p>
+<p>以上的学习资料都非常的简明、易懂，利于学习和理解，是写得很好的教材，值得学习<br>当然，git还有更深入的知识，如果你要深入理解git的话，还可以去看如下资料：<br><a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">Pro Git</a><br><a href="https://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html" target="_blank" rel="noopener">Git-Flow备忘清单</a></p>
+<p>git 是一个非常棒的版本控制软件，它目前有很完整的生态，下面让我们进入 git的学习之中吧…</p>
+<a id="more"></a>
+<h2 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h2><blockquote>
+<p>标签，也叫tag,在git中，它类似于一个不能移动的分支【我们知道，分支本质上是一个可移动的指定】，所以，标签就是钉死在某个提交点上的一种技术，相对提交点，我们可以在标签上附加上一些其它的信息，比如数字签名之类的</p>
+</blockquote>
+<h3 id="标签操作"><a href="#标签操作" class="headerlink" title="标签操作"></a>标签操作</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出所有的标签</span></span><br><span class="line">$ git tag</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果标签太多，还可以通过-l参数来过滤, 匹配字符中可以写 * 来通配</span></span><br><span class="line">$ git tag -l <span class="string">'匹配字符'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看单个指定的标签</span></span><br><span class="line">$ git show tag_name</span><br></pre></td></tr></table></figure>
+<p>下面我们来创建几个标签，需要注意的是在git中，以两种不同的标签，分别是：</p>
+<ul>
+<li>轻量标签[lightweight]</li>
+<li>附注标签[annotated]</li>
+</ul>
+<blockquote>
+<p>一个轻量标签很像一个不会改变的分支 - 它只是一个特定提交的引用。<br>然而，附注标签是存储在 Git 数据库中的一个完整对象。 它们是可以被校验的；其中包含打标签者的名字、电子邮件地址、日期时间；还有一个标签信息；并且可以使用 GNU Privacy Guard （GPG）签名与验证。 通常建议创建附注标签，这样你可以拥有以上所有信息；但是如果你只是想用一个临时的标签，或者因为某些原因不想要保存那些信息，轻量标签也是可用的</p>
+</blockquote>
+<p>下面我们分别来创建这两种标签</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 基于当前提交点来创建一个轻量标签</span></span><br><span class="line">$ git tag v1.0</span><br></pre></td></tr></table></figure>
+<p>如果你想基于之前某个提交点来创建另一个标签，我们可以使用<code>git log --oneline</code> 来得到提交点，然后再创建标签，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">117b6f7 Merge branch <span class="string">'testing'</span></span><br><span class="line">2393508 modify f4.txt</span><br><span class="line">2b4645f modify readme.txt</span><br><span class="line">79309a2 delete world.java file</span><br><span class="line">190db88 modify World.java</span><br><span class="line">0ff04d2 修改World.java文件</span><br><span class="line">e986401 添加World.java文件</span><br><span class="line">f6e2999 add new file f4.txt</span><br><span class="line">c5fd500 add new file f3.txt</span><br><span class="line">6d0a0e2 Merge branch <span class="string">'issue2'</span></span><br><span class="line">5cc9e23 add new file f2.txt</span><br><span class="line">d0f63b3 resolved conflict</span><br><span class="line">b6152d7 update readme.txt by master branch</span><br><span class="line">235e87d update readme.txt <span class="keyword">in</span> issue1 branch</span><br><span class="line">4324270 add readme.txt file</span><br></pre></td></tr></table></figure></p>
+<p>然后，我想基于<code>5cc9e23</code>提交点来创建一个标签，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag v0.1 5cc9e23</span><br></pre></td></tr></table></figure></p>
+<p>没有任何提示，则表示创建标签成功.</p>
+<p>如果要创建附注标签，则执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -a v0.2 -m <span class="string">'一个玩具版本，只有最基本的功能'</span> f6e2999</span><br></pre></td></tr></table></figure></p>
+<p>现在，我们通过命令<code>git show tag_name</code> 来看看轻量标签与附注标签的区别，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git show v0.1</span><br><span class="line"><span class="comment">#显示的结果如下：</span></span><br><span class="line">commit 5cc9e23fe5504127db5a1f714fae46c2f071ca57</span><br><span class="line">Author: yejf &lt;yejf@sz-tz.org&gt;</span><br><span class="line">Date:   Thu Dec 28 11:18:21 2017 +0800</span><br><span class="line"></span><br><span class="line">    add new file f2.txt</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，只有提交点的信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ git show v0.2</span><br><span class="line"><span class="comment">#显示的结果如下：</span></span><br><span class="line">tag v0.2</span><br><span class="line">Tagger: yejf &lt;yejf@sz-tz.org&gt;</span><br><span class="line">Date:   Wed Jan 3 23:06:10 2018 +0800</span><br><span class="line"></span><br><span class="line">一个玩具版本，只有最基本的功能</span><br><span class="line"></span><br><span class="line">commit f6e2999ec7aa1ce1b8792db85ca3d191ce12eceb</span><br><span class="line">Author: yejf &lt;yejf@sz-tz.org&gt;</span><br><span class="line">Date:   Thu Dec 28 11:29:18 2017 +0800</span><br><span class="line"></span><br><span class="line">    add new file f4.txt</span><br></pre></td></tr></table></figure>
+<p>可以看到，附注标签除了提交点外，还有创建标签的作者、创建日期信息。</p>
+<h3 id="推送到远程"><a href="#推送到远程" class="headerlink" title="推送到远程"></a>推送到远程</h3><blockquote>
+<p>默认情况下，<code>git push</code>操作并不会传递标签到远程仓库中，你必需显示地推送，执行：<code>git push origin [tagname]</code><br>如果你想把本地的创建标签都推送到远程，可以执行：<code>git push origin --tags</code></p>
+</blockquote>
+<p>现在，当其他人从仓库中克隆或拉取时，他们也能得到你推送的标签。</p>
+<h2 id="github操作"><a href="#github操作" class="headerlink" title="github操作"></a>github操作</h2><blockquote>
+<p>github做为最知名的项目托管平台，世界上大多数的开源项目都托管在github上，几乎涵盖了所有编程语言的开源项目，做为开发人员，不能没有github帐号，所以，如果你还没有github帐号的话，请点击<a href="https://github.com" target="_blank" rel="noopener">此处</a>，注册一个.</p>
+</blockquote>
+<h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><p>登录github后，我们就可以创建一个项目，也叫一个repository, 在网站的右上角，点击<strong>+</strong>号，如下：<br><img src="/2017/12/29/git-3/assets/new-repository.png" alt="图示"></p>
+<p>会弹出另一个页面，让你填写仓库相关的资料，如下：<br><img src="/2017/12/29/git-3/assets/create-repository.png" alt="图示"></p>
+<ul>
+<li>输入仓库名[repository name],也就是项目名，一个仓库对应一个项目</li>
+<li>输入描述信息</li>
+<li>默认勾选了 Public 项目</li>
+<li>勾选生成项目的 README 文件</li>
+<li>添加 .gitignore 文件和选择开源许可证</li>
+<li>最后，点击 <strong>Create Repository</strong> 按钮</li>
+</ul>
+<p>创建好项目后，我们就可以进入项目，并对项目界面做一下基本的认识</p>
+<h3 id="管理项目"><a href="#管理项目" class="headerlink" title="管理项目"></a>管理项目</h3><p>首先，进入项目后，我们可以看到如下界面：<br><img src="/2017/12/29/git-3/assets/project-detail.png" alt="图示"><br>可以看到，第一个标签就是<code>Code</code>, 也就是我们的项目代码，但此时，里面只有我们让生成的3个文件，如下：</p>
+<ul>
+<li>.gitignore</li>
+<li>LICENSE</li>
+<li>README.md</li>
+</ul>
+<p>其中，.gitignore文件是告诉git仓库，在工作区中的哪些文件我们无需管理，也就是忽略的文件，它的内容大致如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># eclise environments</span><br><span class="line">.classpath</span><br><span class="line">.project</span><br><span class="line">.class</span><br><span class="line">.war</span><br><span class="line">.zip</span><br><span class="line">.rar</span><br><span class="line"># IDEA environments</span><br><span class="line">.idea</span><br><span class="line">*.iml</span><br><span class="line">.settings/*</span><br><span class="line"># maven environments</span><br><span class="line">/target/*</span><br><span class="line">/target/</span><br></pre></td></tr></table></figure></p>
+<p>其中，#开头的表示注释，* 代表通配， / 代表目录， 这个文件我们可以自己书写里面的内容，默认情况下，不同的开发语言这个文件的内容不同。</p>
+<p>而LICENSE文件是开源许可证协议文件，一般无需操作<br>README.md 文件是针对项目的描述性文本，它采用markdown格式编写，遵守md的语法。</p>
+<p>另外，在项目主页面上，还可以看到当前的分支，提交次数，分支数， 贡献者，发布次数 信息，也有Issues, Pull Requests, Project, Wiki, Setting 等功能标签，所有，我们在这个页面上，就可以操作与项目相关的所有事情。</p>
+<p>下面就说说如何去clone一个项目以及何在项目中创建issue</p>
+<ul>
+<li>clone项目，支持两种方式，默认是https，还有就是 ssh, 先来看一下https的地址<br>点击按钮<strong>Clone or download</strong>,可以看到如下界面<br><img src="assets/clone-https.png" alt="图示"><br>可以看到我们要克隆项目的https地址，为：<code>https://github.com/yejf/gitdemo.git</code><br>当然，你也可以很容易地切换到ssh地址，只需要点击这个弹出层的右上角的<strong>Use SSH</strong>, 得到如下界面<br><img src="/2017/12/29/git-3/assets/clone-ssh.png" alt="图示"><br>我们看到的项目地址变成了：<code>git@github.com:yejf/gitdemo.git</code></li>
+</ul>
+<p>我们这里采用https的地址，你在你本地电脑的任何位置，右击，选择<code>git bash here</code>后，在命令行中，输入：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/yejf/gitdemo.git  <span class="comment">#注：这个地址要写你自己的地址，也行这会儿我已经删除了这个项目</span></span><br></pre></td></tr></table></figure></p>
+<p>这样一来，你在本地就克隆了一份远程仓库的项目，其它的操作就是git的操作，前二篇文章我们对git做了讲解。</p>
+<p>我们要开发项目，得要有做事的指导方针和总体需求，把总体需求按照一定的设计划分成多个不同的任务，然后再一个一个地完成这些任务，当然，多人协作时，可以让多人来完成这些任务，有的任务之间有先后顺序，任务有轻重缓急等等，这些任务，在github上就是<code>Issue</code>, 所以，我们要来了解一下如何创建和管理 <code>Issue</code></p>
+<p>我们在项目主页面上，点击<strong>Issues</strong>标签，进入 Issue界面，如下：<br><img src="/2017/12/29/git-3/assets/issue-ui.png" alt="图示"><br>第一次进来，这里没有任何的issue, 需要项目开发人员自行创建issue,创建的按钮清晰明了，在右边点击<strong>New Issue</strong>, 出来如下界面：<br><img src="/2017/12/29/git-3/assets/issue-create.png" alt="图示"><br>左边主体部份是issue标题和issue具体内容，我们可以对这个任务做评细的描述，不同的公司可能会有不同的描述规则，这时不多做介绍，主要目的是把要做的事情描述清楚。</p>
+<p>右边有较丰富的辅助性设置，包含：指定受托人[assignees], 给任务打上Labels, 选择里程碑[Milestone],指定完成时间等信息，当然，这些都不是必需的，但是对于一个issue来讲，有这些辅助信息可以让多人协作更有效率，配合更好。</p>
+<p>创建好issue后，指定的受托人[assignees]会收到一个通知，同时，参与者可以在每个issue下面评论，完成 issue后，可以close这个issue, 如果发现之前的issue没有完成后，还可以再次open这个issue, 具体的操作可以在项目中体验。</p>
+<h4 id="项目成员的管理"><a href="#项目成员的管理" class="headerlink" title="项目成员的管理"></a>项目成员的管理</h4><p>上面讲到issue的创建和使用，在创建issue时，指定assignees时，是从我们这个项目的参与者中来选择的，所以，事先，我们应该把相关的开发人员添加到我们的项目中来，可以有多种式来邀请，如：</p>
+<ul>
+<li>发送邀请链接</li>
+<li>直接搜索人员，并加入</li>
+</ul>
+<p>进入项目的<strong>setting</strong>标签，选择 <strong>Collaborators</strong> 选项卡，如下：<br><img src="/2017/12/29/git-3/assets/setting-collaborators.png" alt="图示"></p>
+<p>里面可以让我们输入参与者的名字进行google式搜索，前提这个用户是github平台上的注册用户。</p>
+<p>一旦某个人进入到了这个项目，在他们主页面上就可以看到。</p>
+<h4 id="删除项目"><a href="#删除项目" class="headerlink" title="删除项目"></a>删除项目</h4><blockquote>
+<p>这个动作比较危险，因为一旦实施了删除，就再也不能恢复，所以，github平台上，删除项目的入口<strong>藏</strong>得很深。<br>进入项目的<strong>setting</strong>标签，选择 <strong>Options</strong> 选项卡，然后一直把页面通过下拉框拉到最下面，看到如下界面：<br><img src="/2017/12/29/git-3/assets/setting-delete.png" alt="图示"><br>然后，点击<strong>delete this repository</strong></p>
+</blockquote>
+<p>会得到再次确认的警告，并让用输入项目的名称，如果项目名称输入无误后，就会彻底地删除这个项目</p>
+<h4 id="基于PR的操作"><a href="#基于PR的操作" class="headerlink" title="基于PR的操作"></a>基于PR的操作</h4><blockquote>
+<p>PR，也叫Pull Request, 是一种基于分支、合并的开发流程，它可以让项目的所有参与者都各自在自己的分支上开发，而互不影响，由某个人负责去合并分支，而不是由后提交者负责合并，把处理冲突的操作放到不影响开发的情形下进行，实践证明，基于RP的开发是很管用的。</p>
+</blockquote>
+<p>使用RP的流程大致如下：</p>
+<ul>
+<li>开发者拿到分配给自己的issue</li>
+<li><p>拉取出 develop分支或master分支的最新版本</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">$ git pull</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在本地仓库创建一个与issue名同名的分支,并切换到此分支上</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b issueXXX</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完成issue中规定的任务代码，添加并提交修改</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add --all</span><br><span class="line">$ git commit -m <span class="string">"日志"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把本地的issue分支推送到远程</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push --<span class="built_in">set</span>-upstream origin issueXXX   <span class="comment"># 第一次需要这么做，后面直接 git push 【因为远程已有这个分支】</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在github平台上的项目中，创建一个RP, 如下：<br><img src="/2017/12/29/git-3/assets/PR-1.png" alt="图示"><br>填写相关的资讯后，可以选择代码审核人员以及测式人员，提交即可</p>
+</li>
+<li><p>代码审核人员得到通知后，审核并测试代码，如果没有问题，则合并到 develop分支或master分支上去<br>这个在平台上可以可视化操作合并</p>
+</li>
+<li><p>审核者在远程仓库中删除这个分支<br>在平台上可以可视化地删除</p>
+</li>
+<li><p>开发者在本地删除这个分支</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d issueXXX</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上就是基于PR开发的基本流程，当然这些都是可以在开发中调整的，不同的项目规模采用的开发模式会不一样，所以，不能生搬硬套，而是要掌握git的核心，在具体的项目中灵活运用才是正道。</p>
+<h4 id="设置ssh的KEY"><a href="#设置ssh的KEY" class="headerlink" title="设置ssh的KEY"></a>设置ssh的KEY</h4><blockquote>
+<p>前提：<br>在本地你要利用ssh的工具生成公钥，然后把公钥的内容COPY一份，再到github上进行配置，如下：</p>
+</blockquote>
+<p>点击用户头像边上的下拉按钮，选择 <strong>Setting</strong>, 如下：<br><img src="/2017/12/29/git-3/assets/user-setting.png" alt="图示"><br>然后，再选择<strong>SSH and GPG keys</strong>, 进入如下界面<br><img src="/2017/12/29/git-3/assets/ssh-add.png" alt="图示"><br>到了这个界面上，标题可以任意写，而内容就是要你事先生成的SSH的公钥，有关这一部分的内容，请查看<a href="ssh.md">ssh学习</a></p>
+<h2 id="命令小结"><a href="#命令小结" class="headerlink" title="命令小结"></a>命令小结</h2><ul>
+<li>$ git tag tag_name</li>
+<li>$ git tag [-a] tag_name commit_id</li>
+<li>$ git show tag_name</li>
+<li>$ git tag</li>
+<li>$ git tag -l ‘匹配模式’</li>
+<li>$ git tag -a tag_name -m ‘日志’</li>
+<li>$ git push origin tag_name | [–tags]</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+            <a href="/tags/版本控制/" rel="tag"># 版本控制</a>
+          
+            <a href="/tags/分布式开发/" rel="tag"># 分布式开发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/27/git-2/" rel="next" title="Git学习之(二)--分支管理、远程仓库">
+                <i class="fa fa-chevron-left"></i> Git学习之(二)--分支管理、远程仓库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/04/ssh/" rel="prev" title="SSH学习和github的SSH配置">
+                SSH学习和github的SSH配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-介绍"><span class="nav-number">1.</span> <span class="nav-text">git 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标签管理"><span class="nav-number">1.1.</span> <span class="nav-text">标签管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标签操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">标签操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推送到远程"><span class="nav-number">1.1.2.</span> <span class="nav-text">推送到远程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github操作"><span class="nav-number">1.2.</span> <span class="nav-text">github操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建项目"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理项目"><span class="nav-number">1.2.2.</span> <span class="nav-text">管理项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#项目成员的管理"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">项目成员的管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除项目"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">删除项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于PR的操作"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">基于PR的操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置ssh的KEY"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">设置ssh的KEY</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令小结"><span class="nav-number">1.3.</span> <span class="nav-text">命令小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>

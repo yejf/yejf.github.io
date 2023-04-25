@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle, rdbms, sql, plsql" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="快乐编程" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.png?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta name="keywords" content="oracle, rdbms, sql, plsql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle数据库学习笔记(四)">
+<meta property="og:url" content="http://www.teacherye.com/2017/02/22/oracle/oracle-4/index.html">
+<meta property="og:site_name" content="快乐编程">
+<meta property="og:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.teacherye.com/2017/02/22/oracle/oracle-4/assets/内联.jpg">
+<meta property="og:image" content="http://www.teacherye.com/2017/02/22/oracle/oracle-4/assets/左外连接.jpg">
+<meta property="og:image" content="http://www.teacherye.com/2017/02/22/oracle/oracle-4/assets/右外连接.jpg">
+<meta property="og:image" content="http://www.teacherye.com/2017/02/22/oracle/oracle-4/assets/全外连接.jpg">
+<meta property="og:updated_time" content="2018-04-19T07:26:33.098Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle数据库学习笔记(四)">
+<meta name="twitter:description" content="学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等">
+<meta name="twitter:image" content="http://www.teacherye.com/2017/02/22/oracle/oracle-4/assets/内联.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.teacherye.com/2017/02/22/oracle/oracle-4/"/>
+
+
+
+
+
+  <title>Oracle数据库学习笔记(四) | 快乐编程</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <!-- 添加github的样式: add by yejf -->
+    <a href="https://github.com/yejf/yejf.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">快乐编程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">热爱编程、热爱学习、相信科技的力量</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-course">
+          <a href="/courses/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            课程体系
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.teacherye.com/2017/02/22/oracle/oracle-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teacher Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="快乐编程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle数据库学习笔记(四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-22T12:38:47+08:00">
+                2017-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/" itemprop="url" rel="index">
+                    <span itemprop="name">关系型</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/关系型/oracle/" itemprop="url" rel="index">
+                    <span itemprop="name">oracle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/02/22/oracle/oracle-4/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/02/22/oracle/oracle-4/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/02/22/oracle/oracle-4/" class="leancloud_visitors" data-flag-title="Oracle数据库学习笔记(四)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习Oracle数据库的基入配置、SQL语法、高级SQL查询、DDL操作等
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Oracle-数据库"><a href="#Oracle-数据库" class="headerlink" title="Oracle 数据库"></a>Oracle 数据库</h1><blockquote>
+<p>Oracle是一个强大的关系型数据库产品，功能丰富，产品安全性有保障，是Oracle公司的主打产品</p>
+</blockquote>
+<p>本系列笔记可能会遇到的专业词汇有：</p>
+<ul>
+<li>DB, <code>DataBase</code>, 数据库</li>
+<li>DBMS,<code>DataBase Management System</code>, 数据库管理系统</li>
+<li>RDBMS,<code>Relationship DataBase Management System</code>,  关系型数据库管理系统</li>
+<li>SQL, <code>Standard Query Language</code>, 标准化查询语言</li>
+</ul>
+<p>本系列学习笔记包含如下的课程内容：</p>
+<ul>
+<li>数据库的基本概念</li>
+<li>DDL 命令<ul>
+<li>Create</li>
+<li>ALTER</li>
+<li>DROP</li>
+</ul>
+</li>
+<li>DML 命令<ul>
+<li>insert</li>
+<li>update</li>
+<li>delete</li>
+</ul>
+</li>
+<li>DQL 命令<ul>
+<li>select 命令</li>
+<li>关联查询</li>
+<li>分组查询</li>
+<li>子查询</li>
+</ul>
+</li>
+<li>DCL 命令</li>
+<li>DTL 命令<ul>
+<li>commit</li>
+<li>rollback</li>
+<li>savepoint</li>
+</ul>
+</li>
+<li>数据字典</li>
+<li>数据库对象<ul>
+<li>序列</li>
+<li>索引</li>
+<li>视图</li>
+<li>同义词</li>
+</ul>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<p>##关联查询</p>
+<ul>
+<li>它是用来在多表查询的一种机制，Oracle支持 内联、左外联、右外联、全联查询。默认是采用内联。</li>
+<li><p><strong><em>早期语法：</em></strong></p>
+<blockquote>
+<p>select [distinct] [alias.]列名[,列名]|*<br>from 表名1 alias[,表名2 alias][,表名3 alias]…<br>[where 子句]<br>[order by 子句]  </p>
+</blockquote>
+<p>  可以看出来，它是采用<br><strong>‘,’</strong>号隔开多表，利用where 指定关联条件。如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- 查询员工名、工资以及所在的部门名称。</span><br><span class="line">select e.first_name,e.salary, d.name</span><br><span class="line">from s_emp e, s_dept d</span><br></pre></td></tr></table></figure>
+<p>  这条查询语句由于没有指定“关联条件”，所以产生了迪卡尔积,<br>迪卡尔积会造成资源的浪费，我们在查询中是要避免的。改为如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-- 表之间的关联关系，绝大多数都是主外键关系</span><br><span class="line">select e.first_name,e.salary, d.name</span><br><span class="line">from s_emp e, s_dept d</span><br><span class="line">WHERE e.dept_id = d.id</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><em>新语法：</em></strong></p>
+<blockquote>
+<p>select [distinct] [alias.]列名[,列名]|*<br>from 表名1 alias [inner|[left|right|full outer]] join 表名2 alias<br>on 关联条件<br>[where 子句]<br>[order by 子句]</p>
+</blockquote>
+<p>  上面示例利用新语法改写后：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select e.first_name,e.salary, d.name</span><br><span class="line">from s_emp e join s_dept d</span><br><span class="line">on e.dept_id = d.id;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p style="color:blue;">练习</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">-- 找出Sales 部门的所有员工</span><br><span class="line">select e.* from s_emp e join s_dept d </span><br><span class="line">on e.dept_id = d.id where d.name = &apos;Sales&apos;;</span><br><span class="line">-- 找出在 Asia 地区工作的员工</span><br><span class="line">select e.* from s_emp e join s_dept d on e.dept_id = d.id </span><br><span class="line">join s_region r on d.region_id = r.id </span><br><span class="line">where r.name = &apos;Asia&apos;;</span><br><span class="line">-- 找出客户&apos;Hamada Sport&apos; 的所有订单号、费用、下订日期</span><br><span class="line">select o.id,o.total,o.date_ordered from s_customer c join s_ord o </span><br><span class="line">on c.id = o.customer_id </span><br><span class="line">where c.name = &apos;Hamada Sport&apos;;</span><br><span class="line">-- 找出所有在&apos;Asia&apos;客户的信息</span><br><span class="line">select c.* from s_customer c join s_region r </span><br><span class="line">on c.region_id = r.id </span><br><span class="line">where r.name = &apos;Asia&apos;;</span><br><span class="line">--- 查询出客户名及它的订单号，总费用</span><br><span class="line">select c.name, o.id, o.total </span><br><span class="line">from s_customer c </span><br><span class="line">left join </span><br><span class="line">s_ord o on c.id = o.customer_id </span><br><span class="line">order by c.name;</span><br><span class="line">　</span><br><span class="line">select c.name, o.id, o.total </span><br><span class="line">from s_ord o </span><br><span class="line">right join </span><br><span class="line">s_customer c </span><br><span class="line">on c.id = o.customer_id </span><br><span class="line">order by c.name;</span><br><span class="line">--- 查询订单号，订单费用以及订单所对应的客户名</span><br><span class="line">select o.id, o.total, c.name </span><br><span class="line">from s_ord o </span><br><span class="line">left join </span><br><span class="line">s_customer c </span><br><span class="line">on o.customer_id = c.id;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们的关联查询分为2大类：</p>
+<blockquote>
+<p>1.内联查询  </p>
+<blockquote>
+<p>[inner] join</p>
+</blockquote>
+</blockquote>
+<p>  <img src="/2017/02/22/oracle/oracle-4/assets/内联.jpg" alt="内联图片" title="内联图示" width="50%" height="50%"></p>
+<blockquote>
+<p>2.外联查询</p>
+<blockquote>
+<p>a.左外联 以关联的左边为准，即使右边没有与之匹配的记录，<br>  则左边的记录也要出现在结果集中，右边全部以NULL值显示。<br>left [outer] join</p>
+</blockquote>
+</blockquote>
+<p>  <img src="/2017/02/22/oracle/oracle-4/assets/左外连接.jpg" alt="左外联图片" title="左外联图示" width="50%" height="50%"></p>
+<blockquote>
+<blockquote>
+<p>b.右外联<br>以关联的右边为准，即使左边没有与之匹配的记录，<br>  则右边的记录也要出现在结果集中，左边全部以NULL值显示。<br>right [outer] join</p>
+</blockquote>
+</blockquote>
+<p>  <img src="/2017/02/22/oracle/oracle-4/assets/右外连接.jpg" alt="右外联图片" title="右外联图示" width="50%" height="50%"></p>
+<blockquote>
+<blockquote>
+<p>c.全联<br>full [outer] join</p>
+</blockquote>
+</blockquote>
+<p>  <img src="/2017/02/22/oracle/oracle-4/assets/全外连接.jpg" alt="全外联图片" title="全外联图示" width="50%" height="50%"></p>
+<blockquote>
+<blockquote>
+<p>d.交叉联 返回连接两张的笛卡尔积<br>cross [outer] join</p>
+</blockquote>
+</blockquote>
+</li>
+<li><p>自关联查询：同一张表自己关联自己，如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">-- 查询出所有的员工名以及员工的上司名</span><br><span class="line">select e.first_name &quot;员工名&quot;,m.first_name &quot;上司名&quot;</span><br><span class="line">from s_emp e join s_emp m </span><br><span class="line">-- 关联条件</span><br><span class="line">on e.manager_id = m.id</span><br><span class="line">　</span><br><span class="line">这个语句只查询出了24行结果，少了 Carmen，因为Carmen员工的manager_id</span><br><span class="line">是空值。改为：</span><br><span class="line">select e.first_name &quot;员工名&quot;,m.first_name &quot;上司名&quot;</span><br><span class="line">from s_emp e left join s_emp m </span><br><span class="line">-- 关联条件</span><br><span class="line">on e.manager_id = m.id</span><br><span class="line">注意：关联的条件不一定总是做等值比较的。</span><br><span class="line">　</span><br><span class="line">-- 找出Womansport所购买的订单信息（订单号，费用，支付方式）</span><br><span class="line">select o.id, o.total, o.payment_type, c.name from s_ord o join s_customer c on o.customer_id = c.id </span><br><span class="line">where c.name = &apos;Womansport&apos;;</span><br><span class="line">-- 找出Operations部门工作的员工名，工资，并且按照工资降序排列</span><br><span class="line">select e.first_name, e.salary from s_emp e join </span><br><span class="line">s_dept d on e.dept_id = d.id where d.name = &apos;Operations&apos; order by 2 desc;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##分组查询</p>
+<ul>
+<li><p>所谓分组，就是看待数据的”角度”不同。也就是把某类值相同的看做一组。<br><strong><em>语法：</em></strong></p>
+<blockquote>
+<p>SELECT [DISTINCT] [alias.][列名 列别名[,列名 列别名]|*]<br>FROM 表名 [alias] [inner|outer join]<br>[表名[alias] ON 关联条件]<br>[WHERE 子句]<br>[GROUP BY 子句]<br>[HAVING 子句]<br>[Order by 子句]  </p>
+</blockquote>
+</li>
+<li><p>常用的分组函数</p>
+<p>  函数名称|作用<br>  -|-<br>  SUM([distinct] 列|表达式|值)|求和，会自动忽略null值<br>  AVG([distinct] 列|表达式|值)|求平均值，自动忽略null值<br>  MAX(列|表达式|值)|求最大值<br>  MIN(列|表达式|值)|求最小值<br>  COUNT([distinct] 列|*)|求记录数,包含重复值和null值</p>
+</li>
+<li><p style="color:blue;">练习</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">-- 找出员工的最高、最低、平均、以及工资总和</span><br><span class="line">select max(salary) 最高工资, min(salary) 最低工资, </span><br><span class="line">avg(salary) 平均工资, sum(salary) 工资总和 from </span><br><span class="line">s_emp;</span><br><span class="line">　</span><br><span class="line">-- 找出各部门员工的最高、最低、平均、以及工资总和</span><br><span class="line">select max(salary) 最高工资, min(salary) 最低工资, </span><br><span class="line">avg(salary) 平均工资, sum(salary) 工资总和 from </span><br><span class="line">s_emp group by dept_id;</span><br><span class="line">　</span><br><span class="line">--- 找出各41,42,50部门员工的最高、最低、平均、以及工资总和</span><br><span class="line">select dept_id,max(salary) 最高工资, min(salary) 最低工资, avg(salary) 平均工资, sum(salary) 工资总和 from s_emp where dept_id in (41,42,50) group by dept_id;</span><br><span class="line">　</span><br><span class="line">--- 找出各41,42,50部门员工的最高、最低、平均、以及工资总和且该部门的最高工资大于2000</span><br><span class="line">select dept_id,max(salary) 最高工资, </span><br><span class="line">min(salary) 最低工资, avg(salary) 平均工资, </span><br><span class="line">sum(salary) 工资总和 from s_emp </span><br><span class="line">where dept_id in (41,42,50) group by dept_id</span><br><span class="line">having max(salary) &gt; 2000;</span><br><span class="line">　</span><br><span class="line">--- 找出各41,42,50部门员工的最高、最低、平均、以及工资总和以及部门名称且该部门的最高工资大于2000</span><br><span class="line">select e.dept_id,d.name,max(salary) 最高工资, </span><br><span class="line">min(salary) 最低工资, avg(salary) 平均工资, </span><br><span class="line">sum(salary) 工资总和 from s_emp e join s_dept d </span><br><span class="line">on e.dept_id = d.id </span><br><span class="line">where dept_id in (41,42,50) group by dept_id,d.name</span><br><span class="line">having max(salary) &gt; 2000;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p style="color:red;">注意：<br><br>只有出现在group by 后面的列（即用来做为分组条件的列），才有资格<br>写在SELECT的后面，除非使用组函数进行修饰。<br><br>WHERE  子句中不可以使用组函数，它是对数据分组之前进行过滤。<br><br>HAVING 子句中可以使用组函数，它是对数据分组之后进行过滤。<br><br>GROUP BY 子句后面的字段不能使用*, 别名, 列的序号</p></li>
+<li><p>如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">统计工资超过1100元以上的员工，各个职称各有多少人。</span><br><span class="line">select title,count(e.*)</span><br><span class="line">from s_emp e where salary &gt; 1100</span><br><span class="line">group by title;</span><br><span class="line">　</span><br><span class="line">-- 统计共计多少个员工</span><br><span class="line">select count(*) from s_emp;</span><br><span class="line">　</span><br><span class="line">-- 统计共计多少个职称[不能重复]</span><br><span class="line">select count(distinct title) from s_emp;</span><br><span class="line">　</span><br><span class="line">-- 找出订单数量超过(含)2个的客户</span><br><span class="line">select c.id,c.name,count(*) &quot;订单数&quot;</span><br><span class="line">from s_customer c join s_ord o on c.id = o.customer_id</span><br><span class="line">group by c.id,c.name</span><br><span class="line">having count(*) &gt;= 2;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">-- 找出超过(含)4个员工的部门id及部门名称</span><br><span class="line">select d.id,d.name, count(*) from s_dept d </span><br><span class="line">join s_emp e on e.dept_id = d.id group by </span><br><span class="line">d.name,d.id having count(*) &gt;= 4;</span><br><span class="line">　</span><br><span class="line">-- 找出订单总费用超过10000元的客户</span><br><span class="line">select c.name from s_customer c join s_ord o on c.id = o.customer_id group by c.id,c.name having sum(o.total) &gt; 10000;</span><br><span class="line">　</span><br><span class="line">-- 统计各区域的客户数量，按它的降序排序</span><br><span class="line">select r.name 区域, count(*) 客户数量 from s_customer c join s_region r on r.id = c.region_id </span><br><span class="line">group by r.id, r.name order by 2 desc;</span><br><span class="line">　</span><br><span class="line">select count(*) from s_customer group by region_id </span><br><span class="line">order by 1 desc;</span><br><span class="line">-- 统计各经理的所直接管理的员工数</span><br><span class="line">select e.manager_id, m.first_name, count(*) </span><br><span class="line">from s_emp e join s_emp m on e.manager_id = m.id </span><br><span class="line">group by e.manager_id, m.first_name;</span><br><span class="line">　</span><br><span class="line">select m.first_name 上司名字, count(*) 直接下属数量</span><br><span class="line">from s_emp e join s_emp m on e.manager_id = m.id </span><br><span class="line">group by m.id, m.first_name;</span><br><span class="line">　</span><br><span class="line">-- 查询职位为Warehouse Manager直接管理的下属数量</span><br><span class="line">select m.title, m.first_name 上司名字, count(*) 直接下属数量</span><br><span class="line">-- 分组前筛查</span><br><span class="line">from s_emp e join s_emp m </span><br><span class="line">on e.manager_id = m.id </span><br><span class="line">where m.title = &apos;Warehouse Manager&apos; </span><br><span class="line">group by m.id, m.first_name, m.title;</span><br><span class="line">　</span><br><span class="line">-- 分组后筛查</span><br><span class="line">select m.title, m.first_name 上司名字, count(*) 直接下属数量</span><br><span class="line">from s_emp e join s_emp m </span><br><span class="line">on e.manager_id = m.id </span><br><span class="line">group by m.id, m.first_name, m.title</span><br><span class="line">having m.title = &apos;Warehouse Manager&apos;;</span><br><span class="line">　</span><br><span class="line">-- 统计订单中各种支付类型的总费用</span><br><span class="line">select payment_type, sum(total) from s_ord group by payment_type;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##子查询</p>
+<ul>
+<li>定义:就是指查询中嵌套查询。<br>子查询必须用()括起来，子查询可以出现在很多位置，比如: 当列、当表、当条件等</li>
+<li><p>子查询的本质：<br>a.内敛视图<br>b.把子查询的结果作为外部查询的条件</p>
+</li>
+<li><p><strong><em>语法：</em></strong></p>
+<blockquote>
+<p>SELECT (子查询)<br>FROM (子查询)<br>WHERE (子查询)<br>GROUP BY 子句<br>HAVING (子查询)<br>ORDER BY 子句  </p>
+</blockquote>
+</li>
+<li><p>举例：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">-- 找出与Ben同一个部门的员工</span><br><span class="line">select e1.first_name from s_emp e1 join </span><br><span class="line">s_emp e2 on e1.dept_id = e2.dept_id and </span><br><span class="line">e2.first_name = &apos;Ben&apos; where e1.first_name &lt;&gt; &apos;Ben&apos;;</span><br><span class="line">　</span><br><span class="line">step1. 找出Ben所在的部门号</span><br><span class="line">select dept_id from s_emp where first_name = &apos;Ben&apos;;</span><br><span class="line">　</span><br><span class="line">step2. 再根据上面的查询结果做为第二个查询的条件</span><br><span class="line">select first_name from s_emp where dept_id = (</span><br><span class="line">  -- 子查询</span><br><span class="line">  select dept_id from s_emp where first_name = &apos;Ben&apos;</span><br><span class="line">)</span><br><span class="line">and first_name &lt;&gt; &apos;Ben&apos;;</span><br><span class="line">　</span><br><span class="line">--- 查询出客户名，电话号码以及订单数</span><br><span class="line">-- 使用关联查询</span><br><span class="line">select c.name, c.phone, count(o.id) from s_customer c </span><br><span class="line">left join s_ord o </span><br><span class="line">on c.id = o.customer_id </span><br><span class="line">group by c.id, c.name, c.phone </span><br><span class="line">order by c.id;</span><br><span class="line">　</span><br><span class="line">-- 无关子查询</span><br><span class="line">select c.name, c.phone, nvl(r.rtotal, 0) from </span><br><span class="line">s_customer c left join</span><br><span class="line">(</span><br><span class="line">select customer_id, count(*) rtotal from s_ord group by customer_id</span><br><span class="line">) r on c.id = r.customer_id </span><br><span class="line">order by c.id;</span><br><span class="line">　</span><br><span class="line">-- 相关子查询</span><br><span class="line">select c.name, c.phone, (</span><br><span class="line">select count(*) from s_ord o where o.customer_id = c.id</span><br><span class="line">) from s_customer_id c </span><br><span class="line">order by c.id;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>子查询分类：</p>
+</li>
+</ul>
+<ol>
+<li><p>无关子查询<br> 是指子查询中没有使用外部查询所定义的变量/别名，而且内查询是可以单独运行的。</p>
+</li>
+<li><p>相关子查询<br> 是指子查询中要使用外部查询所定义的变量/别名，内查询不能单独运行。</p>
+</li>
+</ol>
+<ul>
+<li>子查询的特点：</li>
+</ul>
+<ol>
+<li>子查询很灵活，可以解决很多其他查询方式不能解决的问题</li>
+<li>子查询效率很低，其中相关子查询效率最低</li>
+<li>子查询嵌套的层数越多，效率越低</li>
+<li>查询效率：关联查询 &gt; 无相关子查询 &gt; 相关子查询</li>
+</ol>
+<ul>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">-- 查询出客户名及他拥有的订单数(使用子查询)</span><br><span class="line">-- 无关子查询</span><br><span class="line">select c.name, nvl(r.rtotal, 0) from </span><br><span class="line">s_customer c left join</span><br><span class="line">(</span><br><span class="line">select customer_id, count(*) rtotal from s_ord group by customer_id</span><br><span class="line">) r on c.id = r.customer_id order by c.id;</span><br><span class="line">　</span><br><span class="line">-- 相关子查询</span><br><span class="line">select c.name, (</span><br><span class="line">select count(*) from s_ord o where o.customer_id = c.id</span><br><span class="line">) from s_customer_id c order by c.id;</span><br><span class="line">　</span><br><span class="line">-- 查询出部门名及此部门的员工数。(使用子查询)</span><br><span class="line">-- 无关子查询</span><br><span class="line">select d.name, r.ecount from s_dept d left join </span><br><span class="line">(</span><br><span class="line">-- 按部门分组,查询出每个部门的人数</span><br><span class="line">select dept_id, count(*) ecount from s_emp </span><br><span class="line">group by dept_id</span><br><span class="line">) r on d.id = r.dept_id;</span><br><span class="line">　</span><br><span class="line">-- 相关子查询</span><br><span class="line">select d.name, </span><br><span class="line">(</span><br><span class="line">select count(*) from s_emp e </span><br><span class="line">where e.dept_id = d.id</span><br><span class="line">) from s_dept d order by d.id;</span><br><span class="line">　</span><br><span class="line">-- 查询出工资超过公司平均工资的员工.</span><br><span class="line">第一步, 查询公司的平均工资</span><br><span class="line">select avg(salary) from s_emp;</span><br><span class="line">第二步, 查询工资大于第一步查询出的平均工资的员工信息</span><br><span class="line">select * from s_emp where salary &gt; 平均工资</span><br><span class="line">第三步, 合并查询语句</span><br><span class="line">select * from s_emp where salary &gt; </span><br><span class="line">(select avg(salary) from s_emp);</span><br><span class="line">　</span><br><span class="line">-- 查询部门平均工资超过公司平均工资的部门</span><br><span class="line">第一步,查询公司的平均工资</span><br><span class="line">select avg(salary) from s_emp;</span><br><span class="line">第二步,查询部门的平均工资</span><br><span class="line">select avg(salary) from s_emp group by dept_id;</span><br><span class="line">第三步,查询出部门平均工资大于公司平均工资的部门ID</span><br><span class="line">select e1.dept_id, avg(salary) from s_emp e1 group by e1.dept_id having avg(salary) &gt; </span><br><span class="line">(select avg(salary) from s_emp);</span><br><span class="line">第四步,查询出相关部门</span><br><span class="line">select distinct * from s_dept d where d.id in </span><br><span class="line">(</span><br><span class="line">select e1.dept_id from s_emp e1 group by e1.dept_id having avg(salary) &gt; </span><br><span class="line">(select avg(salary) from s_emp)</span><br><span class="line">);</span><br><span class="line">　</span><br><span class="line">select d.name from s_dept d join </span><br><span class="line">(</span><br><span class="line">select e1.dept_id did, avg(salary) from s_emp e1 group by e1.dept_id having avg(salary) &gt; </span><br><span class="line">(select avg(salary) from s_emp)</span><br><span class="line">) r on d.id = r.did;</span><br><span class="line">　</span><br><span class="line">--- 找出各个部门中大于他所在部门平均工资的员工名和工资</span><br><span class="line">第一步, 查询部门的平均工资</span><br><span class="line">select avg(salary) from s_emp group by </span><br><span class="line">dept_id;</span><br><span class="line">第二步,</span><br><span class="line">select e.first_name, e.salary from s_emp e join </span><br><span class="line">(</span><br><span class="line">select dept_id, avg(salary) vsal from s_emp group by dept_id</span><br><span class="line">) r on e.salary &gt; r.vsal and e.dept_id = r.dept_id;</span><br><span class="line">　</span><br><span class="line">-- 相关子查询</span><br><span class="line">select first_name, salary from s_emp e1 where salary &gt; </span><br><span class="line">(</span><br><span class="line">select avg(salary) from s_emp e2 where e2.dept_id = e1.dept_id</span><br><span class="line">)</span><br><span class="line">　</span><br><span class="line">-- 找出职称相同员工</span><br><span class="line">分析:首先查询出根据职称进行分组,数量大于2的职称.第二步查询出职称为第一步查询的结果的员工即为满足条件的员工</span><br><span class="line">第一步,</span><br><span class="line">select title from s_emp group by title having count(*) &gt;= 2;</span><br><span class="line">第二步,</span><br><span class="line">select first_name, title from s_emp where title in </span><br><span class="line">(</span><br><span class="line">select title from s_emp group by title having count(*) &gt;= 2</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把子查询当做“表”来看，那么这个”表”就是一个内联视图[inline view]。如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from (</span><br><span class="line">  select id,first_name,start_date,salary from s_emp where dept_id=41</span><br><span class="line">) v_emp;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>要理解为什么要使用这种子查询，先来看一个伪例：rownum<br>它总是从1开始，依次递增，绝不会产生间隔。如：</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select d.*,rownum from s_dept d where rownum = 1; // 正确</span><br><span class="line">select d.*,rownum from s_dept d where rownum = 5; // 错误</span><br><span class="line">select d.*,rownum from s_dept d where rownum &gt; 5; // 错误</span><br><span class="line">select d.*,rownum from s_dept d where rownum &lt; 5; // 正确</span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li>rownum 的作用<br>1.TopN问题<br>解题思路：<br>a).利用子查询先按要求的列做排序.<br>b).再利用外部查询以及rownum 来过滤出 TopN记录</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">-- 查询出工资排名前三的员工</span><br><span class="line">select * from</span><br><span class="line">(select first_name, salary from s_emp order by salary desc) </span><br><span class="line">where rownum &lt;= 3;</span><br><span class="line">　</span><br><span class="line">-- 查询出41部门工资最高的员工</span><br><span class="line">select * from </span><br><span class="line">(</span><br><span class="line">select first_name, salary from s_emp where </span><br><span class="line">dept_id = 41 order by salary desc</span><br><span class="line">)</span><br><span class="line">where rownum = 1;</span><br><span class="line">　</span><br><span class="line">-- 查询出拥有订单数排名前3的客户</span><br><span class="line">select * from </span><br><span class="line">(</span><br><span class="line">select c.name, count(*) from s_customer c </span><br><span class="line">join s_ord o on o.customer_id = c.id group </span><br><span class="line">by c.id, c.name order by 2 desc</span><br><span class="line">)</span><br><span class="line">where rownum &lt;= 3;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2.分页查询问题</p>
+<ul>
+<li><p>通项公式</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select * from</span><br><span class="line">(</span><br><span class="line">select inner_.*, rownum rn_ from</span><br><span class="line">(</span><br><span class="line">-- 核心业务语句</span><br><span class="line">) inner_</span><br><span class="line">where rownum &lt;= endValue</span><br><span class="line">) outter_</span><br><span class="line">where outter_.rn_ &gt;= stratValue;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p style="color:blue;">练习：</p>
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">-- 查询出工资排名第二和第三的员工</span><br><span class="line">select * from</span><br><span class="line">(</span><br><span class="line">select inner_.*, rownum rn_ from</span><br><span class="line">(</span><br><span class="line">select first_name, salary </span><br><span class="line">from s_emp order by salary desc</span><br><span class="line">) inner_</span><br><span class="line">where rownum &lt;= 3</span><br><span class="line">) </span><br><span class="line">outter_</span><br><span class="line">where outter_.rn_ &gt;= 2;</span><br><span class="line">　</span><br><span class="line">-- 查询出员工表中第6到第10的数据。</span><br><span class="line">select * from </span><br><span class="line">(</span><br><span class="line">select v1.*, rownum rm_ from </span><br><span class="line">(</span><br><span class="line">select * from s_emp</span><br><span class="line">) v1 </span><br><span class="line">where rownum &lt;= 10</span><br><span class="line">) v2 </span><br><span class="line">where v2.rm &gt;= 6;</span><br><span class="line">　</span><br><span class="line">-- 查询出在&apos;Asia&apos;地区工作的员工的第二行至第四行记录。</span><br><span class="line">select * from </span><br><span class="line">(</span><br><span class="line">select v1.*, rownum rm_ from </span><br><span class="line">(</span><br><span class="line">select * from s_emp e join s_dept d on </span><br><span class="line">e.dept_id = d.id join s_region r on </span><br><span class="line">d.region_id = r.id where r.name = &apos;Asia&apos;</span><br><span class="line">) v1 </span><br><span class="line">where rownum &lt;= 4</span><br><span class="line">) v2 </span><br><span class="line">where v2.rm &gt;= 2;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关于子查询的集合操作</p>
+<p>  关键字|作用<br>  -|-<br>  UNION|返回两个子查询的并集，不含重复记录<br>  UNION ALL|返回两个子查询的并集，包含复复记录<br>  INTERSECT|返回交集<br>  MINUS|两个子查询相减</p>
+</li>
+</ul>
+<h2 id="exists运算符"><a href="#exists运算符" class="headerlink" title="exists运算符"></a>exists运算符</h2><ul>
+<li><p>exists用来判断子查询是否有结果,如果有,则返回true;否则,返回false.如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">-- 找出与Ben同部门的员工</span><br><span class="line">select * from s_emp e1 where exists </span><br><span class="line">(</span><br><span class="line">select 1 from s_emp e2 where </span><br><span class="line">e2.dept_id = e1.dept_id and </span><br><span class="line">e2.first_name = &apos;Ben&apos;</span><br><span class="line">) and e1.first_name &lt;&gt; &apos;Ben&apos;;</span><br><span class="line">　</span><br><span class="line">-- 找出各部门工资排名前2名的员工</span><br><span class="line">分析: 存在这样的员工，与我同一部门并且比我工资高的员工不超过1个</span><br><span class="line">select dept_id,first_name,salary from s_emp e1</span><br><span class="line">where exists (</span><br><span class="line">  select 1 from s_emp e2</span><br><span class="line">  where e1.dept_id = e2.dept_id</span><br><span class="line">  and e1.salary &lt; e2.salary</span><br><span class="line">  having count(*) &lt;= 1</span><br><span class="line">)</span><br><span class="line">order by dept_id,salary desc;</span><br><span class="line">　</span><br><span class="line">select dept_id,first_name,salary from s_emp e1</span><br><span class="line">where not exists (</span><br><span class="line">  select 1 from s_emp e2</span><br><span class="line">  where e1.dept_id = e2.dept_id</span><br><span class="line">  and e1.salary &lt; e2.salary</span><br><span class="line">  having count(*) &gt; 1</span><br><span class="line">)</span><br><span class="line">order by dept_id,salary desc;</span><br><span class="line">　</span><br><span class="line">-- 找出各个部门中工资最高的员工</span><br><span class="line">select dept_id,first_name,salary from s_emp e1</span><br><span class="line">where not exists (</span><br><span class="line">  select 1 from s_emp e2</span><br><span class="line">  where e1.dept_id = e2.dept_id</span><br><span class="line">  and e1.salary &lt; e2.salary</span><br><span class="line">) order by e1.dept_id;</span><br><span class="line">　</span><br><span class="line">select dept_id,first_name,</span><br><span class="line">salary from s_emp e1</span><br><span class="line">where not exists (</span><br><span class="line">  select 1 from s_emp e2</span><br><span class="line">  where e1.dept_id = e2.dept_id</span><br><span class="line">  and e1.salary &lt; e2.salary </span><br><span class="line">  having count(*) &gt;= 1</span><br><span class="line">)</span><br><span class="line">order by dept_id,salary desc; // 等同于上面, 多加了个条件</span><br><span class="line">　</span><br><span class="line">select dept_id,first_name,</span><br><span class="line">salary from s_emp e1</span><br><span class="line">where exists (</span><br><span class="line">  select 1 from s_emp e2</span><br><span class="line">  where e1.dept_id = e2.dept_id</span><br><span class="line">  and e1.salary &lt; e2.salary </span><br><span class="line">  having count(*) = 0</span><br><span class="line">)</span><br><span class="line">order by dept_id,salary desc;</span><br><span class="line">　</span><br><span class="line">select * from s_emp e1 join (</span><br><span class="line">select dept_id, max(salary) maxsal from s_emp group by dept_id) r </span><br><span class="line">on r.dept_id = e1.dept_id and e1.salary = r.maxsal;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="其他运算符"><a href="#其他运算符" class="headerlink" title="其他运算符"></a>其他运算符</h2><ul>
+<li><p>any运算符</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 找出与41部门任意一个人的工资相同的其他部门的员工</span><br><span class="line">select * from s_emp where salary = any (</span><br><span class="line">select salary from s_emp where dept_id = 41</span><br><span class="line">) and dept_id &lt;&gt; 41;</span><br><span class="line">　</span><br><span class="line">select * from s_emp where salary in (</span><br><span class="line">select salary from s_emp where dept_id = 41</span><br><span class="line">) and dept_id &lt;&gt; 41;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>all运算符</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 找出工资比41部门所有人工资都高的员工</span><br><span class="line">select * from s_emp where salary &gt; all (</span><br><span class="line">select salary from s_emp where dept_id = 41</span><br><span class="line">);</span><br><span class="line">　</span><br><span class="line">select * from s_emp where salary &gt; (</span><br><span class="line">select max(salary) from s_emp where dept_id  = 41);</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+            <a href="/tags/rdbms/" rel="tag"># rdbms</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/21/oracle/oracle-3/" rel="next" title="Oracle数据库学习笔记(三)">
+                <i class="fa fa-chevron-left"></i> Oracle数据库学习笔记(三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/19/plsql/plsql01/" rel="prev" title="PLSQL学习笔记(一)">
+                PLSQL学习笔记(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Teacher Ye" />
+          <p class="site-author-name" itemprop="name">Teacher Ye</p>
+           
+              <p class="site-description motion-element" itemprop="description">javase,javaee, servlet,jsp,jdbc,orm,mybatis,hibernate,spring,spring mvc,git, ssh,oracle,mysql,lambda,io,学习,博客，spring boot, spring data jpa, spring security</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yejf" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/2267713200" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle-数据库"><span class="nav-number">1.</span> <span class="nav-text">Oracle 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#exists运算符"><span class="nav-number">1.1.</span> <span class="nav-text">exists运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他运算符"><span class="nav-number">1.2.</span> <span class="nav-text">其他运算符</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright" >
+  
+  &copy;  2016 - 2018 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teacher Ye</span>
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站总访问量<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytn4BA5U';
+      var conf = '066d9a423caf4030aa6feb2cf71b3e0c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("c8S4c0h6dtG3gJSWDf7h03yw-gzGzoHsz", "J0lSgipW25aVdSve6RLLx0Gi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <!-- 页面点击小红心 add by yejf-->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>
